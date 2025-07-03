@@ -7,10 +7,10 @@ export default function Page() {
         <div className="max-w-full flex ">
          <div className="max-w-full py-20 mt-40 px-4 flex flex-col justify-center items-start">
             <div className="mb-8">
-                <h1 className="text-6xl font-bold text-gray-900 mb-4">
+                <h1 className="text-6xl font-bold text-primary mb-4">
                     Boost your productivity.
                 </h1>
-                <h2 className="text-4xl font-bold text-gray-900">
+                <h2 className="text-4xl font-bold text-primary">
                     Start managing tasks smarter.
                 </h2>
             </div>

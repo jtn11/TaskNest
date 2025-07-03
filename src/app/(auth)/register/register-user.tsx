@@ -1,11 +1,29 @@
-export const RegisterUser = ()=>{
+'use client'
+import { useState } from "react";
+
+interface FormProps {
+    onSubmit : (data : {name : string ; email : string ; password : string}) => void
+}
+
+export const RegisterUser = ({onSubmit} : FormProps)=>{
+
+    const [name , setname ] = useState('');
+    const [email , setemail] = useState('');
+    const [password , setPassword] = useState('');
+    
+    function handleSubmit (e : React.FormEvent){
+        e.preventDefault();
+        onSubmit({name , email , password});
+    }
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-            <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-md">
+        <div className="min-h-screen flex items-center justify-center px-4">
+            <div className="max-w-md w-full p-8 rounded-lg shadow-md">
                 <h2 className="text-2xl font-bold mb-6 text-center">Sign Up</h2>
 
-                <form className="space-y-4">
+                <form
+                onSubmit={handleSubmit}
+                 className="space-y-4">
                     {/* Name Field */}
                     <div>
                         <label className="block mb-1 font-medium">Name</label>
@@ -13,6 +31,8 @@ export const RegisterUser = ()=>{
                             type="text"
                             name="name"
                             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            value={name}
+                            onChange={(e)=> setname(e.target.value)}
                         />
                     </div>
 
@@ -23,7 +43,9 @@ export const RegisterUser = ()=>{
                             type="email"
                             name="email"
                             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
+                            value={email}
+                            onChange={(e)=>setemail(e.target.value)}
+                       />
                     </div>
 
                     {/* Password Field */}
@@ -33,6 +55,8 @@ export const RegisterUser = ()=>{
                             type="password"
                             name="password"
                             className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            value={password}
+                            onChange={(e)=>setPassword(e.target.value)}
                         />
                     </div>
 
