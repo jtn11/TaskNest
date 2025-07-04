@@ -1,4 +1,5 @@
 'use client'
+import Link from "next/link";
 import { useState } from "react";
 
 interface FormProps {
@@ -23,8 +24,7 @@ export const RegisterUser = ({onSubmit} : FormProps)=>{
 
                 <form
                 onSubmit={handleSubmit}
-                 className="space-y-4">
-                    {/* Name Field */}
+                 className="space-y-4 mb-2">
                     <div>
                         <label className="block mb-1 font-medium">Name</label>
                         <input
@@ -36,7 +36,6 @@ export const RegisterUser = ({onSubmit} : FormProps)=>{
                         />
                     </div>
 
-                    {/* Email Field */}
                     <div>
                         <label className="block mb-1 font-medium">Email</label>
                         <input
@@ -48,7 +47,6 @@ export const RegisterUser = ({onSubmit} : FormProps)=>{
                        />
                     </div>
 
-                    {/* Password Field */}
                     <div>
                         <label className="block mb-1 font-medium">Password</label>
                         <input
@@ -67,6 +65,13 @@ export const RegisterUser = ({onSubmit} : FormProps)=>{
                         Sign Up
                     </button>
                 </form>
+
+                     <div className="text-md">
+                    <span className="text-gray-600">Already have an account ? </span>
+                    <Link href="/login" className=" text-blue-600 ml-2 hover:underline">
+                        Login 
+                    </Link>
+                </div>
             </div>
         </div>
     );
