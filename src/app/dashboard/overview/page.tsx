@@ -1,5 +1,3 @@
-export default function OverView(){
-    return(
-        <div>this is Overview </div>
-    )
+export default function OverView() {
+  return <div>this is Overview </div>;
 }

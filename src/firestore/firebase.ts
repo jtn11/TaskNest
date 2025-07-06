@@ -9,7 +9,7 @@ const firebaseConfig = {
   projectId: "tasknest-dd627",
   storageBucket: "tasknest-dd627.firebasestorage.app",
   messagingSenderId: "758460605961",
-  appId: "1:758460605961:web:c299d2010363cad2dbfad8"
+  appId: "1:758460605961:web:c299d2010363cad2dbfad8",
 };
 
 // Initialize Firebase
