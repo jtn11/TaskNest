@@ -4,6 +4,9 @@ import {
   UserCircleIcon,
   PencilSquareIcon,
 } from "@heroicons/react/24/solid";
+import {Tooltip } from "@mantine/core";
+import { useState } from "react";
+import { TaskModal } from "./modals/add-task-modal";
 
 interface NavBarProps {
   isSidebarOpen: boolean;
@@ -11,6 +14,10 @@ interface NavBarProps {
 }
 
 export const NavBar = ({ isSidebarOpen, setSidebarOpen }: NavBarProps) => {
+
+    const [openModal , setOpenModal] = useState(false);
+
+
   return (
     <div className="bg-white border-b border-gray-200 px-6 py-4">
       <div className="flex items-center justify-between">
@@ -36,9 +43,19 @@ export const NavBar = ({ isSidebarOpen, setSidebarOpen }: NavBarProps) => {
 
         <div className="flex items-center">
           <div className="flex items-center space-x-2">
-            <div className="flex items-center gap-1 rounded-full p-2 hover:bg-gray-200 cursor-pointer">
+            <Tooltip 
+            className = "text-sm"
+            label = "create new task"
+            >
+            <div className="flex items-center gap-1 rounded-full p-2 hover:bg-gray-200 cursor-pointer"
+            onClick={()=>setOpenModal(true)}
+            >
               <PencilSquareIcon className="w-5 h-5" />
+              
             </div>
+            </Tooltip>
+            {openModal && <TaskModal opened= {openModal} onClose = {()=> setOpenModal(false)}/>}
+            
 
             <div className="w-8 h-8 rounded-full flex items-center justify-center">
               <UserCircleIcon className="w-7 h-7" />

@@ -32,7 +32,7 @@ export const SideBar = ({ setSidebarOpen }: SideBarProps) => {
           onClick={() => setSidebarOpen(false)}
           className="text-gray-600 hover:text-gray-800"
         >
-          <ChevronDoubleLeftIcon className="w-4 h-4" />
+          <ChevronDoubleLeftIcon className="w-4 h-4"/>
         </button>
       </div>
 
