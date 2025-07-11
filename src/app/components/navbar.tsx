@@ -3,8 +3,11 @@ import {
   Bars3Icon,
   UserCircleIcon,
   PencilSquareIcon,
+  MagnifyingGlassCircleIcon,
+  MagnifyingGlassIcon,
+  XCircleIcon,
 } from "@heroicons/react/24/solid";
-import {Tooltip } from "@mantine/core";
+import { TextInput, Tooltip } from "@mantine/core";
 import { useState } from "react";
 import { TaskModal } from "./modals/add-task-modal";
 
@@ -14,12 +17,10 @@ interface NavBarProps {
 }
 
 export const NavBar = ({ isSidebarOpen, setSidebarOpen }: NavBarProps) => {
-
-    const [openModal , setOpenModal] = useState(false);
-
+  const [openModal, setOpenModal] = useState(false);
 
   return (
-    <div className="bg-white border-b border-gray-200 px-6 py-4">
+    <div className="bg-gray-50 border-b border-gray-200 px-6 py-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
           {/* Hamburger appears only when sidebar is closed */}
@@ -32,30 +33,34 @@ export const NavBar = ({ isSidebarOpen, setSidebarOpen }: NavBarProps) => {
             </button>
           )}
 
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Search tasks..."
-              className="pl-4 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
-          </div>
+          <TextInput
+            leftSection={
+              <MagnifyingGlassIcon className="text-tertiary w-4 h-4" />
+            }
+            placeholder="Search tasks..."
+            type="text"
+            aria-label="searchInput"
+            aria-describedby="basic-addon2"
+            className="text-sm leading-5 font-normal shadow-sm rounded-md border-primary bg-secondary "
+          />
         </div>
 
         <div className="flex items-center">
           <div className="flex items-center space-x-2">
-            <Tooltip 
-            className = "text-sm"
-            label = "create new task"
-            >
-            <div className="flex items-center gap-1 rounded-full p-2 hover:bg-gray-200 cursor-pointer"
-            onClick={()=>setOpenModal(true)}
-            >
-              <PencilSquareIcon className="w-5 h-5" />
-              
-            </div>
+            <Tooltip className="text-sm" label="create new task">
+              <div
+                className="flex items-center gap-1 rounded-full p-2 hover:bg-gray-100 shadow-md cursor-pointer"
+                onClick={() => setOpenModal(true)}
+              >
+                <PencilSquareIcon className="w-5 h-5 " />
+              </div>
             </Tooltip>
-            {openModal && <TaskModal opened= {openModal} onClose = {()=> setOpenModal(false)}/>}
-            
+            {openModal && (
+              <TaskModal
+                opened={openModal}
+                onClose={() => setOpenModal(false)}
+              />
+            )}
 
             <div className="w-8 h-8 rounded-full flex items-center justify-center">
               <UserCircleIcon className="w-7 h-7" />

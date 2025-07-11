@@ -25,18 +25,18 @@ export const SideBar = ({ setSidebarOpen }: SideBarProps) => {
   };
 
   return (
-    <div className="w-64 bg-white border-r border-gray-200 flex flex-col min-h-screen">
+    <div className="w-64 bg-gray-50 border-r border-gray-200 flex flex-col min-h-screen">
       <div className="p-6 flex justify-between items-center">
         <h1 className="text-xl font-bold text-gray-900">TaskNest</h1>
         <button
           onClick={() => setSidebarOpen(false)}
           className="text-gray-600 hover:text-gray-800"
         >
-          <ChevronDoubleLeftIcon className="w-4 h-4"/>
+          <ChevronDoubleLeftIcon className="w-4 h-4" />
         </button>
       </div>
 
-      <div className="p-3">
+      <div className="p-3 hover:text-gray-800">
         <NavItem
           href="/dashboard/overview"
           Icon={HomeIcon}
