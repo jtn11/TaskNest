@@ -58,7 +58,7 @@ export const SideBar = ({ setSidebarOpen }: SideBarProps) => {
         <NavItem
           href="/dashboard/analytics"
           Icon={ChartPieIcon}
-          label="Overview"
+          label="Analytics"
           isActive={isActive("/dashboard/analytics")}
         />
       </div>

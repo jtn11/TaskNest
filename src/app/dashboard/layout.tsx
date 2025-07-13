@@ -11,13 +11,13 @@ export default function Layout({ children }: LayoutProps) {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex h-screen overflow-hidden">
       {isSidebarOpen && <SideBar setSidebarOpen={setSidebarOpen} />}
 
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col overflow-hidden">
         <NavBar isSidebarOpen={isSidebarOpen} setSidebarOpen={setSidebarOpen} />
 
-        <div className="p-4">{children}</div>
+        <div className="overflow-y-auto">{children}</div>
       </div>
     </div>
   );
