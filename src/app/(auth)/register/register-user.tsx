@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useState } from "react";
 
 interface FormProps {
-  onSubmit: (data: { name: string; email: string; password: string }) => void;
+  onSubmit: (data: { email: string; password: string }) => void;
 }
 
 export const RegisterUser = ({ onSubmit }: FormProps) => {
@@ -13,7 +13,7 @@ export const RegisterUser = ({ onSubmit }: FormProps) => {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    onSubmit({ name, email, password });
+    onSubmit({ email, password });
   }
 
   return (
@@ -22,7 +22,7 @@ export const RegisterUser = ({ onSubmit }: FormProps) => {
         <h2 className="text-2xl font-bold mb-6 text-center">Sign Up</h2>
 
         <form onSubmit={handleSubmit} className="space-y-4 mb-2">
-          <div>
+          {/* <div>
             <label className="block mb-1 font-medium">Name</label>
             <input
               type="text"
@@ -31,7 +31,7 @@ export const RegisterUser = ({ onSubmit }: FormProps) => {
               value={name}
               onChange={(e) => setname(e.target.value)}
             />
-          </div>
+          </div> */}
 
           <div>
             <label className="block mb-1 font-medium">Email</label>

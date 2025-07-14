@@ -10,37 +10,86 @@ import {
 } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { app } from "@/firestore/firebase";
+import firebase from "firebase/compat/app";
+import {
+  doc,
+  getDoc,
+  getFirestore,
+  serverTimestamp,
+  setDoc,
+} from "firebase/firestore";
 
 interface AuthContextType {
   // currentUser: any;
   login: (email: string, password: string) => Promise<void>;
   signup: (email: string, password: string) => Promise<void>;
   logout: () => void;
+  isLoggedIn: boolean;
+  username: string | null;
 }
 
 const auth = getAuth(app);
+const firestoreDb = getFirestore(app);
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [currentUser, setCurrentUser] = useState<any>(null);
+  const [username, setUsername] = useState<string | null>(null);
   const router = useRouter();
-
-  // useEffect(() => {
-  //     const unsubscribe = onAuthStateChanged(auth, (user) => {
-  //         setCurrentUser(user);
-  //     });
-  //     return () => unsubscribe();
-  // }, []);
 
   const login = async (email: string, password: string) => {
     await signInWithEmailAndPassword(auth, email, password);
     router.push("/dashboard");
   };
 
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      // console.log("user" , user)
+      setCurrentUser(user);
+
+      if (user) {
+        console.log(user.uid);
+        const docSnap = await getDoc(doc(firestoreDb, "users", user.uid));
+        // console.log("docsnap.data",docSnap.data());
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          setUsername(data.username);
+        }
+      } else {
+        setUsername(null);
+      }
+    });
+
+    return () => unsubscribe(); // cleanup function
+  }, []);
+
+  const isLoggedIn = currentUser ? true : false;
+
+  // signUp User and added in users collection as a doc
+
   const signup = async (email: string, password: string) => {
-    await createUserWithEmailAndPassword(auth, email, password);
-    router.push("/dashboard");
+    try {
+      const SignedInUser = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      );
+      const user = SignedInUser.user;
+
+      // to take username as the first intials before @in gmail
+      const username = user.email?.split("@")[0] || "anonymous";
+
+      await setDoc(doc(firestoreDb, "users", user.uid), {
+        username,
+        uid: user.uid,
+        email: user.email,
+        createdAt: serverTimestamp(),
+      });
+      router.push("/dashboard");
+    } catch (error) {
+      console.log("SignUp Error", error);
+    }
   };
 
   const logout = async () => {
@@ -49,7 +98,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ login, signup, logout }}>
+    <AuthContext.Provider
+      value={{ login, signup, logout, isLoggedIn, username }}
+    >
       {children}
     </AuthContext.Provider>
   );

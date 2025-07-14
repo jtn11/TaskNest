@@ -7,9 +7,10 @@ import {
   MagnifyingGlassIcon,
   XCircleIcon,
 } from "@heroicons/react/24/solid";
-import { TextInput, Tooltip } from "@mantine/core";
+import { Menu, TextInput, Tooltip } from "@mantine/core";
 import { useState } from "react";
 import { TaskModal } from "./modals/add-task-modal";
+import { useAuth } from "@/context/AuthContext";
 
 interface NavBarProps {
   isSidebarOpen: boolean;
@@ -18,6 +19,7 @@ interface NavBarProps {
 
 export const NavBar = ({ isSidebarOpen, setSidebarOpen }: NavBarProps) => {
   const [openModal, setOpenModal] = useState(false);
+  const { username, logout } = useAuth();
 
   return (
     <div className="bg-gray-50 border-b border-gray-200 px-6 py-4">
@@ -62,10 +64,20 @@ export const NavBar = ({ isSidebarOpen, setSidebarOpen }: NavBarProps) => {
               />
             )}
 
-            <div className="w-8 h-8 rounded-full flex items-center justify-center">
-              <UserCircleIcon className="w-7 h-7" />
+            <div className="w-9 h-9 rounded-full flex items-center justify-center shadow-md">
+              <Menu width={200} position="bottom-start">
+                <Menu.Target>
+                  <UserCircleIcon className="w-7 h-7" />
+                </Menu.Target>
+
+                <Menu.Dropdown>
+                  <Menu.Item>{username || "Username"}</Menu.Item>
+                  <Menu.Item>Settings</Menu.Item>
+                  <Menu.Item onClick={logout}>Log out</Menu.Item>
+                </Menu.Dropdown>
+              </Menu>
             </div>
-            <span className="text-sm font-medium text-gray-700">John Doe</span>
+            {/* <span className="text-sm font-medium text-gray-700 truncate max-w-[100px]">John doe</span> */}
           </div>
         </div>
       </div>
