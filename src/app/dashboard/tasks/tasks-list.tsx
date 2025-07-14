@@ -1,3 +1,4 @@
+import StatusDropdown from "@/app/components/status-dropdown";
 import { ArrowLeftIcon, LifebuoyIcon } from "@heroicons/react/24/outline";
 import { Button, Menu } from "@mantine/core";
 import { useState } from "react";
@@ -13,6 +14,7 @@ export const TaskList = () => {
     return (
       <div className="w-full space-y-2 py-4 overflow-y-auto">
         <div className="flex items-center gap-3 border border-gray-100 rounded-sm px-4 py-1 bg-white  hover:bg-gray-50 transition cursor-pointer">
+          {/* <StatusDropdown/> */}
           <Menu width={200} position="bottom-start">
             <Menu.Target>
               <LifebuoyIcon className="w-4 h-5" />
@@ -40,6 +42,7 @@ export const TaskList = () => {
               </Menu.Sub>
             </Menu.Dropdown>
           </Menu>
+
           <div className="w-full" onClick={() => setExpandTask(false)}>
             <span>This is the first task </span>
           </div>
@@ -73,6 +76,7 @@ export const TaskList = () => {
               </Menu.Sub>
             </Menu.Dropdown>
           </Menu>
+          {/* <StatusDropdown/> */}
           <div className="w-full" onClick={() => setExpandTask(false)}>
             <span>This is the first task </span>
           </div>

@@ -67,7 +67,7 @@ export const NavBar = ({ isSidebarOpen, setSidebarOpen }: NavBarProps) => {
             <div className="w-9 h-9 rounded-full flex items-center justify-center shadow-md">
               <Menu width={200} position="bottom-start">
                 <Menu.Target>
-                  <UserCircleIcon className="w-7 h-7" />
+                  <UserCircleIcon className="w-7 h-7 text-blue-500 " />
                 </Menu.Target>
 
                 <Menu.Dropdown>
