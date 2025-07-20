@@ -8,6 +8,7 @@ import {
 } from "@heroicons/react/24/solid";
 import { NavItem } from "./nav-items";
 import { usePathname } from "next/navigation";
+import { WorkspaceUI } from "../workspaces/workspaceUI";
 
 interface SideBarProps {
   setSidebarOpen: (open: boolean) => void;
@@ -61,6 +62,9 @@ export const SideBar = ({ setSidebarOpen }: SideBarProps) => {
           label="Analytics"
           isActive={isActive("/dashboard/analytics")}
         />
+      </div>
+      <div>
+        <WorkspaceUI />
       </div>
     </div>
   );

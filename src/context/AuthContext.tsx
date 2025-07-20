@@ -7,6 +7,7 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   getAuth,
+  User,
 } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { app } from "@/firestore/firebase";
@@ -26,6 +27,7 @@ interface AuthContextType {
   logout: () => void;
   isLoggedIn: boolean;
   username: string | null;
+  currentUser: User | null;
 }
 
 const auth = getAuth(app);
@@ -39,7 +41,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
 
   const login = async (email: string, password: string) => {
-    await signInWithEmailAndPassword(auth, email, password);
+    const userCred = await signInWithEmailAndPassword(auth, email, password);
+    const user = userCred.user;
     router.push("/dashboard");
   };
 
@@ -49,7 +52,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setCurrentUser(user);
 
       if (user) {
-        console.log(user.uid);
+        console.log("userUID", user.uid);
+        console.log(
+          "This is the current user token",
+          (await user.getIdToken()).trim(),
+        );
         const docSnap = await getDoc(doc(firestoreDb, "users", user.uid));
         // console.log("docsnap.data",docSnap.data());
         if (docSnap.exists()) {
@@ -86,7 +93,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         email: user.email,
         createdAt: serverTimestamp(),
       });
-      router.push("/dashboard");
+      // router.push("/dashboard");
+      router.push("/workspaces");
     } catch (error) {
       console.log("SignUp Error", error);
     }
@@ -99,7 +107,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <AuthContext.Provider
-      value={{ login, signup, logout, isLoggedIn, username }}
+      value={{ login, signup, logout, isLoggedIn, username, currentUser }}
     >
       {children}
     </AuthContext.Provider>
