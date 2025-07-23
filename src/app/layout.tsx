@@ -9,6 +9,7 @@ import {
   mantineHtmlProps,
   MantineProvider,
 } from "@mantine/core";
+import { WorkspaceProvider } from "@/context/workspace-context";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -39,7 +40,9 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <MantineProvider>
-          <AuthProvider>{children}</AuthProvider>
+          <AuthProvider>
+            <WorkspaceProvider>{children}</WorkspaceProvider>
+          </AuthProvider>
         </MantineProvider>
       </body>
     </html>

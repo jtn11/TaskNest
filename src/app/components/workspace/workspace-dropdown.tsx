@@ -1,0 +1,94 @@
+"use client";
+import { PlusIcon } from "@heroicons/react/24/outline";
+import {
+  ChevronDownIcon,
+  HomeIcon,
+  UserPlusIcon,
+  UsersIcon,
+} from "@heroicons/react/24/solid"; // Using 24 for consistency if available, otherwise 16
+import {
+  Menu,
+  Button,
+  Group,
+  Text,
+  Divider,
+  Avatar,
+  Tooltip,
+} from "@mantine/core";
+
+export const WorkSpaceDropdown = () => {
+  return (
+    <Menu shadow="md" width={240} position="bottom-start" withArrow>
+      <Menu.Target>
+        <Tooltip className="text-xs" label="Manage Workspaces">
+          <div className="flex items-center gap-1 rounded-full p-2 hover:bg-gray-100 shadow-md cursor-pointer">
+            <HomeIcon className="w-5 h-5 " />
+          </div>
+        </Tooltip>
+      </Menu.Target>
+
+      <Menu.Dropdown className="bg-white border border-gray-200 rounded-b-lg shadow-lg">
+        {/* Members Section */}
+        <Menu.Label className="px-4 py-2">
+          <Group className="flex items-center items-center justify-between mb-2">
+            <div className="flex items-center">
+              <HomeIcon className="w-4 h-4 text-gray-600 mr-2" />
+              <span className="text-gray-700 text-sm font-medium">
+                Workspaces
+              </span>
+            </div>
+            <span className="text-xs ml-15 text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
+              3
+            </span>
+          </Group>
+        </Menu.Label>
+
+        {/* Member List */}
+        <div className="space-y-2 ml-6">
+          <Menu.Item component="div" className="py-0 px-0 hover:bg-transparent">
+            {" "}
+            {/* No hover, no padding */}
+            <div className="flex items-center space-x-2">
+              <Avatar
+                color="blue"
+                radius="xl"
+                size="sm"
+                className="w-6 h-6 flex items-center justify-center text-white text-xs font-medium"
+              >
+                J
+              </Avatar>
+              <span className="text-sm text-gray-600">John Doe</span>
+            </div>
+          </Menu.Item>
+          <Menu.Item component="div" className="py-0 px-0 hover:bg-transparent">
+            <div className="flex items-center space-x-2">
+              <Avatar
+                color="green"
+                radius="xl"
+                size="sm"
+                className="w-6 h-6 flex items-center justify-center text-white text-xs font-medium"
+              >
+                S
+              </Avatar>
+              <span className="text-sm text-gray-600">Sarah Smith</span>
+            </div>
+          </Menu.Item>
+        </div>
+
+        {/* Divider */}
+        <Divider className="border-t border-gray-100 my-1" />
+
+        {/* Add Member Button */}
+        <Menu.Item
+          className="flex items-center w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors duration-150"
+          onClick={() => console.log("Add Member clicked")}
+          leftSection={<PlusIcon className="w-4 h-4 text-gray-600 mr-3" />}
+        >
+          <span className="text-gray-700 text-sm font-medium">
+            Add Workspace
+          </span>
+        </Menu.Item>
+      </Menu.Dropdown>
+    </Menu>
+  );
+};

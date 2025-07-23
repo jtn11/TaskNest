@@ -33,3 +33,26 @@ export const createWorkspace = async (req: AuthRequest, res: Response) => {
     res.status(500).json({ message: "Failed to create workspace" });
   }
 };
+
+export const GetWorkspace = async (req: AuthRequest, res: Response) => {
+  try {
+    const uid = req.user?.uid;
+    const workspaceRef = db
+      .collection("workspace")
+      .where("members", "array-contains", uid);
+    const snapshot = workspaceRef.get();
+
+    if ((await snapshot).empty) {
+      return res.status(404).json({ message: "No workspace found" });
+    }
+
+    const workspaces = (await snapshot).docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    res.status(200).json(workspaces);
+  } catch (error) {
+    console.error("Error fetching workspace:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};

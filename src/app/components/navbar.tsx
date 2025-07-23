@@ -6,11 +6,13 @@ import {
   MagnifyingGlassCircleIcon,
   MagnifyingGlassIcon,
   XCircleIcon,
+  HomeIcon,
 } from "@heroicons/react/24/solid";
 import { Menu, TextInput, Tooltip } from "@mantine/core";
 import { useState } from "react";
 import { TaskModal } from "./modals/add-task-modal";
 import { useAuth } from "@/context/AuthContext";
+import { WorkSpaceDropdown } from "./workspace/workspace-dropdown";
 
 interface NavBarProps {
   isSidebarOpen: boolean;
@@ -63,6 +65,15 @@ export const NavBar = ({ isSidebarOpen, setSidebarOpen }: NavBarProps) => {
                 onClose={() => setOpenModal(false)}
               />
             )}
+
+            {/* <Tooltip className="text-xs" label="Manage Workspaces">
+              <div
+                className="flex items-center gap-1 rounded-full p-2 hover:bg-gray-100 shadow-md cursor-pointer"
+              >
+                <HomeIcon className="w-5 h-5 " />
+              </div>
+            </Tooltip> */}
+            <WorkSpaceDropdown />
 
             <div className="w-9 h-9 rounded-full flex items-center justify-center shadow-md">
               <Menu width={200} position="bottom-start">
