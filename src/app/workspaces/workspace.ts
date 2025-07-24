@@ -1,14 +1,8 @@
 import { useAuth } from "@/context/AuthContext";
-import { getAuth } from "firebase/auth";
 
 // GET Workspace
-export const GetWorkspace = async () => {
-  const { currentUser } = getAuth();
+export const GetWorkspace = async (token : string) => {
   try {
-    if (!currentUser) {
-      throw new Error("User not Authenticated");
-    }
-    const token = await currentUser.getIdToken();
     const res = await fetch("http://localhost:8000/api/workspace", {
       method: "GET",
       headers: {
@@ -27,14 +21,9 @@ export const GetWorkspace = async () => {
 };
 
 // POST Method
-export const CreateWorkspace = async (name: string) => {
-  const { currentUser } = useAuth();
-
+export const CreateWorkspace = async (name: string , token : string) => {
+    
   try {
-    if (!currentUser) {
-      throw new Error("user not Authenticated");
-    }
-    const token = await currentUser.getIdToken();
     const res = await fetch("http://localhost:8000/api/workspace", {
       method: "POST",
       headers: {

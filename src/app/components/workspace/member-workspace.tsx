@@ -5,14 +5,13 @@ import {
   UserPlusIcon,
   UsersIcon,
 } from "@heroicons/react/24/solid"; // Using 24 for consistency if available, otherwise 16
-import { PlusIcon } from "@heroicons/react/20/solid"; // Using a 20px PlusIcon from Heroicons
 import { Menu, Button, Group, Text, Divider, Avatar } from "@mantine/core";
 import { useWorkspace } from "@/context/workspace-context";
 import { useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 
 export const MemberWorkSpace = () => {
-  const { workspace } = useWorkspace();
+  const { workspaces , activeWorkspace } = useWorkspace();
 
   // useEffect(()=>{
   //   const fetchWorkspace = async()=>{
@@ -35,9 +34,9 @@ export const MemberWorkSpace = () => {
           }}
         >
           <div className="flex items-center justify-center space-x-3">
-            <HomeIcon className="w-5 h-5 text-gray-700" />
-            <span className="font-medium text-gray-900 text-base">
-              {workspace ? workspace.name : "Workspace"}
+            <HomeIcon className="w-4 h-4 text-gray-700" />
+            <span className="font-medium text-gray-900 text-sm">
+              {activeWorkspace ? activeWorkspace.name : "Workspace"}
             </span>
 
             <ChevronDownIcon className="w-4 h-4 mt-1 text-gray-600 transition-transform duration-220" />

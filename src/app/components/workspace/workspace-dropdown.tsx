@@ -1,4 +1,5 @@
 "use client";
+import { useWorkspace } from "@/context/workspace-context";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import {
   ChevronDownIcon,
@@ -15,8 +16,13 @@ import {
   Avatar,
   Tooltip,
 } from "@mantine/core";
+import { useRouter } from "next/navigation";
 
 export const WorkSpaceDropdown = () => {
+
+  const {workspaces , activeWorkspace}  = useWorkspace();
+  const router = useRouter();
+
   return (
     <Menu shadow="md" width={240} position="bottom-start" withArrow>
       <Menu.Target>
@@ -38,15 +44,15 @@ export const WorkSpaceDropdown = () => {
               </span>
             </div>
             <span className="text-xs ml-15 text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
-              3
+              {workspaces.length}
             </span>
           </Group>
         </Menu.Label>
 
-        {/* Member List */}
         <div className="space-y-2 ml-6">
-          <Menu.Item component="div" className="py-0 px-0 hover:bg-transparent">
-            {" "}
+          {
+            workspaces.map((WorkSpace)=>(
+                        <Menu.Item key={WorkSpace.id} component="div" className="py-0 px-0 hover:bg-transparent">
             {/* No hover, no padding */}
             <div className="flex items-center space-x-2">
               <Avatar
@@ -55,24 +61,13 @@ export const WorkSpaceDropdown = () => {
                 size="sm"
                 className="w-6 h-6 flex items-center justify-center text-white text-xs font-medium"
               >
-                J
+                W
               </Avatar>
-              <span className="text-sm text-gray-600">John Doe</span>
+              <span className="text-sm text-gray-600">{WorkSpace.name}</span>
             </div>
           </Menu.Item>
-          <Menu.Item component="div" className="py-0 px-0 hover:bg-transparent">
-            <div className="flex items-center space-x-2">
-              <Avatar
-                color="green"
-                radius="xl"
-                size="sm"
-                className="w-6 h-6 flex items-center justify-center text-white text-xs font-medium"
-              >
-                S
-              </Avatar>
-              <span className="text-sm text-gray-600">Sarah Smith</span>
-            </div>
-          </Menu.Item>
+            ))
+          }
         </div>
 
         {/* Divider */}
@@ -81,7 +76,7 @@ export const WorkSpaceDropdown = () => {
         {/* Add Member Button */}
         <Menu.Item
           className="flex items-center w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors duration-150"
-          onClick={() => console.log("Add Member clicked")}
+          onClick={() => router.push("/workspaces")}
           leftSection={<PlusIcon className="w-4 h-4 text-gray-600 mr-3" />}
         >
           <span className="text-gray-700 text-sm font-medium">
