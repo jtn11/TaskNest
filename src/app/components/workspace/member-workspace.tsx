@@ -5,21 +5,62 @@ import {
   UserPlusIcon,
   UsersIcon,
 } from "@heroicons/react/24/solid"; // Using 24 for consistency if available, otherwise 16
-import { Menu, Button, Group, Text, Divider, Avatar } from "@mantine/core";
+import { Menu, Button, Group, Stack, TextInput, Divider, Avatar, Modal } from "@mantine/core";
 import { useWorkspace } from "@/context/workspace-context";
-import { useEffect } from "react";
-import { useAuth } from "@/context/AuthContext";
+import { useState } from "react";
 
 export const MemberWorkSpace = () => {
-  const { workspaces , activeWorkspace } = useWorkspace();
 
-  // useEffect(()=>{
-  //   const fetchWorkspace = async()=>{
-  //     if(currentUser){
-  //       const data  = await c
-  //     }
-  //   }
-  // })
+  const { workspaces , activeWorkspace } = useWorkspace();
+  const [showModal , setShowModal] = useState(false);
+
+  const [name, setName] = useState("");
+  const [emailInput, setEmailInput] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleAddEmail = () => {
+  };
+
+  const handleCreateWorkspace = async () => {
+    setLoading(true);
+    try {
+      setLoading(false);
+      // onClose();
+    } catch (err) {
+      console.error("Error creating workspace:", err);
+      setLoading(false);
+    }
+  };
+
+
+  if(showModal){
+    return (
+        <Modal 
+        opened
+        onClose={()=>setShowModal(false)}
+        title="Invite Member"
+        yOffset={150}>
+          <Stack>
+            <TextInput
+              label="Member's email"
+              placeholder="e.g., abc@gmail.com"
+              value={name}
+              onChange={(e) => setName(e.currentTarget.value)}
+              required
+            />
+    
+            <Group mt="md">
+              <Button variant="default" onClick={()=>setShowModal(false)}>
+                Cancel
+              </Button>
+              <Button onClick={handleCreateWorkspace} loading={loading}>
+                Add Member
+              </Button>
+            </Group>
+          </Stack>
+        </Modal>
+      );
+  }
 
   return (
     <Menu shadow="md" width={240} position="bottom-start" withArrow>
@@ -59,7 +100,7 @@ export const MemberWorkSpace = () => {
         </Menu.Label>
 
         {/* Member List */}
-        <div className="space-y-2 ml-6">
+        <div className="w-full space-y-2">
           <Menu.Item component="div" className="py-0 px-0 hover:bg-transparent">
             {" "}
             {/* No hover, no padding */}
@@ -88,19 +129,6 @@ export const MemberWorkSpace = () => {
               <span className="text-sm text-gray-600">Sarah Smith</span>
             </div>
           </Menu.Item>
-          <Menu.Item component="div" className="py-0 px-0 hover:bg-transparent">
-            <div className="flex items-center space-x-2">
-              <Avatar
-                color="purple"
-                radius="xl"
-                size="sm"
-                className="w-6 h-6 flex items-center justify-center text-white text-xs font-medium"
-              >
-                M
-              </Avatar>
-              <span className="text-sm text-gray-600">Mike Johnson</span>
-            </div>
-          </Menu.Item>
         </div>
 
         {/* Divider */}
@@ -109,7 +137,7 @@ export const MemberWorkSpace = () => {
         {/* Add Member Button */}
         <Menu.Item
           className="flex items-center w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors duration-150"
-          onClick={() => console.log("Add Member clicked")}
+          onClick={() => setShowModal(true)}
           leftSection={<UserPlusIcon className="w-4 h-4 text-gray-600 mr-3" />}
         >
           <span className="text-gray-700 text-sm font-medium">Add Member</span>

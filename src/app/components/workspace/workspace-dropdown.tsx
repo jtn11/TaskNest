@@ -36,7 +36,7 @@ export const WorkSpaceDropdown = () => {
       <Menu.Dropdown className="bg-white border border-gray-200 rounded-b-lg shadow-lg">
         {/* Members Section */}
         <Menu.Label className="px-4 py-2">
-          <Group className="flex items-center items-center justify-between mb-2">
+          <Group className="flex items-center justify-between mb-2">
             <div className="flex items-center">
               <HomeIcon className="w-4 h-4 text-gray-600 mr-2" />
               <span className="text-gray-700 text-sm font-medium">
@@ -49,7 +49,7 @@ export const WorkSpaceDropdown = () => {
           </Group>
         </Menu.Label>
 
-        <div className="space-y-2 ml-6">
+        <div className="space-y-2">
           {
             workspaces.map((WorkSpace)=>(
                         <Menu.Item key={WorkSpace.id} component="div" className="py-0 px-0 hover:bg-transparent">

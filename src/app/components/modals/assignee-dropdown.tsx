@@ -1,78 +1,86 @@
 "use client";
 
 import { useState } from "react";
-import { Popover, Avatar } from "@mantine/core";
-import { CheckIcon } from "@heroicons/react/20/solid";
+import { Popover, Avatar, Menu, Group, Divider, Button } from "@mantine/core";
+import { ChartBarIcon, CheckCircleIcon, CheckIcon, ClipboardDocumentListIcon, ClockIcon, LifebuoyIcon, StopCircleIcon } from "@heroicons/react/20/solid";
 
 export default function AssigneeDropdown() {
   const [opened, setOpened] = useState(false);
-  const [selected, setSelected] = useState("Alice Johnson");
 
-  const assignees = [
-    { name: "Alice Johnson", avatar: "https://i.pravatar.cc/40?u=alice" },
-    { name: "Bob Smith", avatar: "https://i.pravatar.cc/40?u=bob" },
-    { name: "Charlie Doe", avatar: "https://i.pravatar.cc/40?u=charlie" },
-  ];
-
-  const handleSelect = (name: string) => {
-    setSelected(name);
-    setOpened(false);
-  };
-
-  const selectedUser = assignees.find((a) => a.name === selected);
-
+  // if(opened){
   return (
-    <Popover
-      opened={opened}
-      onChange={setOpened}
-      position="bottom-start"
-      withArrow
-      offset={8}
-    >
-      <Popover.Target>
-        <div
-          onClick={() => setOpened((o) => !o)}
-          className="w-35 h-6 px-2 cursor-pointer flex items-center gap-2 rounded bg-gray-100 hover:bg-gray-200 transition"
-        >
-          <img
-            src={selectedUser?.avatar}
-            alt={selectedUser?.name}
-            className="w-5 h-5 rounded-full"
-          />
-          <span className="text-xs text-gray-800 truncate">
-            {selectedUser?.name}
-          </span>
-        </div>
-      </Popover.Target>
+      <div className="w-full space-y-2 py-4 overflow-y-auto">
+        <div className="flex items-center gap-3 border border-gray-100 rounded-sm px-4 py-1 hover:bg-gray-50 transition cursor-pointer">
+          {/* <StatusDropdown/> */}
+              <Menu shadow="md" width={220} position="bottom-start" withArrow>
+            <Menu.Target>
+              <Button>Status</Button>
+              {/* <span>Status</span> */}
+            </Menu.Target>
 
-      <Popover.Dropdown>
-        <div className="w-50 bg-white rounded-md ">
-          {assignees.map((user) => {
-            const isSelected = selected === user.name;
-            return (
-              <div
-                key={user.name}
-                onClick={() => handleSelect(user.name)}
-                className={`flex items-center justify-between p-1 m-1 rounded cursor-pointer ${
-                  isSelected ? "bg-gray-100" : "hover:bg-gray-50"
-                }`}
+      <Menu.Dropdown className="bg-white border border-gray-200 rounded-b-lg shadow-lg">
+        <Menu.Label className="px-4 py-2">
+          <Group className="flex items-center justify-between mb-2">
+            <div className="flex items-center">
+              <ChartBarIcon className="w-4 h-4 text-gray-600 mr-2" />
+              <span className="text-gray-700 mt-1 text-sm font-medium">Change Status</span>
+            </div>
+          </Group>
+        </Menu.Label>
+
+          <Divider className="border-t border-gray-100 my-1" />
+
+        <div className="w-full space-y-2">
+                    <Menu.Item component="div" className="hover:bg-transparent">
+            
+            <div className="flex items-center space-x-2">
+              <StopCircleIcon
+                radius="xl"
+                className="w-4 h-4 flex items-center justify-center text-xs font-medium"
               >
-                <div className="flex items-center gap-2">
-                  <img
-                    src={user.avatar}
-                    alt={user.name}
-                    className="w-6 h-6 rounded-full"
-                  />
-                  <span className="text-xs">{user.name}</span>
-                </div>
-                {isSelected && (
-                  <CheckIcon className="h-4 w-4 text-indigo-500" />
-                )}
-              </div>
-            );
-          })}
+              </StopCircleIcon>
+              <span className="text-sm text-gray-600">Backlog</span>
+            </div>
+          </Menu.Item>
+
+          <Menu.Item component="div" className=" hover:bg-transparent">
+            <div className="flex items-center space-x-2">
+              <ClockIcon
+                radius="xl"
+                className="w-4 h-4 flex items-center justify-center text-yellow-500 text-xs font-medium"
+              >
+              </ClockIcon>
+              <span className="text-sm text-gray-600">In-Progress</span>
+            </div>
+          </Menu.Item>
+
+          <Menu.Item component="div" className="hover:bg-transparent">
+            <div className="flex items-center space-x-2">
+              <ClipboardDocumentListIcon
+                radius="xl"
+                className="w-4 h-4 flex items-center justify-center text-green-600 text-xs font-medium"
+              >
+              </ClipboardDocumentListIcon>
+              <span className="text-sm text-gray-600">In-Review</span>
+            </div>
+          </Menu.Item>
+
+          <Menu.Item component="div" className="hover:bg-transparent">
+            <div className="flex items-center space-x-2">
+              <CheckCircleIcon
+                radius="xl"
+                className="w-4 h-4 flex items-center justify-center text-blue-600 text-xs font-medium"
+              >
+              </CheckCircleIcon>
+              <span className="text-sm text-gray-600">Completed</span>
+            </div>
+          </Menu.Item>
         </div>
-      </Popover.Dropdown>
-    </Popover>
-  );
+
+      </Menu.Dropdown>
+    </Menu>
+        </div>
+      </div>
+    )
 }
+
