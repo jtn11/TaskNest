@@ -1,26 +1,12 @@
 "use client";
 import { useWorkspace } from "@/context/workspace-context";
 import { PlusIcon } from "@heroicons/react/24/outline";
-import {
-  ChevronDownIcon,
-  HomeIcon,
-  UserPlusIcon,
-  UsersIcon,
-} from "@heroicons/react/24/solid"; // Using 24 for consistency if available, otherwise 16
-import {
-  Menu,
-  Button,
-  Group,
-  Text,
-  Divider,
-  Avatar,
-  Tooltip,
-} from "@mantine/core";
+import { HomeIcon } from "@heroicons/react/24/solid"; // Using 24 for consistency if available, otherwise 16
+import { Menu, Group, Divider, Avatar, Tooltip } from "@mantine/core";
 import { useRouter } from "next/navigation";
 
 export const WorkSpaceDropdown = () => {
-
-  const {workspaces , activeWorkspace}  = useWorkspace();
+  const { workspaces } = useWorkspace();
   const router = useRouter();
 
   return (
@@ -50,24 +36,26 @@ export const WorkSpaceDropdown = () => {
         </Menu.Label>
 
         <div className="space-y-2">
-          {
-            workspaces.map((WorkSpace)=>(
-                        <Menu.Item key={WorkSpace.id} component="div" className="py-0 px-0 hover:bg-transparent">
-            {/* No hover, no padding */}
-            <div className="flex items-center space-x-2">
-              <Avatar
-                color="blue"
-                radius="xl"
-                size="sm"
-                className="w-6 h-6 flex items-center justify-center text-white text-xs font-medium"
-              >
-                W
-              </Avatar>
-              <span className="text-sm text-gray-600">{WorkSpace.name}</span>
-            </div>
-          </Menu.Item>
-            ))
-          }
+          {workspaces.map((WorkSpace) => (
+            <Menu.Item
+              key={WorkSpace.id}
+              component="div"
+              className="py-0 px-0 hover:bg-transparent"
+            >
+              {/* No hover, no padding */}
+              <div className="flex items-center space-x-2">
+                <Avatar
+                  color="blue"
+                  radius="xl"
+                  size="sm"
+                  className="w-6 h-6 flex items-center justify-center text-white text-xs font-medium"
+                >
+                  W
+                </Avatar>
+                <span className="text-sm text-gray-600">{WorkSpace.name}</span>
+              </div>
+            </Menu.Item>
+          ))}
         </div>
 
         {/* Divider */}

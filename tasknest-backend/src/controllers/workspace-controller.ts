@@ -1,8 +1,7 @@
 import { db } from "../firebase/firebase";
 import { AuthRequest } from "../middleware/authmiddleware";
-import {Response } from "express";
+import { Response } from "express";
 import admin from "firebase-admin";
-
 
 export const createWorkspace = async (req: AuthRequest, res: Response) => {
   const user = req.user;
@@ -42,9 +41,9 @@ export const GetWorkspace = async (req: AuthRequest, res: Response) => {
     const workspaceRef = db
       .collection("workspace")
       .where("members", "array-contains", uid)
-      .orderBy("createdAt" , "asc");
+      .orderBy("createdAt", "asc");
 
-      const snapshot = workspaceRef.get();
+    const snapshot = workspaceRef.get();
 
     if ((await snapshot).empty) {
       return res.status(404).json({ message: "No workspace found" });

@@ -1,7 +1,7 @@
 import { useAuth } from "@/context/AuthContext";
 
 // GET Workspace
-export const GetWorkspace = async (token : string) => {
+export const GetWorkspace = async (token: string) => {
   try {
     const res = await fetch("http://localhost:8000/api/workspace", {
       method: "GET",
@@ -21,8 +21,7 @@ export const GetWorkspace = async (token : string) => {
 };
 
 // POST Method
-export const CreateWorkspace = async (name: string , token : string) => {
-    
+export const CreateWorkspace = async (name: string, token: string) => {
   try {
     const res = await fetch("http://localhost:8000/api/workspace", {
       method: "POST",

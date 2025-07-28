@@ -1,89 +1,144 @@
 "use client";
 import { CreateWorkspace, GetWorkspace } from "@/app/workspaces/workspace";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { useAuth } from "./AuthContext";
 import { User } from "firebase/auth";
 import { useRouter } from "next/navigation";
+import { GetWorkspaceMembers } from "@/app/workspaces/members";
 
 interface WorkSpaceType {
-    id: string;
-    name: string;
-    createdby: string;
-    members: [];
-    createdBy?: string;
-    assignedBy?: string;
-    createdAt?: string | { seconds: number; nanoseconds: number };
+  id: string;
+  name: string;
+  createdby: string;
+  members: [];
+  createdBy?: string;
+  assignedBy?: string;
+  createdAt?: string | { seconds: number; nanoseconds: number };
+}
+
+interface UserType {
+  uid: string;
+  username: string;
+  email?: string;
 }
 
 interface WorkSpaceContextTypes {
-    workspaces: WorkSpaceType[];
-    activeWorkspace: WorkSpaceType | null;
-    handleCreateWorkspace: (name: string) => Promise<void>;
+  workspaces: WorkSpaceType[];
+  activeWorkspace: WorkSpaceType | null;
+  handleCreateWorkspace: (name: string) => Promise<void>;
+  setmembers: React.Dispatch<React.SetStateAction<UserType[]>>;
+  members: UserType[];
 }
 
 const WorkSpaceContext = createContext<WorkSpaceContextTypes | undefined>(
-    undefined,
+  undefined,
 );
 
 export const WorkspaceProvider = ({
-    children,
+  children,
 }: {
-    children: React.ReactNode;
+  children: React.ReactNode;
 }) => {
+  const { currentUser } = useAuth();
+  const router = useRouter();
 
-    const { currentUser } = useAuth();
-    const router = useRouter();
+  const [workspaces, setWorkspaces] = useState<WorkSpaceType[]>([]);
+  const [activeWorkspace, setActiveWorkspace] = useState<WorkSpaceType | null>(
+    null,
+  );
+  const [members, setmembers] = useState<UserType[]>([]);
 
-    const [workspaces, setWorkspaces] = useState<WorkSpaceType[]>([]);
-    const [activeWorkspace, setActiveWorkspace] = useState<WorkSpaceType | null>(null);
+  const tokenref = useRef<string | null>(null);
 
-    const handleCreateWorkspace = async (name: string) => {
-        if (!currentUser) return;
-        const token = await currentUser.getIdToken();
-        const result = await CreateWorkspace(name, token);
-        if (result) {
-            setWorkspaces((prev) => [...prev, result]); // append new workspace
-            setActiveWorkspace(result); // make it the active workspace
-            router.push("/dashboard");
-        }
+  useEffect(() => {
+    const fetchCurrentUserToken = async () => {
+      if (!currentUser) {
+        return console.log("User not LoggedIn");
+      }
+      const token = await currentUser.getIdToken();
+      tokenref.current = token;
     };
+    fetchCurrentUserToken();
+  }, [currentUser]);
 
+  const handleCreateWorkspace = async (name: string) => {
+    if (!currentUser) return;
+    const token = tokenref.current;
+    if (!token) {
+      return console.log("token not available");
+    }
+    const result = await CreateWorkspace(name, token);
+    if (result) {
+      setWorkspaces((prev) => [...prev, result]); // append new workspace
+      setActiveWorkspace(result); // make it the active workspace
+      router.push("/dashboard");
+    }
+  };
 
-    useEffect(() => {
-        const fetchWorkspace = async () => {
-            if (currentUser) {
-                const token = await currentUser.getIdToken();
-                const data = await GetWorkspace(token);
-                if (data) setWorkspaces(data);
-                if (data.length > 0 && !activeWorkspace) {
-                    setActiveWorkspace(data[data.length - 1]);
-                }
-                console.log("WholeData", data);
-            }
-        };
+  useEffect(() => {
+    const fetchWorkspace = async () => {
+      if (currentUser) {
+        const token = tokenref.current;
+        if (!token) {
+          return console.log("token not available");
+        }
+        const data = await GetWorkspace(token);
+        if (data) {
+          setWorkspaces(data);
+        }
+        if (data.length > 0 && !activeWorkspace) {
+          setActiveWorkspace(data[data.length - 1]);
+        }
+        console.log("WholeData", data);
+      }
+    };
+    fetchWorkspace();
+  }, [tokenref.current]);
 
-        fetchWorkspace();
-    }, [currentUser]);
+  const fetchmembers = async (workspaceId: string) => {
+    if (!currentUser) return;
 
-    useEffect(() => {
-        console.log("Updated Workspaces:", workspaces);
-    }, [workspaces]);
+    const token = tokenref.current;
+    if (!token) {
+      console.warn("Token not available yet");
+      return;
+    }
+    const data = await GetWorkspaceMembers(workspaceId, token);
+    if (data) setmembers(data);
+    console.log("fetchmember's Data", data);
+  };
 
-    useEffect(() => {
-        console.log("Updated Active Workspace:", activeWorkspace);
-    }, [activeWorkspace]);
+  useEffect(() => {
+    if (activeWorkspace) fetchmembers(activeWorkspace.id);
+  }, [activeWorkspace]);
 
-    return (
-        <WorkSpaceContext.Provider value={{ workspaces, activeWorkspace, handleCreateWorkspace }}>
-            {children}
-        </WorkSpaceContext.Provider>
-    );
+  useEffect(() => {
+    console.log("Updated Workspaces:", workspaces);
+  }, [workspaces]);
+
+  useEffect(() => {
+    console.log("Updated Active Workspace:", activeWorkspace);
+  }, [activeWorkspace]);
+
+  return (
+    <WorkSpaceContext.Provider
+      value={{
+        workspaces,
+        activeWorkspace,
+        handleCreateWorkspace,
+        members,
+        setmembers,
+      }}
+    >
+      {children}
+    </WorkSpaceContext.Provider>
+  );
 };
 
 export const useWorkspace = () => {
-    const context = useContext(WorkSpaceContext);
-    if (!context) {
-        throw new Error("useWorkspace must be used within a WorkspaceProvider");
-    }
-    return context;
+  const context = useContext(WorkSpaceContext);
+  if (!context) {
+    throw new Error("useWorkspace must be used within a WorkspaceProvider");
+  }
+  return context;
 };

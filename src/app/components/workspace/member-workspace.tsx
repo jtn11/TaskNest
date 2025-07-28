@@ -5,61 +5,72 @@ import {
   UserPlusIcon,
   UsersIcon,
 } from "@heroicons/react/24/solid"; // Using 24 for consistency if available, otherwise 16
-import { Menu, Button, Group, Stack, TextInput, Divider, Avatar, Modal } from "@mantine/core";
+import {
+  Menu,
+  Button,
+  Group,
+  Stack,
+  TextInput,
+  Divider,
+  Avatar,
+  Modal,
+} from "@mantine/core";
 import { useWorkspace } from "@/context/workspace-context";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useAuth } from "@/context/AuthContext";
+import { AddWorkspaceMember } from "@/app/workspaces/members";
 
 export const MemberWorkSpace = () => {
+  const { members, activeWorkspace, setmembers } = useWorkspace();
+  const [showModal, setShowModal] = useState(false);
 
-  const { workspaces , activeWorkspace } = useWorkspace();
-  const [showModal , setShowModal] = useState(false);
-
-  const [name, setName] = useState("");
-  const [emailInput, setEmailInput] = useState("");
+  const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
+  const { currentUser } = useAuth();
 
-  const handleAddEmail = () => {
-  };
+  const handleAddMember = async () => {
+    if (!activeWorkspace || !currentUser) return;
+    if (email == " ") return;
 
-  const handleCreateWorkspace = async () => {
-    setLoading(true);
-    try {
-      setLoading(false);
-      // onClose();
-    } catch (err) {
-      console.error("Error creating workspace:", err);
-      setLoading(false);
+    const token = await currentUser.getIdToken();
+    const result = await AddWorkspaceMember(activeWorkspace.id, email, token);
+    if (result.user) {
+      setmembers((prev) => [...prev, result.user]);
+      setEmail("");
+      setShowModal(false);
+    } else {
+      alert(result?.message || "Failed to add member");
     }
   };
 
-
-  if(showModal){
+  if (showModal) {
     return (
-        <Modal 
+      <Modal
         opened
-        onClose={()=>setShowModal(false)}
+        onClose={() => setShowModal(false)}
         title="Invite Member"
-        yOffset={150}>
-          <Stack>
-            <TextInput
-              label="Member's email"
-              placeholder="e.g., abc@gmail.com"
-              value={name}
-              onChange={(e) => setName(e.currentTarget.value)}
-              required
-            />
-    
-            <Group mt="md">
-              <Button variant="default" onClick={()=>setShowModal(false)}>
-                Cancel
-              </Button>
-              <Button onClick={handleCreateWorkspace} loading={loading}>
-                Add Member
-              </Button>
-            </Group>
-          </Stack>
-        </Modal>
-      );
+        yOffset={150}
+      >
+        <Stack>
+          <TextInput
+            label="Member's email"
+            placeholder="e.g., abc@gmail.com"
+            value={email}
+            onChange={(e) => setEmail(e.currentTarget.value)}
+            required
+          />
+
+          <Group mt="md">
+            <Button variant="default" onClick={() => setShowModal(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleAddMember} loading={loading}>
+              Add Member
+            </Button>
+          </Group>
+        </Stack>
+      </Modal>
+    );
   }
 
   return (
@@ -94,41 +105,33 @@ export const MemberWorkSpace = () => {
               <span className="text-gray-700 text-sm font-medium">Members</span>
             </div>
             <span className="text-xs ml-20 text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
-              3
+              {members.length}
             </span>
           </Group>
         </Menu.Label>
 
         {/* Member List */}
         <div className="w-full space-y-2">
-          <Menu.Item component="div" className="py-0 px-0 hover:bg-transparent">
-            {" "}
-            {/* No hover, no padding */}
-            <div className="flex items-center space-x-2">
-              <Avatar
-                color="blue"
-                radius="xl"
-                size="sm"
-                className="w-6 h-6 flex items-center justify-center text-white text-xs font-medium"
-              >
-                J
-              </Avatar>
-              <span className="text-sm text-gray-600">John Doe</span>
-            </div>
-          </Menu.Item>
-          <Menu.Item component="div" className="py-0 px-0 hover:bg-transparent">
-            <div className="flex items-center space-x-2">
-              <Avatar
-                color="green"
-                radius="xl"
-                size="sm"
-                className="w-6 h-6 flex items-center justify-center text-white text-xs font-medium"
-              >
-                S
-              </Avatar>
-              <span className="text-sm text-gray-600">Sarah Smith</span>
-            </div>
-          </Menu.Item>
+          {members.map((member) => (
+            <Menu.Item
+              key={member.uid}
+              component="div"
+              className="py-0 px-0 hover:bg-transparent"
+            >
+              {/* No hover, no padding */}
+              <div className="flex items-center space-x-2">
+                <Avatar
+                  color="blue"
+                  radius="xl"
+                  size="sm"
+                  className="w-6 h-6 flex items-center justify-center text-white text-xs font-medium"
+                >
+                  {member.username.charAt(0).toUpperCase()}
+                </Avatar>
+                <span className="text-sm text-gray-600">{member.username}</span>
+              </div>
+            </Menu.Item>
+          ))}
         </div>
 
         {/* Divider */}
