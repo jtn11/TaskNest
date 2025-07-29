@@ -60,12 +60,10 @@ export const addMembersToWorkspace = async (
     await workspaceRef.update({
       members: admin.firestore.FieldValue.arrayUnion(userId),
     });
-    res
-      .status(200)
-      .json({
-        message: "Member added Successfully",
-        user: { userId, ...userToAdd.data() },
-      });
+    res.status(200).json({
+      message: "Member added Successfully",
+      user: { userId, ...userToAdd.data() },
+    });
   } catch (error) {
     console.error("Error adding member:", error);
     res.status(500).json({ message: "Internal Server Error" });

@@ -1,82 +1,67 @@
 "use client";
 
 import { useState } from "react";
-import { Popover } from "@mantine/core";
+import { Menu, Button } from "@mantine/core";
 import {
-  CheckIcon,
+  ArrowDownCircleIcon,
   EllipsisHorizontalCircleIcon,
-} from "@heroicons/react/20/solid";
+  ArrowUpCircleIcon,
+  ArrowRightCircleIcon,
+} from "@heroicons/react/24/outline";
 
 export default function PriorityDropdown() {
   const [opened, setOpened] = useState(false);
-  const [selected, setSelected] = useState("Moderate");
 
-  const handleSelect = (level: string) => {
-    setSelected(level);
-    setOpened(false);
-  };
-
+  // if(opened){
   return (
-    <Popover
-      opened={opened}
-      onChange={setOpened}
-      position="bottom-start"
-      withArrow
-      offset={8}
-    >
-      <Popover.Target>
-        <div
-          onClick={() => setOpened((o) => !o)}
-          className="w-21 h-6 px-2 cursor-pointer flex items-center gap-2 rounded bg-gray-100 hover:bg-gray-200 transition"
-        >
-          <span className="text-sm text-gray-800 truncate">{selected}</span>
-        </div>
-      </Popover.Target>
-
-      <Popover.Dropdown>
-        <div className="w-40 bg-white rounded-md">
-          {/* Low */}
-          <div
-            onClick={() => handleSelect("Low")}
-            className={`flex items-center p-1 m-1 justify-between rounded cursor-pointer ${
-              selected === "Low" ? "bg-gray-100" : "hover:bg-gray-50"
-            }`}
+    <div className="flex items-center gap-3 rounded-sm cursor-pointer">
+      <Menu shadow="md" width={180} position="bottom-start" withArrow>
+        <Menu.Target>
+          <Button
+            variant="default"
+            size="xs"
+            radius="md"
+            leftSection={<EllipsisHorizontalCircleIcon className="w-4 h-4" />}
+            className=" rounded-sm flex items-center border border-gray-200"
           >
-            <span className="text-sm ml-2">Low</span>
-            {selected === "Low" && (
-              <CheckIcon className="h-4 w-4 text-indigo-500 mr-1" />
-            )}
-          </div>
+            Priority
+          </Button>
+        </Menu.Target>
 
-          {/* Moderate */}
-          <div
-            onClick={() => handleSelect("Moderate")}
-            className={`flex items-center justify-between p-1 m-1 rounded cursor-pointer ${
-              selected === "Moderate" ? "bg-gray-100" : "hover:bg-gray-50"
-            }`}
-          >
-            <EllipsisHorizontalCircleIcon className="h-4 w-4 text-indigo-500" />
+        <Menu.Dropdown className="bg-white border border-gray-200 rounded-b-lg shadow-lg">
+          <div className="w-full">
+            <Menu.Item component="div" className="hover:bg-transparent">
+              <div className="flex items-center space-x-2">
+                <ArrowDownCircleIcon
+                  radius="xl"
+                  className="w-5 h-5 flex items-center justify-center text-xs font-medium"
+                />
+                <span className="text-sm text-gray-600">low</span>
+              </div>
+            </Menu.Item>
 
-            <span className="text-sm ml-2">Moderate</span>
-            {selected === "Moderate" && (
-              <CheckIcon className="h-4 w-4 text-indigo-500 mr-1" />
-            )}
-          </div>
+            <Menu.Item component="div" className=" hover:bg-transparent">
+              <div className="flex items-center space-x-2">
+                <ArrowRightCircleIcon
+                  radius="xl"
+                  className="w-5 h-5 flex items-center justify-center text-xs font-medium"
+                />
+                <span className="text-sm text-gray-600">Moderate</span>
+              </div>
+            </Menu.Item>
 
-          {/* High */}
-          <div
-            onClick={() => handleSelect("High")}
-            className={`flex items-center justify-between p-1 m-1 rounded cursor-pointer ${
-              selected === "High" ? "bg-gray-100" : "hover:bg-gray-50"
-            }`}
-          >
-            <span className="text-sm ml-2">High</span>
-            {selected === "High" && (
-              <CheckIcon className="h-4 w-4 text-indigo-500 mr-1" />
-            )}
+            <Menu.Item component="div" className="hover:bg-transparent">
+              <div className="flex items-center space-x-2">
+                <ArrowUpCircleIcon
+                  radius="xl"
+                  className="w-5 h-5 flex items-center justify-center text-xs font-medium"
+                />
+                <span className="text-sm text-gray-600">High</span>
+              </div>
+            </Menu.Item>
           </div>
-        </div>
-      </Popover.Dropdown>
-    </Popover>
+        </Menu.Dropdown>
+      </Menu>
+    </div>
   );
 }

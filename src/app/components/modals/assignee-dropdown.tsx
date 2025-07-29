@@ -1,89 +1,50 @@
 "use client";
-
 import { useState } from "react";
-import { Popover, Avatar, Menu, Group, Divider, Button } from "@mantine/core";
-import {
-  ChartBarIcon,
-  CheckCircleIcon,
-  CheckIcon,
-  ClipboardDocumentListIcon,
-  ClockIcon,
-  LifebuoyIcon,
-  StopCircleIcon,
-} from "@heroicons/react/20/solid";
+import { Menu, Button, Avatar, Divider } from "@mantine/core";
+import { UserCircleIcon, UserIcon } from "@heroicons/react/24/outline";
+import { useWorkspace } from "@/context/workspace-context";
 
 export default function AssigneeDropdown() {
   const [opened, setOpened] = useState(false);
+  const { members } = useWorkspace();
 
-  // if(opened){
   return (
-    <div className="w-full space-y-2 py-4 overflow-y-auto">
-      <div className="flex items-center gap-3 border border-gray-100 rounded-sm px-4 py-1 hover:bg-gray-50 transition cursor-pointer">
-        {/* <StatusDropdown/> */}
-        <Menu shadow="md" width={220} position="bottom-start" withArrow>
-          <Menu.Target>
-            <Button>Status</Button>
-            {/* <span>Status</span> */}
-          </Menu.Target>
-
-          <Menu.Dropdown className="bg-white border border-gray-200 rounded-b-lg shadow-lg">
-            <Menu.Label className="px-4 py-2">
-              <Group className="flex items-center justify-between mb-2">
-                <div className="flex items-center">
-                  <ChartBarIcon className="w-4 h-4 text-gray-600 mr-2" />
-                  <span className="text-gray-700 mt-1 text-sm font-medium">
-                    Change Status
+    <div className="flex items-center gap-3 rounded-sm cursor-pointer">
+      <Menu shadow="md" width={180} position="bottom-start" withArrow>
+        <Menu.Target>
+          <Button
+            variant="default"
+            size="xs"
+            radius="md"
+            leftSection={<UserIcon className="w-4 h-4 text-blue-600" />}
+            className=" rounded-sm flex items-center border border-gray-200"
+          >
+            Assignee
+          </Button>
+        </Menu.Target>
+        <Menu.Dropdown className="bg-white border w-full border-gray-200 rounded-b-lg shadow-lg">
+          <span className="text-xs justify-center pl-10 pb-2">
+            Team Members
+          </span>
+          <Divider className="border-t border-gray-100 my-1" />
+          <div className="w-full">
+            {members.map((member) => (
+              <Menu.Item
+                key={member.uid}
+                component="div"
+                className="py-0 px-0 hover:bg-transparent"
+              >
+                <div className="flex items-center space-x-2">
+                  <UserCircleIcon className="w-4 h-4 text-blue-500 flex items-center justify-center text-xs font-medium" />
+                  <span className="text-sm text-gray-600">
+                    {member.username}
                   </span>
                 </div>
-              </Group>
-            </Menu.Label>
-
-            <Divider className="border-t border-gray-100 my-1" />
-
-            <div className="w-full space-y-2">
-              <Menu.Item component="div" className="hover:bg-transparent">
-                <div className="flex items-center space-x-2">
-                  <StopCircleIcon
-                    radius="xl"
-                    className="w-4 h-4 flex items-center justify-center text-xs font-medium"
-                  ></StopCircleIcon>
-                  <span className="text-sm text-gray-600">Backlog</span>
-                </div>
               </Menu.Item>
-
-              <Menu.Item component="div" className=" hover:bg-transparent">
-                <div className="flex items-center space-x-2">
-                  <ClockIcon
-                    radius="xl"
-                    className="w-4 h-4 flex items-center justify-center text-yellow-500 text-xs font-medium"
-                  ></ClockIcon>
-                  <span className="text-sm text-gray-600">In-Progress</span>
-                </div>
-              </Menu.Item>
-
-              <Menu.Item component="div" className="hover:bg-transparent">
-                <div className="flex items-center space-x-2">
-                  <ClipboardDocumentListIcon
-                    radius="xl"
-                    className="w-4 h-4 flex items-center justify-center text-green-600 text-xs font-medium"
-                  ></ClipboardDocumentListIcon>
-                  <span className="text-sm text-gray-600">In-Review</span>
-                </div>
-              </Menu.Item>
-
-              <Menu.Item component="div" className="hover:bg-transparent">
-                <div className="flex items-center space-x-2">
-                  <CheckCircleIcon
-                    radius="xl"
-                    className="w-4 h-4 flex items-center justify-center text-blue-600 text-xs font-medium"
-                  ></CheckCircleIcon>
-                  <span className="text-sm text-gray-600">Completed</span>
-                </div>
-              </Menu.Item>
-            </div>
-          </Menu.Dropdown>
-        </Menu>
-      </div>
+            ))}
+          </div>
+        </Menu.Dropdown>
+      </Menu>
     </div>
   );
 }

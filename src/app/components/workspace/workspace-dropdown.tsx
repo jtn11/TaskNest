@@ -6,7 +6,7 @@ import { Menu, Group, Divider, Avatar, Tooltip } from "@mantine/core";
 import { useRouter } from "next/navigation";
 
 export const WorkSpaceDropdown = () => {
-  const { workspaces } = useWorkspace();
+  const { workspaces, setActiveWorkspace } = useWorkspace();
   const router = useRouter();
 
   return (
@@ -20,7 +20,6 @@ export const WorkSpaceDropdown = () => {
       </Menu.Target>
 
       <Menu.Dropdown className="bg-white border border-gray-200 rounded-b-lg shadow-lg">
-        {/* Members Section */}
         <Menu.Label className="px-4 py-2">
           <Group className="flex items-center justify-between mb-2">
             <div className="flex items-center">
@@ -35,14 +34,14 @@ export const WorkSpaceDropdown = () => {
           </Group>
         </Menu.Label>
 
-        <div className="space-y-2">
+        <div>
           {workspaces.map((WorkSpace) => (
             <Menu.Item
               key={WorkSpace.id}
               component="div"
               className="py-0 px-0 hover:bg-transparent"
+              onClick={() => setActiveWorkspace(WorkSpace)}
             >
-              {/* No hover, no padding */}
               <div className="flex items-center space-x-2">
                 <Avatar
                   color="blue"
@@ -58,10 +57,8 @@ export const WorkSpaceDropdown = () => {
           ))}
         </div>
 
-        {/* Divider */}
         <Divider className="border-t border-gray-100 my-1" />
 
-        {/* Add Member Button */}
         <Menu.Item
           className="flex items-center w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors duration-150"
           onClick={() => router.push("/workspaces")}

@@ -27,6 +27,9 @@ interface WorkSpaceContextTypes {
   activeWorkspace: WorkSpaceType | null;
   handleCreateWorkspace: (name: string) => Promise<void>;
   setmembers: React.Dispatch<React.SetStateAction<UserType[]>>;
+  setActiveWorkspace: React.Dispatch<
+    React.SetStateAction<WorkSpaceType | null>
+  >;
   members: UserType[];
 }
 
@@ -125,6 +128,7 @@ export const WorkspaceProvider = ({
       value={{
         workspaces,
         activeWorkspace,
+        setActiveWorkspace,
         handleCreateWorkspace,
         members,
         setmembers,

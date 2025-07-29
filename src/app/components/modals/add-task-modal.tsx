@@ -1,10 +1,9 @@
-// import { Button, Modal, Textarea } from "@mantine/core"
-
 import { Button, Modal, Switch, Textarea } from "@mantine/core";
 import { useState } from "react";
-import StatusDropdown from "../status-dropdown";
-import AssigneeDropdown from "./assignee-dropdown";
 import PriorityDropdown from "./priority-dropdown";
+import StatusDropdown from "./status-dropwdown";
+import AssigneeDropdown from "./assignee-dropdown";
+import { PaperClipIcon } from "@heroicons/react/24/solid";
 
 interface ModalProps {
   opened: boolean;
@@ -29,14 +28,13 @@ export const TaskModal = ({ opened, onClose }: ModalProps) => {
 
   const renderBody = () => {
     return (
-      <div className="px-6 py-1 space-y-4">
-        {/* Title Input */}
+      <div className="py-1 space-y-4">
         <Textarea
           size="md"
           radius="md"
-          placeholder="Issue title"
+          placeholder="Issue title..."
           minRows={1}
-          maxRows={1}
+          maxRows={4}
           autosize
           onChange={(e) => setTitle(e.target.value)}
           value={title}
@@ -46,12 +44,13 @@ export const TaskModal = ({ opened, onClose }: ModalProps) => {
           }}
         />
 
-        {/* Description Input */}
         <Textarea
           size="md"
           radius="md"
           placeholder="Add description..."
-          minRows={6}
+          minRows={2}
+          maxRows={12}
+          autosize
           onChange={(e) => setDescription(e.target.value)}
           value={description}
           classNames={{
@@ -59,39 +58,13 @@ export const TaskModal = ({ opened, onClose }: ModalProps) => {
           }}
         />
 
-        {/* Bottom Section */}
         <div className="flex items-center justify-between pt-4 border-t border-gray-200">
-          {/* Left side - Tags and Options */}
           <div className="flex items-center gap-2">
-            <StatusDropdown />
+            <StatusDropdown label={"status"} />
             <PriorityDropdown />
             <AssigneeDropdown />
-
-            <Button
-              variant="subtle"
-              size="sm"
-              p={4}
-              classNames={{
-                root: "text-gray-500 hover:text-gray-700 hover:bg-gray-100",
-              }}
-            >
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"
-                />
-              </svg>
-            </Button>
+            <PaperClipIcon className="w-4 h-4" />
           </div>
-
-          {/* Right side - Actions */}
 
           <Button
             size="sm"
@@ -114,7 +87,7 @@ export const TaskModal = ({ opened, onClose }: ModalProps) => {
       onClose={onClose}
       yOffset={140}
       title={
-        <span className="text-gray-900 text-xl font-medium">Add Task</span>
+        <span className="text-gray-900 ml-1 text-xl font-medium">Add Task</span>
       }
       size="xl"
       closeButtonProps={{
@@ -128,7 +101,7 @@ export const TaskModal = ({ opened, onClose }: ModalProps) => {
         body: "bg-white p-0",
         root: "z-[var(--z-modal)]",
         content: "shadow-lg bg-white rounded-xl",
-        header: "p-4 mb-0  bg-white",
+        header: "mb-0  bg-white",
       }}
     >
       {renderBody()}
