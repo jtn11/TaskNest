@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Menu, Button } from "@mantine/core";
+import { Menu, Button, Divider } from "@mantine/core";
 import {
   ArrowDownCircleIcon,
   EllipsisHorizontalCircleIcon,
@@ -29,6 +29,8 @@ export default function PriorityDropdown() {
         </Menu.Target>
 
         <Menu.Dropdown className="bg-white border border-gray-200 rounded-b-lg shadow-lg">
+          <span className="pl-2 pb-2 text-sm font-medium">Set Priority...</span>
+          <Divider className="border-t border-gray-100 my-1" />
           <div className="w-full">
             <Menu.Item component="div" className="hover:bg-transparent">
               <div className="flex items-center space-x-2">

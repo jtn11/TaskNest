@@ -8,6 +8,7 @@ export default function AssigneeDropdown() {
   const [opened, setOpened] = useState(false);
   const { members } = useWorkspace();
 
+  // if(opened){
   return (
     <div className="flex items-center gap-3 rounded-sm cursor-pointer">
       <Menu shadow="md" width={180} position="bottom-start" withArrow>
@@ -23,8 +24,8 @@ export default function AssigneeDropdown() {
           </Button>
         </Menu.Target>
         <Menu.Dropdown className="bg-white border w-full border-gray-200 rounded-b-lg shadow-lg">
-          <span className="text-xs justify-center pl-10 pb-2">
-            Team Members
+          <span className="text-sm font-medium justify-center pl-2 pb-2">
+            Team Members...
           </span>
           <Divider className="border-t border-gray-100 my-1" />
           <div className="w-full">

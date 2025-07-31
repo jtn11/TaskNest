@@ -10,6 +10,7 @@ import {
   StopCircleIcon,
 } from "@heroicons/react/20/solid";
 import { cn } from "@/lib/cn";
+import { LifebuoyIcon } from "@heroicons/react/24/outline";
 
 interface statusDropdownType {
   button?: React.ReactNode;
@@ -39,7 +40,7 @@ export default function StatusDropdown({
               variant="default"
               size="xs"
               radius="md"
-              leftSection={<ChartBarIcon className="w-4 h-4 text-indigo-500" />}
+              leftSection={<LifebuoyIcon className="w-4 h-4" />}
               className={cn(
                 "rounded-sm flex items-center border border-gray-200",
                 classname,
@@ -54,9 +55,8 @@ export default function StatusDropdown({
           <Menu.Label className="px-4 py-2">
             <Group className="flex items-center justify-between">
               <div className="flex items-center">
-                <ChartBarIcon className="w-4 h-4 text-gray-600 mr-2" />
                 <span className="text-gray-700 mt-1 text-sm font-medium">
-                  Change Status
+                  Change Status...
                 </span>
               </div>
             </Group>
@@ -65,6 +65,12 @@ export default function StatusDropdown({
           <Divider className="border-t border-gray-100 pb-1" />
 
           <div className="w-full">
+            <Menu.Item component="div" className="hover:bg-transparent">
+              <div className="flex items-center space-x-2">
+                <LifebuoyIcon className="w-4 h-4 flex items-center justify-center text-xs font-medium" />
+                <span className="text-sm text-gray-600">Todo</span>
+              </div>
+            </Menu.Item>
             <Menu.Item component="div" className="hover:bg-transparent">
               <div className="flex items-center space-x-2">
                 <StopCircleIcon
@@ -97,10 +103,7 @@ export default function StatusDropdown({
 
             <Menu.Item component="div" className="hover:bg-transparent">
               <div className="flex items-center space-x-2">
-                <CheckCircleIcon
-                  radius="xl"
-                  className="w-4 h-4 flex items-center justify-center text-blue-600 text-xs font-medium"
-                ></CheckCircleIcon>
+                <CheckCircleIcon className="w-4 h-4 flex items-center justify-center text-blue-600 text-xs font-medium"></CheckCircleIcon>
                 <span className="text-sm text-gray-600">Completed</span>
               </div>
             </Menu.Item>
