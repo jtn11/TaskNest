@@ -7,7 +7,7 @@ const USERS_COLLECTION = "users";
 
 // Get /api/tasks?workspanceId = id
 export const getUsersTask = async (req: AuthRequest, res: Response) => {
-  const workspaceId = req.query.workspaceId as string;
+  const workspaceId = req.params.id;
   const status = req.query.status as string;
   // const priority = req.query.priority as String ;
   const onlymine = req.query.onlymine === "true ";
@@ -18,8 +18,9 @@ export const getUsersTask = async (req: AuthRequest, res: Response) => {
 
   try {
     let query: FirebaseFirestore.Query = db
-      .collection("TASKS_COLLECTION")
-      .where("workspaceId", "==", workspaceId);
+      .collection("workspace")
+      .doc(workspaceId)
+      .collection("tasks");
     if (status) query = query.where("status", "==", status);
     if (onlymine) query = query.where("assignedTo", "==", req.user?.uid);
 
@@ -31,40 +32,44 @@ export const getUsersTask = async (req: AuthRequest, res: Response) => {
   }
 };
 
-// POST /api/tasks
+// POST /api/workspace/:id/tasks
 export const createTask = async (req: AuthRequest, res: Response) => {
-  const createdby = req.user?.uid;
-  const {
-    title,
-    description,
-    assignedTo,
-    status,
-    priority,
-    workspaceId,
-    attachments,
-  } = req.body;
+  const createdBy = req.user?.uid;
+  const workspaceId = req.params.id;
+  const { title, description, assignedTo, status, priority, attachments } =
+    req.body;
 
-  if (!title || !assignedTo || !workspaceId) {
+  if (!title || !assignedTo) {
     return res
       .status(400)
-      .json({ message: "Title, assignedTo, and workspaceId are required" });
+      .json({ message: "Title, assignedTo,  are required" });
   }
 
   try {
     const newTask = {
       title,
       description: description || "",
-      createdby,
+      createdBy,
       assignedTo,
       status: status || "backlog",
       priority: priority || "medium",
-      workspaceId,
+      attachments: attachments || [],
       createdAt: new Date().toISOString(),
     };
 
-    const docRef = await db.collection(TASKS_COLLECTION).add(newTask);
+    const docRef = await db
+      .collection("workspace")
+      .doc(workspaceId)
+      .collection("tasks")
+      .doc();
+    await docRef.set(newTask);
     res.status(201).json({ id: docRef.id, ...newTask });
   } catch (error) {
-    res.status(500).json({ message: "Failed to create task ", error });
+    res
+      .status(500)
+      .json({
+        message: "Failed to create task ",
+        error: (error as Error).message,
+      });
   }
 };

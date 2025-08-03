@@ -17,7 +17,7 @@ app.get("/", (_req, res) => {
   res.send("backend is here");
 });
 
-app.use("/api/tasks", taskRoutes);
+app.use("/api/workspace/:id/tasks", taskRoutes);
 app.use("/api/workspace", workspaceRoute);
 
 app.listen(PORT, () => {

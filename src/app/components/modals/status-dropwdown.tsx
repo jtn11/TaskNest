@@ -1,9 +1,7 @@
 "use client";
 import { useState } from "react";
-import { clsx } from "clsx";
-import { Menu, Group, Divider, Button } from "@mantine/core";
+import { Menu, Group, Divider } from "@mantine/core";
 import {
-  ChartBarIcon,
   CheckCircleIcon,
   ClipboardDocumentListIcon,
   ClockIcon,
@@ -13,42 +11,57 @@ import { cn } from "@/lib/cn";
 import { LifebuoyIcon } from "@heroicons/react/24/outline";
 
 interface statusDropdownType {
-  button?: React.ReactNode;
-  icon?: React.ReactNode;
-  label?: String;
+  value?: string;
+  onChange?: (val: string) => void;
+  label?: string;
   classname?: string;
 }
 
 export default function StatusDropdown({
-  icon,
-  button,
   label,
   classname,
+  value,
+  onChange,
 }: statusDropdownType) {
-  const [opened, setOpened] = useState(false);
+  const [currentStatus, setCurrentStatus] = useState("todo");
+  const [currentlabel, setCurrentlabel] = useState<String | undefined>("todo");
 
-  // if(opened){
+  const handleSelect = (status: string, label: string) => {
+    setCurrentStatus(status);
+    setCurrentlabel(label);
+    if (onChange) {
+      onChange(status);
+    }
+  };
+
+  const displayLabel = label === "status" ? currentlabel : label;
+
   return (
     <div className="flex items-center gap-3 borderq rounded-sm cursor-pointer">
-      {/* <StatusDropdown/> */}
       <Menu shadow="md" width={180} position="bottom-start" withArrow>
         <Menu.Target>
-          {button ? (
-            button
-          ) : (
-            <Button
-              variant="default"
-              size="xs"
-              radius="md"
-              leftSection={<LifebuoyIcon className="w-4 h-4" />}
-              className={cn(
-                "rounded-sm flex items-center border border-gray-200",
-                classname,
-              )}
-            >
-              {label}
-            </Button>
-          )}
+          <div
+            className={cn(
+              "inline-flex items-center gap-2 px-2 py-1 text-sm border border-gray-200 hover:bg-gray-100 rounded-lg ",
+              !displayLabel && "px-1 border-none",
+              classname,
+            )}
+          >
+            {
+              currentStatus === "backlog" ? (
+                <StopCircleIcon className="w-4 h-4" />
+              ) : currentStatus === "In-Progress" ? (
+                <ClockIcon className="w-4 h-4 text-yellow-500" />
+              ) : currentStatus === "In-Review" ? (
+                <ClipboardDocumentListIcon className="w-4 h-4 text-green-600" />
+              ) : currentStatus === "completed" ? (
+                <CheckCircleIcon className="w-4 h-4 text-blue-600" />
+              ) : (
+                <LifebuoyIcon className="w-4 h-4" />
+              ) // default
+            }
+            {displayLabel && <span>{displayLabel}</span>}
+          </div>
         </Menu.Target>
 
         <Menu.Dropdown className="bg-white border border-gray-200 rounded-b-lg shadow-lg">
@@ -65,13 +78,22 @@ export default function StatusDropdown({
           <Divider className="border-t border-gray-100 pb-1" />
 
           <div className="w-full">
-            <Menu.Item component="div" className="hover:bg-transparent">
+            <Menu.Item
+              component="div"
+              className="hover:bg-transparent"
+              onClick={() => handleSelect("todo", "Todo")}
+            >
               <div className="flex items-center space-x-2">
                 <LifebuoyIcon className="w-4 h-4 flex items-center justify-center text-xs font-medium" />
                 <span className="text-sm text-gray-600">Todo</span>
               </div>
             </Menu.Item>
-            <Menu.Item component="div" className="hover:bg-transparent">
+
+            <Menu.Item
+              component="div"
+              className="hover:bg-transparent"
+              onClick={() => handleSelect("backlog", "Backlog")}
+            >
               <div className="flex items-center space-x-2">
                 <StopCircleIcon
                   radius="xl"
@@ -81,7 +103,11 @@ export default function StatusDropdown({
               </div>
             </Menu.Item>
 
-            <Menu.Item component="div" className=" hover:bg-transparent">
+            <Menu.Item
+              component="div"
+              className=" hover:bg-transparent"
+              onClick={() => handleSelect("In-Progress", "In-Progress")}
+            >
               <div className="flex items-center space-x-2">
                 <ClockIcon
                   radius="xl"
@@ -91,7 +117,11 @@ export default function StatusDropdown({
               </div>
             </Menu.Item>
 
-            <Menu.Item component="div" className="hover:bg-transparent">
+            <Menu.Item
+              component="div"
+              className="hover:bg-transparent"
+              onClick={() => handleSelect("In-Review", "In-Review")}
+            >
               <div className="flex items-center space-x-2">
                 <ClipboardDocumentListIcon
                   radius="xl"
@@ -101,7 +131,11 @@ export default function StatusDropdown({
               </div>
             </Menu.Item>
 
-            <Menu.Item component="div" className="hover:bg-transparent">
+            <Menu.Item
+              component="div"
+              className="hover:bg-transparent"
+              onClick={() => handleSelect("completed", "Completed")}
+            >
               <div className="flex items-center space-x-2">
                 <CheckCircleIcon className="w-4 h-4 flex items-center justify-center text-blue-600 text-xs font-medium"></CheckCircleIcon>
                 <span className="text-sm text-gray-600">Completed</span>

@@ -1,5 +1,5 @@
 import { Button, Modal, Switch, Textarea } from "@mantine/core";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PriorityDropdown from "./priority-dropdown";
 import StatusDropdown from "./status-dropwdown";
 import AssigneeDropdown from "./assignee-dropdown";
@@ -13,6 +13,9 @@ interface ModalProps {
 export const TaskModal = ({ opened, onClose }: ModalProps) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [status, setStatus] = useState("todo");
+  const [assignee, setAssignee] = useState("no-Assignee");
+  const [priority, setPriority] = useState("medium");
 
   const handleSubmit = () => {
     if (title.trim() === "") {
@@ -60,9 +63,13 @@ export const TaskModal = ({ opened, onClose }: ModalProps) => {
 
         <div className="flex items-center justify-between pt-4 border-t border-gray-200">
           <div className="flex items-center gap-2">
-            <StatusDropdown label={"status"} />
-            <PriorityDropdown />
-            <AssigneeDropdown />
+            <StatusDropdown
+              label="status"
+              value={status}
+              onChange={setStatus}
+            />
+            <PriorityDropdown value={priority} onChange={setPriority} />
+            <AssigneeDropdown value={assignee} onChange={setAssignee} />
             <PaperClipIcon className="w-4 h-4" />
           </div>
 
