@@ -2,9 +2,6 @@ import { AuthRequest } from "../middleware/authmiddleware";
 import { db } from "../firebase/firebase";
 import { Response } from "express";
 
-const TASKS_COLLECTION = "tasks";
-const USERS_COLLECTION = "users";
-
 // Get /api/tasks?workspanceId = id
 export const getUsersTask = async (req: AuthRequest, res: Response) => {
   const workspaceId = req.params.id;
@@ -53,7 +50,6 @@ export const createTask = async (req: AuthRequest, res: Response) => {
       assignedTo,
       status: status || "backlog",
       priority: priority || "medium",
-      attachments: attachments || [],
       createdAt: new Date().toISOString(),
     };
 
@@ -65,11 +61,9 @@ export const createTask = async (req: AuthRequest, res: Response) => {
     await docRef.set(newTask);
     res.status(201).json({ id: docRef.id, ...newTask });
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        message: "Failed to create task ",
-        error: (error as Error).message,
-      });
+    res.status(500).json({
+      message: "Failed to create task ",
+      error: (error as Error).message,
+    });
   }
 };

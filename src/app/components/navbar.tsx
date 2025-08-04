@@ -3,10 +3,7 @@ import {
   Bars3Icon,
   UserCircleIcon,
   PencilSquareIcon,
-  MagnifyingGlassCircleIcon,
   MagnifyingGlassIcon,
-  XCircleIcon,
-  HomeIcon,
 } from "@heroicons/react/24/solid";
 import { Menu, TextInput, Tooltip } from "@mantine/core";
 import { useState } from "react";
@@ -50,10 +47,10 @@ export const NavBar = ({ isSidebarOpen, setSidebarOpen }: NavBarProps) => {
         </div>
 
         <div className="flex items-center">
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center">
             <Tooltip className="text-sm" label="create new task">
               <div
-                className="flex items-center gap-1 rounded-full p-2 hover:bg-gray-100 shadow-md cursor-pointer"
+                className="flex items-center gap-1 rounded-full p-2 hover:bg-gray-100 cursor-pointer"
                 onClick={() => setOpenModal(true)}
               >
                 <PencilSquareIcon className="w-5 h-5 " />
@@ -66,16 +63,9 @@ export const NavBar = ({ isSidebarOpen, setSidebarOpen }: NavBarProps) => {
               />
             )}
 
-            {/* <Tooltip className="text-xs" label="Manage Workspaces">
-              <div
-                className="flex items-center gap-1 rounded-full p-2 hover:bg-gray-100 shadow-md cursor-pointer"
-              >
-                <HomeIcon className="w-5 h-5 " />
-              </div>
-            </Tooltip> */}
             <WorkSpaceDropdown />
 
-            <div className="w-9 h-9 rounded-full flex items-center justify-center shadow-md">
+            <div className="w-9 h-9 rounded-full flex items-center justify-center cursor-pointer">
               <Menu width={200} position="bottom-start">
                 <Menu.Target>
                   <UserCircleIcon className="w-7 h-7 text-blue-500 " />

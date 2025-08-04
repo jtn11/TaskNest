@@ -16,11 +16,11 @@ export default function AssigneeDropdown({
   const { members } = useWorkspace();
 
   const handleAssignee = (assignee: string) => {
-    setAssignee(assignee);
+    setAssignedTo(assignee);
     onChange(assignee);
   };
 
-  const [assignee, setAssignee] = useState("Assignee");
+  const [assignedTo, setAssignedTo] = useState("Assignee");
 
   return (
     <div className="flex items-center gap-3 rounded-sm cursor-pointer">
@@ -28,7 +28,7 @@ export default function AssigneeDropdown({
         <Menu.Target>
           <div className="inline-flex items-center gap-2 px-2 py-1 text-sm border border-gray-200 hover:bg-gray-100 rounded-lg ">
             <UserIcon className="w-4 h-4 text-blue-600" />
-            <span>{assignee}</span>
+            <span>{assignedTo}</span>
           </div>
         </Menu.Target>
 

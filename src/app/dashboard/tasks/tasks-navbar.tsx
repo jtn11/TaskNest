@@ -7,7 +7,7 @@ import {
   ClipboardDocumentListIcon,
   CheckCircleIcon,
 } from "@heroicons/react/24/solid";
-import { ArrowUpOnSquareIcon, LifebuoyIcon } from "@heroicons/react/24/outline";
+import { LifebuoyIcon } from "@heroicons/react/24/outline";
 
 export const TaskNavBar = () => {
   const [activeState, setActiveState] = useState("todo");

@@ -13,7 +13,7 @@ export const WorkSpaceDropdown = () => {
     <Menu shadow="md" width={240} position="bottom-start" withArrow>
       <Menu.Target>
         <Tooltip className="text-xs" label="Manage Workspaces">
-          <div className="flex items-center gap-1 rounded-full p-2 hover:bg-gray-100 shadow-md cursor-pointer">
+          <div className="flex items-center gap-1 rounded-full p-2 hover:bg-gray-100 cursor-pointer">
             <HomeIcon className="w-5 h-5 " />
           </div>
         </Tooltip>

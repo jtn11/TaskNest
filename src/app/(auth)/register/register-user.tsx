@@ -22,17 +22,6 @@ export const RegisterUser = ({ onSubmit }: FormProps) => {
         <h2 className="text-2xl font-bold mb-6 text-center">Sign Up</h2>
 
         <form onSubmit={handleSubmit} className="space-y-4 mb-2">
-          {/* <div>
-            <label className="block mb-1 font-medium">Name</label>
-            <input
-              type="text"
-              name="name"
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={name}
-              onChange={(e) => setname(e.target.value)}
-            />
-          </div> */}
-
           <div>
             <label className="block mb-1 font-medium">Email</label>
             <input

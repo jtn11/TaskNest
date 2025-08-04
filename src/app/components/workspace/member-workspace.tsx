@@ -16,7 +16,7 @@ import {
   Modal,
 } from "@mantine/core";
 import { useWorkspace } from "@/context/workspace-context";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { AddWorkspaceMember } from "@/app/workspaces/members";
 
