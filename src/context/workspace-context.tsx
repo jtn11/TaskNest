@@ -30,6 +30,7 @@ interface WorkSpaceContextTypes {
     React.SetStateAction<WorkSpaceType | null>
   >;
   members: UserType[];
+  token: string;
 }
 
 const WorkSpaceContext = createContext<WorkSpaceContextTypes | undefined>(
@@ -49,23 +50,22 @@ export const WorkspaceProvider = ({
     null,
   );
   const [members, setmembers] = useState<UserType[]>([]);
-
-  const tokenref = useRef<string | null>(null);
+  const [token, setToken] = useState<string>("");
 
   useEffect(() => {
     const fetchCurrentUserToken = async () => {
       if (!currentUser) {
         return console.log("User not LoggedIn");
       }
+      console.log("CurrentUser", currentUser);
       const token = await currentUser.getIdToken();
-      tokenref.current = token;
+      setToken(token);
     };
     fetchCurrentUserToken();
   }, [currentUser]);
 
   const handleCreateWorkspace = async (name: string) => {
     if (!currentUser) return;
-    const token = tokenref.current;
     if (!token) {
       return console.log("token not available");
     }
@@ -80,7 +80,6 @@ export const WorkspaceProvider = ({
   useEffect(() => {
     const fetchWorkspace = async () => {
       if (currentUser) {
-        const token = tokenref.current;
         if (!token) {
           return console.log("token not available");
         }
@@ -95,12 +94,10 @@ export const WorkspaceProvider = ({
       }
     };
     fetchWorkspace();
-  }, [tokenref.current]);
+  }, [token]);
 
   const fetchmembers = async (workspaceId: string) => {
     if (!currentUser) return;
-
-    const token = tokenref.current;
     if (!token) {
       console.warn("Token not available yet");
       return;
@@ -131,6 +128,7 @@ export const WorkspaceProvider = ({
         handleCreateWorkspace,
         members,
         setmembers,
+        token,
       }}
     >
       {children}

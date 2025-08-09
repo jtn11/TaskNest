@@ -5,9 +5,9 @@ import { Response } from "express";
 // Get /api/tasks?workspanceId = id
 export const getUsersTask = async (req: AuthRequest, res: Response) => {
   const workspaceId = req.params.id;
-  const status = req.query.status as string;
+  // const status = req.query.status as string;
   // const priority = req.query.priority as String ;
-  const onlymine = req.query.onlymine === "true ";
+  const onlymine = req.query.onlymine === "true";
 
   if (!workspaceId) {
     return res.status(400).json({ message: "WorkspaceId is required" });
@@ -18,8 +18,13 @@ export const getUsersTask = async (req: AuthRequest, res: Response) => {
       .collection("workspace")
       .doc(workspaceId)
       .collection("tasks");
-    if (status) query = query.where("status", "==", status);
-    if (onlymine) query = query.where("assignedTo", "==", req.user?.uid);
+    // if (status) query = query.where("status", "==", status);
+    if (onlymine) {
+      if (!req.user?.uid) {
+        return res.status(401).json({ message: "User not authenticated" });
+      }
+      query = query.where("assignedTo", "==", req.user?.uid);
+    }
 
     const snapshot = await query.get();
     const tasks = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));

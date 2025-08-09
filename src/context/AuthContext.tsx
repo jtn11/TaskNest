@@ -11,7 +11,6 @@ import {
 } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { app } from "@/firestore/firebase";
-import firebase from "firebase/compat/app";
 import {
   doc,
   getDoc,

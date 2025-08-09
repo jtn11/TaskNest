@@ -1,10 +1,9 @@
 export const GetCurrentUsersTask = async (
   workspaceId: string,
-  SelectedStatus: string,
   token: string,
 ) => {
   const res = await fetch(
-    `http://localhost:8000/api/workspace/${workspaceId}/tasks?status=${SelectedStatus}&onlyMine=true}`,
+    `http://localhost:8000/api/workspace/${workspaceId}/tasks?onlyMine=true}`,
     {
       method: "GET",
       headers: { Authorization: `Bearer ${token}` },
