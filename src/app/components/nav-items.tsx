@@ -12,7 +12,7 @@ export const NavItem = ({ href, Icon, label, isActive }: NavItemsProps) => {
   return (
     <Link href={href}>
       <div
-        className={`group flex h-8 px-2 gap-4 items-center rounded cursor-pointer hover:text-gray-800 mb-[2px] ${isActive ? " bg-gray-200" : "hover:bg-gray-100"}`}
+        className={`group flex h-8 px-2 gap-2 items-center rounded cursor-pointer hover:text-gray-800 mb-[2px] ${isActive ? " bg-gray-200" : "hover:bg-gray-100"}`}
       >
         <Icon
           className={`w-4 h-4 group-hover:text-gray-800 ${isActive ? "text-gray-800" : "text-gray-500"}`}

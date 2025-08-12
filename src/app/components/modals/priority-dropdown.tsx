@@ -33,11 +33,11 @@ export default function PriorityDropdown({
         <Menu.Target>
           <div className="inline-flex items-center gap-2 px-2 py-1 text-sm border border-gray-200 hover:bg-gray-100 rounded-lg ">
             {
-              priority === "Low" ? (
+              priority === "low" ? (
                 <ArrowDownCircleIcon className="w-4 h-4" />
-              ) : priority === "Moderate" ? (
+              ) : priority === "medium" ? (
                 <ArrowRightCircleIcon className="w-4 h-4" />
-              ) : priority === "High" ? (
+              ) : priority === "high" ? (
                 <ArrowUpCircleIcon className="w-4 h-4 " />
               ) : (
                 <EllipsisHorizontalCircleIcon className="w-4 h-4" />
@@ -54,7 +54,7 @@ export default function PriorityDropdown({
             <Menu.Item
               component="div"
               className="hover:bg-transparent"
-              onClick={() => handlePriority("Low")}
+              onClick={() => handlePriority("low")}
             >
               <div className="flex items-center space-x-2">
                 <ArrowDownCircleIcon
@@ -68,7 +68,7 @@ export default function PriorityDropdown({
             <Menu.Item
               component="div"
               className=" hover:bg-transparent"
-              onClick={() => handlePriority("Moderate")}
+              onClick={() => handlePriority("medium")}
             >
               <div className="flex items-center space-x-2">
                 <ArrowRightCircleIcon
@@ -82,7 +82,7 @@ export default function PriorityDropdown({
             <Menu.Item
               component="div"
               className="hover:bg-transparent"
-              onClick={() => handlePriority("High")}
+              onClick={() => handlePriority("high")}
             >
               <div className="flex items-center space-x-2">
                 <ArrowUpCircleIcon

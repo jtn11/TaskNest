@@ -45,7 +45,7 @@ export default function AssigneeDropdown({
                 className="py-0 px-0 hover:bg-transparent"
                 onClick={() => {
                   if (member.email) {
-                    handleAssignee(member.email.split("@")[0]);
+                    handleAssignee(member.email);
                   }
                 }}
               >

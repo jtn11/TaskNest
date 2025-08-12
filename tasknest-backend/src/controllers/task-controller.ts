@@ -23,7 +23,8 @@ export const getUsersTask = async (req: AuthRequest, res: Response) => {
       if (!req.user?.uid) {
         return res.status(401).json({ message: "User not authenticated" });
       }
-      query = query.where("assignedTo", "==", req.user?.uid);
+      query = query.where("assignedTo", "==", req.user?.email);
+      //member.email.split("@")[0]
     }
 
     const snapshot = await query.get();

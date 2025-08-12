@@ -1,7 +1,9 @@
 import StatusDropdown from "@/app/components/modals/status-dropwdown";
 import {
+  ArrowDownCircleIcon,
   ArrowLeftIcon,
   ArrowRightCircleIcon,
+  ArrowUpCircleIcon,
 } from "@heroicons/react/24/outline";
 import { UserCircleIcon } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
@@ -35,10 +37,11 @@ export const TaskList = ({ status }: TaskListProps) => {
       const workspaceId = activeWorkspace?.id;
       if (!currentUser || !workspaceId) return;
       const taskByStatus = await GetCurrentUsersTask(workspaceId, token);
+      console.log("Tasks of Current User",taskByStatus)
       setTasks(taskByStatus || []);
     };
     handleTask();
-  }, [currentUser, activeWorkspace]);
+  }, [currentUser, activeWorkspace , token]);
 
   const filteredTask = tasks.filter((task) => task.status === status);
 
@@ -62,8 +65,15 @@ export const TaskList = ({ status }: TaskListProps) => {
 
               {/* Right Section: Icons + Date */}
               <div className="flex items-center gap-2 text-sm">
-                <ArrowRightCircleIcon className="w-5 h-5" />
-                <UserCircleIcon className="w-5 h-5" />
+                {task.priority === "low" ? (
+                  <ArrowDownCircleIcon className="w-5 h-5" />
+                ) : task.priority === "high" ? (
+                  <ArrowUpCircleIcon className="w-5 h-5" />
+                ) : (
+                  <ArrowRightCircleIcon className="w-5 h-5" />
+                )}
+
+                <UserCircleIcon className="w-5 h-5 text-blue-500" />
                 <span>
                   {new Date(task.createdAt).toLocaleDateString("en-US", {
                     month: "short",

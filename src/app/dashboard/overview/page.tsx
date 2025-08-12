@@ -2,14 +2,22 @@
 import { useAuth } from "@/context/AuthContext";
 import { useWorkspace } from "@/context/workspace-context";
 import { useEffect, useState } from "react";
-import { GetCurrentUsersTask } from "../tasks/task";
 import StatusDropdown from "@/app/components/modals/status-dropwdown";
 import {
+  ArrowDownCircleIcon,
   ArrowLeftIcon,
   ArrowRightCircleIcon,
-  UserCircleIcon,
-} from "@heroicons/react/16/solid";
+  ArrowUpCircleIcon,
+} from "@heroicons/react/24/outline";
 import { GetOverViewTasks } from "./overview";
+import { UserCircleIcon } from "@heroicons/react/16/solid";
+import { Tooltip } from "@mantine/core";
+import PriorityDropdown from "@/app/components/modals/priority-dropdown";
+
+interface PriorityDropdownTypes {
+  value?: string;
+  onChange?: (val: string) => void;
+}
 
 interface Task {
   id: string;
@@ -27,6 +35,9 @@ export default function OverView() {
   const { currentUser } = useAuth();
   const { activeWorkspace, token } = useWorkspace();
   const [tasks, setTasks] = useState<Task[]>([]);
+  // const [priority, setPriority] = useState("Priority");
+  // const [showDropdown, setShowDropdown] = useState(false);
+
 
   useEffect(() => {
     const handleTask = async () => {
@@ -37,6 +48,8 @@ export default function OverView() {
     };
     handleTask();
   }, [currentUser, activeWorkspace]);
+  
+
 
   if (expandTask) {
     return (
@@ -57,9 +70,17 @@ export default function OverView() {
               </div>
 
               {/* Right Section: Icons + Date */}
-              <div className="flex items-center gap-2 text-sm">
-                <ArrowRightCircleIcon className="w-5 h-5" />
-                <UserCircleIcon className="w-5 h-5" />
+              <div className="flex items-center gap-2 text-sm"
+              // onClick={() => setShowDropdown(prev => !prev)}
+              >
+                {task.priority === "low" ? (
+                  <ArrowDownCircleIcon className="w-5 h-5" />
+                ) : task.priority === "high" ? (
+                  <ArrowUpCircleIcon className="w-5 h-5" />
+                ) : (
+                  <ArrowRightCircleIcon className="w-5 h-5" />
+                )}
+                <UserCircleIcon className="w-5 h-5 text-blue-500" />
                 <span>
                   {new Date(task.createdAt).toLocaleDateString("en-US", {
                     month: "short",
@@ -67,6 +88,7 @@ export default function OverView() {
                   })}
                 </span>
               </div>
+
             </div>
           </div>
         ))}
