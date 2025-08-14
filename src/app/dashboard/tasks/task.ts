@@ -6,7 +6,7 @@ export const GetCurrentUsersTask = async (
     `http://localhost:8000/api/workspace/${workspaceId}/tasks?onlymine=true`,
     {
       method: "GET",
-      headers: { Authorization: `Bearer ${token}`},
+      headers: { Authorization: `Bearer ${token}` },
     },
   );
   const tasks = await res.json();

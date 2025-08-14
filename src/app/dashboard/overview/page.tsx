@@ -11,13 +11,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { GetOverViewTasks } from "./overview";
 import { UserCircleIcon } from "@heroicons/react/16/solid";
-import { Tooltip } from "@mantine/core";
-import PriorityDropdown from "@/app/components/modals/priority-dropdown";
-
-interface PriorityDropdownTypes {
-  value?: string;
-  onChange?: (val: string) => void;
-}
+import { DetailedView } from "../tasks/detailed-view";
 
 interface Task {
   id: string;
@@ -35,9 +29,10 @@ export default function OverView() {
   const { currentUser } = useAuth();
   const { activeWorkspace, token } = useWorkspace();
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [openDetailedView, setOpenDetailedView] = useState(false);
+
   // const [priority, setPriority] = useState("Priority");
   // const [showDropdown, setShowDropdown] = useState(false);
-
 
   useEffect(() => {
     const handleTask = async () => {
@@ -48,14 +43,18 @@ export default function OverView() {
     };
     handleTask();
   }, [currentUser, activeWorkspace]);
-  
 
-
-  if (expandTask) {
+  if (openDetailedView) {
+    return <DetailedView setOpenDetailedView={setOpenDetailedView} />;
+  } else {
     return (
       <div>
         {tasks.map((task) => (
-          <div key={task.id} className="w-full p-2 hover:bg-gray-100">
+          <div
+            key={task.id}
+            className="w-full p-2 hover:bg-gray-100"
+            onClick={() => setOpenDetailedView(true)}
+          >
             <div className="flex items-center justify-between gap-4 px-4 cursor-pointer">
               {/* Left Section: Status + Title */}
               <div className="flex items-center gap-3">
@@ -70,8 +69,9 @@ export default function OverView() {
               </div>
 
               {/* Right Section: Icons + Date */}
-              <div className="flex items-center gap-2 text-sm"
-              // onClick={() => setShowDropdown(prev => !prev)}
+              <div
+                className="flex items-center gap-2 text-sm"
+                // onClick={() => setShowDropdown(prev => !prev)}
               >
                 {task.priority === "low" ? (
                   <ArrowDownCircleIcon className="w-5 h-5" />
@@ -88,20 +88,9 @@ export default function OverView() {
                   })}
                 </span>
               </div>
-
             </div>
           </div>
         ))}
-      </div>
-    );
-  } else {
-    return (
-      <div>
-        <ArrowLeftIcon
-          className="w-4 h-4"
-          onClick={() => setExpandTask(true)}
-        />
-        <span>detailed view</span>
       </div>
     );
   }

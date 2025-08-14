@@ -70,7 +70,7 @@ export const TaskNavBar = ({ activeState, setActiveState }: NavBarProps) => {
 
           {/* In-Review */}
           <Button
-            onClick={() => setActiveState("in-review")}
+            onClick={() => setActiveState("review")}
             variant="default"
             size="xs"
             radius="md"
@@ -80,7 +80,7 @@ export const TaskNavBar = ({ activeState, setActiveState }: NavBarProps) => {
             className={`
               px-4 rounded-sm font-medium transition-all duration-200
               flex items-center gap-2 border border-gray-200
-              ${activeState === "in-review" ? "bg-gray-200" : ""}
+              ${activeState === "review" ? "bg-gray-200" : ""}
             `}
           >
             In-Review

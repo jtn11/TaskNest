@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { GetCurrentUsersTask } from "./task";
 import { useWorkspace } from "@/context/workspace-context";
 import { useAuth } from "@/context/AuthContext";
+import { DetailedView } from "./detailed-view";
 
 interface TaskListProps {
   status: string;
@@ -27,38 +28,41 @@ interface Task {
 }
 
 export const TaskList = ({ status }: TaskListProps) => {
-  const [expandTask, setExpandTask] = useState(true);
   const { currentUser } = useAuth();
   const { activeWorkspace, token } = useWorkspace();
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [openDetailedView, setOpenDetailedView] = useState(false);
 
   useEffect(() => {
     const handleTask = async () => {
       const workspaceId = activeWorkspace?.id;
       if (!currentUser || !workspaceId) return;
       const taskByStatus = await GetCurrentUsersTask(workspaceId, token);
-      console.log("Tasks of Current User",taskByStatus)
+      console.log("Tasks of Current User", taskByStatus);
       setTasks(taskByStatus || []);
     };
     handleTask();
-  }, [currentUser, activeWorkspace , token]);
+  }, [currentUser, activeWorkspace, token]);
 
   const filteredTask = tasks.filter((task) => task.status === status);
 
-  if (expandTask) {
+  if (openDetailedView) {
+    return <DetailedView setOpenDetailedView={setOpenDetailedView} />;
+  } else {
     return (
       <div>
         {filteredTask.map((task) => (
-          <div key={task.id} className="w-full p-2 hover:bg-gray-100">
+          <div
+            key={task.id}
+            className="w-full p-2 hover:bg-gray-100"
+            onClick={() => setOpenDetailedView(true)}
+          >
             <div className="flex items-center justify-between gap-4 px-4 cursor-pointer">
               {/* Left Section: Status + Title */}
               <div className="flex items-center gap-3">
-                <StatusDropdown />
+                <StatusDropdown CurrentTaskListStatus={status} />
 
-                <div
-                  className="text-sm font-medium"
-                  onClick={() => setExpandTask(false)}
-                >
+                <div className="text-sm font-medium">
                   <span>{task.title}</span>
                 </div>
               </div>
@@ -86,15 +90,17 @@ export const TaskList = ({ status }: TaskListProps) => {
         ))}
       </div>
     );
-  } else {
-    return (
-      <div>
-        <ArrowLeftIcon
-          className="w-4 h-4"
-          onClick={() => setExpandTask(true)}
-        />
-        <span>detailed view</span>
-      </div>
-    );
   }
+
+  // else {
+  //   return (
+  //     <div>
+  //       <ArrowLeftIcon
+  //         className="w-4 h-4"
+  //         onClick={() => setExpandTask(true)}
+  //       />
+  //       <DetailedView/>
+  //     </div>
+  //   );
+  // }
 };

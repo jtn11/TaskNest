@@ -15,6 +15,7 @@ interface statusDropdownType {
   onChange?: (val: string) => void;
   label?: string;
   classname?: string;
+  CurrentTaskListStatus?: string;
 }
 
 export default function StatusDropdown({
@@ -22,6 +23,7 @@ export default function StatusDropdown({
   classname,
   value,
   onChange,
+  CurrentTaskListStatus,
 }: statusDropdownType) {
   const [currentStatus, setCurrentStatus] = useState("todo");
   const [currentlabel, setCurrentlabel] = useState<String | undefined>("todo");
@@ -50,9 +52,9 @@ export default function StatusDropdown({
             {
               currentStatus === "backlog" ? (
                 <StopCircleIcon className="w-4 h-4" />
-              ) : currentStatus === "In-Progress" ? (
+              ) : currentStatus === "in-progress" ? (
                 <ClockIcon className="w-4 h-4 text-yellow-500" />
-              ) : currentStatus === "In-Review" ? (
+              ) : currentStatus === "review" ? (
                 <ClipboardDocumentListIcon className="w-4 h-4 text-green-600" />
               ) : currentStatus === "completed" ? (
                 <CheckCircleIcon className="w-4 h-4 text-blue-600" />
@@ -106,7 +108,7 @@ export default function StatusDropdown({
             <Menu.Item
               component="div"
               className=" hover:bg-transparent"
-              onClick={() => handleSelect("In-Progress", "In-Progress")}
+              onClick={() => handleSelect("in-progress", "In-Progress")}
             >
               <div className="flex items-center space-x-2">
                 <ClockIcon
@@ -120,7 +122,7 @@ export default function StatusDropdown({
             <Menu.Item
               component="div"
               className="hover:bg-transparent"
-              onClick={() => handleSelect("In-Review", "In-Review")}
+              onClick={() => handleSelect("review", "In-Review")}
             >
               <div className="flex items-center space-x-2">
                 <ClipboardDocumentListIcon
