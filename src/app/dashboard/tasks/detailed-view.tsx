@@ -1,8 +1,6 @@
 import { Button, Modal, Textarea, TextInput, ActionIcon } from "@mantine/core";
 import { useState } from "react";
-import {
-  PaperClipIcon
-} from "@heroicons/react/24/outline";
+import { PaperClipIcon } from "@heroicons/react/24/outline";
 import StatusDropdown from "@/app/components/modals/status-dropwdown";
 import PriorityDropdown from "@/app/components/modals/priority-dropdown";
 import AssigneeDropdown from "@/app/components/modals/assignee-dropdown";

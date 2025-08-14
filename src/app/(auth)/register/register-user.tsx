@@ -46,7 +46,7 @@ export const RegisterUser = ({ onSubmit }: FormProps) => {
 
           <button
             type="submit"
-            className="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+            className="w-full py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
           >
             Sign Up
           </button>
@@ -54,7 +54,7 @@ export const RegisterUser = ({ onSubmit }: FormProps) => {
 
         <div className="text-md">
           <span className="text-gray-600">Already have an account ? </span>
-          <Link href="/login" className=" text-blue-600 ml-2 hover:underline">
+          <Link href="/login" className=" text-blue-500 ml-2 hover:underline">
             Login
           </Link>
         </div>

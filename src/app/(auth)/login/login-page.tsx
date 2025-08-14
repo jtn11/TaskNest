@@ -45,7 +45,7 @@ export const Login = ({ onSubmit }: FormProps) => {
 
           <button
             type="submit"
-            className="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition cursor-pointer"
+            className="w-full py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition cursor-pointer"
           >
             Login
           </button>
@@ -55,7 +55,7 @@ export const Login = ({ onSubmit }: FormProps) => {
           <span className="text-gray-600">New to TaskNest ? </span>
           <Link
             href="/register"
-            className=" text-blue-600 ml-2 hover:underline"
+            className=" text-blue-500 ml-2 hover:underline"
           >
             Create account
           </Link>
