@@ -1,48 +1,22 @@
+"use client";
 import StatusDropdown from "@/app/components/modals/status-dropwdown";
 import {
   ArrowDownCircleIcon,
-  ArrowLeftIcon,
   ArrowRightCircleIcon,
   ArrowUpCircleIcon,
 } from "@heroicons/react/24/outline";
 import { UserCircleIcon } from "@heroicons/react/24/solid";
-import { useEffect, useState } from "react";
-import { GetCurrentUsersTask } from "./task";
-import { useWorkspace } from "@/context/workspace-context";
-import { useAuth } from "@/context/AuthContext";
+import { useState } from "react";
 import { DetailedView } from "./detailed-view";
+import { useTasks } from "@/context/task-context";
 
 interface TaskListProps {
   status: string;
 }
 
-interface Task {
-  id: string;
-  title: string;
-  description: string;
-  createdBy: string;
-  assignedTo: string;
-  status: string;
-  priority: string;
-  createdAt: string;
-}
-
 export const TaskList = ({ status }: TaskListProps) => {
-  const { currentUser } = useAuth();
-  const { activeWorkspace, token } = useWorkspace();
-  const [tasks, setTasks] = useState<Task[]>([]);
   const [openDetailedView, setOpenDetailedView] = useState(false);
-
-  useEffect(() => {
-    const handleTask = async () => {
-      const workspaceId = activeWorkspace?.id;
-      if (!currentUser || !workspaceId) return;
-      const taskByStatus = await GetCurrentUsersTask(workspaceId, token);
-      console.log("Tasks of Current User", taskByStatus);
-      setTasks(taskByStatus || []);
-    };
-    handleTask();
-  }, [currentUser, activeWorkspace, token]);
+  const { tasks } = useTasks();
 
   const filteredTask = tasks.filter((task) => task.status === status);
 
@@ -91,16 +65,4 @@ export const TaskList = ({ status }: TaskListProps) => {
       </div>
     );
   }
-
-  // else {
-  //   return (
-  //     <div>
-  //       <ArrowLeftIcon
-  //         className="w-4 h-4"
-  //         onClick={() => setExpandTask(true)}
-  //       />
-  //       <DetailedView/>
-  //     </div>
-  //   );
-  // }
 };

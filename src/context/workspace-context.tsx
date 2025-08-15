@@ -1,7 +1,7 @@
 "use client";
 import { CreateWorkspace, GetWorkspace } from "@/app/workspaces/workspace";
 import { createContext, useContext, useEffect, useRef, useState } from "react";
-import { useAuth } from "./AuthContext";
+import { useAuth } from "./auth-context";
 import { useRouter } from "next/navigation";
 import { GetWorkspaceMembers } from "@/app/workspaces/members";
 

@@ -1,7 +1,7 @@
 "use client";
 import { RegisterUser } from "./register-user";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/context/auth-context";
 import { useEffect } from "react";
 
 export default function Page() {

@@ -1,55 +1,27 @@
 "use client";
-import { useAuth } from "@/context/AuthContext";
-import { useWorkspace } from "@/context/workspace-context";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import StatusDropdown from "@/app/components/modals/status-dropwdown";
 import {
   ArrowDownCircleIcon,
-  ArrowLeftIcon,
   ArrowRightCircleIcon,
   ArrowUpCircleIcon,
 } from "@heroicons/react/24/outline";
-import { GetOverViewTasks } from "./overview";
 import { UserCircleIcon } from "@heroicons/react/16/solid";
 import { DetailedView } from "../tasks/detailed-view";
-
-interface Task {
-  id: string;
-  title: string;
-  description: string;
-  createdBy: string;
-  assignedTo: string;
-  status: string;
-  priority: string;
-  createdAt: string;
-}
+import { useTasks } from "@/context/task-context";
 
 export default function OverView() {
   const [expandTask, setExpandTask] = useState(true);
-  const { currentUser } = useAuth();
-  const { activeWorkspace, token } = useWorkspace();
-  const [tasks, setTasks] = useState<Task[]>([]);
   const [openDetailedView, setOpenDetailedView] = useState(false);
 
-  // const [priority, setPriority] = useState("Priority");
-  // const [showDropdown, setShowDropdown] = useState(false);
-
-  useEffect(() => {
-    const handleTask = async () => {
-      const workspaceId = activeWorkspace?.id;
-      if (!currentUser || !workspaceId) return;
-      const taskByStatus = await GetOverViewTasks(workspaceId, token);
-      setTasks(taskByStatus || []);
-    };
-    handleTask();
-  }, [currentUser, activeWorkspace]);
+  const { overViewTasks } = useTasks();
 
   if (openDetailedView) {
     return <DetailedView setOpenDetailedView={setOpenDetailedView} />;
   } else {
     return (
       <div>
-        {tasks.map((task) => (
+        {overViewTasks.map((task) => (
           <div
             key={task.id}
             className="w-full p-2 hover:bg-gray-100"

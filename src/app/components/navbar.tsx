@@ -8,7 +8,7 @@ import {
 import { Menu, TextInput, Tooltip } from "@mantine/core";
 import { useState } from "react";
 import { TaskModal } from "./modals/add-task-modal";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/context/auth-context";
 import { WorkSpaceDropdown } from "./workspace/workspace-dropdown";
 
 interface NavBarProps {

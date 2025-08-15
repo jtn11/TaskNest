@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { AuthProvider } from "@/context/AuthContext";
+import { AuthProvider } from "@/context/auth-context";
 import "@mantine/core/styles.css";
 
 import {
@@ -10,6 +10,7 @@ import {
   MantineProvider,
 } from "@mantine/core";
 import { WorkspaceProvider } from "@/context/workspace-context";
+import { TaskProvider } from "@/context/task-context";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -41,7 +42,9 @@ export default function RootLayout({
       >
         <MantineProvider>
           <AuthProvider>
-            <WorkspaceProvider>{children}</WorkspaceProvider>
+            <WorkspaceProvider>
+              <TaskProvider>{children}</TaskProvider>
+            </WorkspaceProvider>
           </AuthProvider>
         </MantineProvider>
       </body>
