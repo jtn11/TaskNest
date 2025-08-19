@@ -6,6 +6,7 @@ import {
   ClockIcon,
   ClipboardDocumentListIcon,
   CheckCircleIcon,
+  StopCircleIcon,
 } from "@heroicons/react/24/solid";
 import { LifebuoyIcon } from "@heroicons/react/24/outline";
 
@@ -43,7 +44,7 @@ export const TaskNavBar = ({ activeState, setActiveState }: NavBarProps) => {
             variant={"default"}
             size="xs"
             radius="md"
-            leftSection={<LifebuoyIcon className="w-4 h-4" />}
+            leftSection={<StopCircleIcon className="w-4 h-4" />}
             className="
               px-4 rounded-sm font-medium transition-all duration-200
               flex items-center gap-2 border border-gray-200

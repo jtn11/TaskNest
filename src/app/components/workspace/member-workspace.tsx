@@ -17,8 +17,8 @@ import {
 } from "@mantine/core";
 import { useWorkspace } from "@/context/workspace-context";
 import { useState } from "react";
-import { useAuth } from "@/context/auth-context";
 import { AddWorkspaceMember } from "@/app/workspaces/members";
+import { useAuth } from "@/context/auth-context";
 
 export const MemberWorkSpace = () => {
   const { members, activeWorkspace, setmembers } = useWorkspace();

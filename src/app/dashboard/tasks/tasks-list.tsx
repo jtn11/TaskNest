@@ -14,29 +14,50 @@ interface TaskListProps {
   status: string;
 }
 
+interface Task {
+  id: string;
+  title: string;
+  description: string;
+  createdBy: string;
+  assignedTo: string;
+  status: string;
+  priority: string;
+  createdAt: string;
+}
+
 export const TaskList = ({ status }: TaskListProps) => {
   const [openDetailedView, setOpenDetailedView] = useState(false);
+  const [selectedListItem, setselectedListItem] = useState<Task | undefined>(
+    undefined,
+  );
   const { tasks } = useTasks();
 
   const filteredTask = tasks.filter((task) => task.status === status);
 
   if (openDetailedView) {
-    return <DetailedView setOpenDetailedView={setOpenDetailedView} />;
+    return (
+      <DetailedView
+        setOpenDetailedView={setOpenDetailedView}
+        selectedListItem={selectedListItem}
+      />
+    );
   } else {
     return (
       <div>
         {filteredTask.map((task) => (
-          <div
-            key={task.id}
-            className="w-full p-2 hover:bg-gray-100"
-            onClick={() => setOpenDetailedView(true)}
-          >
+          <div key={task.id} className="w-full p-2 hover:bg-gray-100">
             <div className="flex items-center justify-between gap-4 px-4 cursor-pointer">
               {/* Left Section: Status + Title */}
               <div className="flex items-center gap-3">
                 <StatusDropdown CurrentTaskListStatus={status} />
 
-                <div className="text-sm font-medium">
+                <div
+                  className="text-sm font-medium"
+                  onClick={() => {
+                    setOpenDetailedView(true);
+                    setselectedListItem(task);
+                  }}
+                >
                   <span>{task.title}</span>
                 </div>
               </div>

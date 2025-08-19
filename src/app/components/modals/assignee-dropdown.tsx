@@ -5,7 +5,7 @@ import { UserCircleIcon, UserIcon } from "@heroicons/react/24/outline";
 import { useWorkspace } from "@/context/workspace-context";
 
 interface AssigneeDropdownTypes {
-  value: string;
+  value?: string;
   onChange: (val: string) => void;
 }
 

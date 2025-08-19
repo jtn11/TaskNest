@@ -5,11 +5,26 @@ import StatusDropdown from "@/app/components/modals/status-dropwdown";
 import PriorityDropdown from "@/app/components/modals/priority-dropdown";
 import AssigneeDropdown from "@/app/components/modals/assignee-dropdown";
 
-interface DetailedViewTypes {
-  setOpenDetailedView: (value: boolean) => void;
+interface Task {
+  id: string;
+  title: string;
+  description: string;
+  createdBy: string;
+  assignedTo: string;
+  status: string;
+  priority: string;
+  createdAt: string;
 }
 
-export const DetailedView = ({ setOpenDetailedView }: DetailedViewTypes) => {
+interface DetailedViewTypes {
+  setOpenDetailedView: (value: boolean) => void;
+  selectedListItem: Task | undefined;
+}
+
+export const DetailedView = ({
+  setOpenDetailedView,
+  selectedListItem,
+}: DetailedViewTypes) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [comment, setComment] = useState("");
@@ -26,7 +41,7 @@ export const DetailedView = ({ setOpenDetailedView }: DetailedViewTypes) => {
             variant="unstyled"
             size="lg"
             placeholder="Task title"
-            value={title}
+            value={selectedListItem?.title}
             onChange={(e) => setTitle(e.target.value)}
             classNames={{
               input:
@@ -42,7 +57,7 @@ export const DetailedView = ({ setOpenDetailedView }: DetailedViewTypes) => {
             minRows={3}
             maxRows={10}
             autosize
-            value={description}
+            value={selectedListItem?.description}
             onChange={(e) => setDescription(e.target.value)}
             classNames={{
               input:
@@ -61,9 +76,19 @@ export const DetailedView = ({ setOpenDetailedView }: DetailedViewTypes) => {
         </div>
 
         <div className="flex gap-1 mb-2">
-          <StatusDropdown label="status" value={status} onChange={setStatus} />
-          <PriorityDropdown value={priority} onChange={setPriority} />
-          <AssigneeDropdown value={assignedTo} onChange={setAssignedTo} />
+          <StatusDropdown
+            label={selectedListItem?.status}
+            value={status}
+            onChange={setStatus}
+          />
+          <PriorityDropdown
+            value={selectedListItem?.priority}
+            onChange={setPriority}
+          />
+          <AssigneeDropdown
+            value={selectedListItem?.assignedTo}
+            onChange={setAssignedTo}
+          />
         </div>
 
         <div className="pt-4 border-t border-gray-100 flex flex-col gap-2">

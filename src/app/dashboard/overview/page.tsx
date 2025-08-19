@@ -10,14 +10,33 @@ import { UserCircleIcon } from "@heroicons/react/16/solid";
 import { DetailedView } from "../tasks/detailed-view";
 import { useTasks } from "@/context/task-context";
 
+interface Task {
+  id: string;
+  title: string;
+  description: string;
+  createdBy: string;
+  assignedTo: string;
+  status: string;
+  priority: string;
+  createdAt: string;
+}
+
 export default function OverView() {
   const [expandTask, setExpandTask] = useState(true);
   const [openDetailedView, setOpenDetailedView] = useState(false);
+  const [selectedListItem, setselectedListItem] = useState<Task | undefined>(
+    undefined,
+  );
 
   const { overViewTasks } = useTasks();
 
   if (openDetailedView) {
-    return <DetailedView setOpenDetailedView={setOpenDetailedView} />;
+    return (
+      <DetailedView
+        setOpenDetailedView={setOpenDetailedView}
+        selectedListItem={selectedListItem}
+      />
+    );
   } else {
     return (
       <div>
@@ -25,7 +44,10 @@ export default function OverView() {
           <div
             key={task.id}
             className="w-full p-2 hover:bg-gray-100"
-            onClick={() => setOpenDetailedView(true)}
+            onClick={() => {
+              setOpenDetailedView(true);
+              setselectedListItem(task);
+            }}
           >
             <div className="flex items-center justify-between gap-4 px-4 cursor-pointer">
               {/* Left Section: Status + Title */}

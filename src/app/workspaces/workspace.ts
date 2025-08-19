@@ -1,5 +1,3 @@
-import { useAuth } from "@/context/auth-context";
-
 // GET Workspace
 export const GetWorkspace = async (token: string) => {
   try {

@@ -28,7 +28,7 @@ export const SideBar = ({ setSidebarOpen }: SideBarProps) => {
   return (
     <div className="w-55 bg-gray-50 border-r border-gray-200 flex flex-col min-h-screen">
       <div className="p-6 flex justify-between items-center">
-        <h1 className="text-xl font-bold text-gray-900">TaskNest</h1>
+        <h1 className="text-xl font-bold  text-blue-500">TaskNest</h1>
         <button
           onClick={() => setSidebarOpen(false)}
           className="text-gray-600 hover:text-gray-800"
@@ -37,11 +37,6 @@ export const SideBar = ({ setSidebarOpen }: SideBarProps) => {
         </button>
       </div>
 
-      {/* <div className="flex gap-2 justify-center items-center">
-        <HomeIcon className="w-6 h-6"/>
-        <span>WorkSpace</span>
-        <ChevronDownIcon className="w-4 h-4"/>
-      </div> */}
       <MemberWorkSpace />
 
       <div className="p-3 mt-2 hover:text-gray-800">

@@ -1,5 +1,3 @@
-import { AuthRequest } from "../../../tasknest-backend/src/middleware/authmiddleware";
-
 export const GetWorkspaceMembers = async (
   workspaceId: string,
   token: string,

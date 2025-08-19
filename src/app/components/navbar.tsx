@@ -5,7 +5,7 @@ import {
   PencilSquareIcon,
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/solid";
-import { Menu, TextInput, Tooltip } from "@mantine/core";
+import { Avatar, Menu, TextInput, Tooltip } from "@mantine/core";
 import { useState } from "react";
 import { TaskModal } from "./modals/add-task-modal";
 import { useAuth } from "@/context/auth-context";
@@ -72,7 +72,23 @@ export const NavBar = ({ isSidebarOpen, setSidebarOpen }: NavBarProps) => {
                 </Menu.Target>
 
                 <Menu.Dropdown>
-                  <Menu.Item>{username || "Username"}</Menu.Item>
+                  <div className="flex items-center space-x-2">
+                    <Menu.Item>
+                      <div className="flex items-center space-x-2">
+                        <Avatar
+                          color="blue"
+                          radius="xl"
+                          size="sm"
+                          className="w-6 h-6 flex items-center justify-center text-white text-xs font-medium"
+                        >
+                          {username ? username.charAt(0).toUpperCase() : ""}
+                        </Avatar>
+                        <div className="text-blue-500 font-medium">
+                          {username || "Username"}
+                        </div>
+                      </div>
+                    </Menu.Item>
+                  </div>
                   <Menu.Item>Settings</Menu.Item>
                   <Menu.Item onClick={logout}>Log out</Menu.Item>
                 </Menu.Dropdown>
