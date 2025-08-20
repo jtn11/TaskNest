@@ -92,7 +92,7 @@ export const DetailedView = ({
         </div>
 
         <div className="pt-4 border-t border-gray-100 flex flex-col gap-2">
-          <span className="text-sm font-medium text-gray-500">Comments</span>
+          <span className="text-sm font-medium text-blue-500">Comments</span>
 
           <div>
             <Textarea
@@ -143,7 +143,7 @@ export const DetailedView = ({
       onClose={() => setOpenDetailedView(false)}
       yOffset={140}
       title={
-        <span className="text-gray-900 ml-1 text-lg font-semibold">
+        <span className="text-blue-500 ml-1 text-lg font-semibold">
           Task Details
         </span>
       }
