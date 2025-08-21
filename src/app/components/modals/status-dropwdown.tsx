@@ -13,7 +13,7 @@ import { LifebuoyIcon } from "@heroicons/react/24/outline";
 interface statusDropdownType {
   value?: string; // its basically to show in the detailed view -> that some value is already there
   onChange?: (val: string) => void;
-  label?: string;
+  label?: string; // from task modal
   classname?: string;
   showOnlyIconsInList?: boolean;
 }
@@ -63,7 +63,6 @@ export default function StatusDropdown({
               showOnlyIconsInList
                 ? "px-1 py-1 border-none cursor-default"
                 : "gap-2 px-2 py-1 cursor-pointer",
-              classname,
             )}
           >
             <StatusIcon status={value || currentStatus} />

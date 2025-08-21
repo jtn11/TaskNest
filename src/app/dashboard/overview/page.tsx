@@ -1,14 +1,10 @@
 "use client";
 import { useState } from "react";
 import StatusDropdown from "@/app/components/modals/status-dropwdown";
-import {
-  ArrowDownCircleIcon,
-  ArrowRightCircleIcon,
-  ArrowUpCircleIcon,
-} from "@heroicons/react/24/outline";
-import { UserCircleIcon } from "@heroicons/react/16/solid";
 import { DetailedView } from "../tasks/detailed-view";
 import { useTasks } from "@/context/task-context";
+import PriorityDropdown from "@/app/components/modals/priority-dropdown";
+import AssigneeDropdown from "@/app/components/modals/assignee-dropdown";
 
 interface Task {
   id: string;
@@ -65,16 +61,9 @@ export default function OverView() {
               {/* Right Section: Icons + Date */}
               <div
                 className="flex items-center gap-2 text-sm"
-                // onClick={() => setShowDropdown(prev => !prev)}
               >
-                {task.priority === "low" ? (
-                  <ArrowDownCircleIcon className="w-5 h-5" />
-                ) : task.priority === "high" ? (
-                  <ArrowUpCircleIcon className="w-5 h-5" />
-                ) : (
-                  <ArrowRightCircleIcon className="w-5 h-5" />
-                )}
-                <UserCircleIcon className="w-5 h-5 text-blue-500" />
+                <PriorityDropdown value={task.priority} ShowOnlyPriorityIcon />
+                <AssigneeDropdown value={task.assignedTo} ShowOnlyUSerIcon />
                 <span>
                   {new Date(task.createdAt).toLocaleDateString("en-US", {
                     month: "short",
