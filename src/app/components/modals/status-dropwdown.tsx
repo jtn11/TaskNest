@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Menu, Group, Divider } from "@mantine/core";
 import {
   CheckCircleIcon,
@@ -51,6 +51,13 @@ export default function StatusDropdown({
     }
   }
 
+  useEffect(() => {
+    if (value) {
+      setCurrentStatus(value);
+      setCurrentlabel(value);
+    }
+  }, [value]);
+
   const displayLabel = label === "status" ? currentlabel : label;
 
   return (
@@ -65,9 +72,9 @@ export default function StatusDropdown({
                 : "gap-2 px-2 py-1 cursor-pointer",
             )}
           >
-            <StatusIcon status={value || currentStatus} />
-            {!showOnlyIconsInList && (value || displayLabel) && (
-              <span>{value || displayLabel}</span>
+            <StatusIcon status={currentStatus} />
+            {!showOnlyIconsInList && currentlabel && (
+              <span>{currentlabel}</span>
             )}
           </div>
         </Menu.Target>

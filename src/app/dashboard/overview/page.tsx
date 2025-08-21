@@ -59,9 +59,7 @@ export default function OverView() {
               </div>
 
               {/* Right Section: Icons + Date */}
-              <div
-                className="flex items-center gap-2 text-sm"
-              >
+              <div className="flex items-center gap-2 text-sm">
                 <PriorityDropdown value={task.priority} ShowOnlyPriorityIcon />
                 <AssigneeDropdown value={task.assignedTo} ShowOnlyUSerIcon />
                 <span>

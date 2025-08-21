@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Menu, Button, Divider } from "@mantine/core";
 import {
   ArrowDownCircleIcon,
@@ -36,6 +36,13 @@ export default function PriorityDropdown({
     }
   };
 
+  useEffect(() => {
+    if (value) {
+      setPriority(value);
+      setCurrentlabel(value);
+    }
+  }, [value]);
+
   function PriorityIcon({ priority }: { priority: string }) {
     switch (priority) {
       case "low":
@@ -63,9 +70,9 @@ export default function PriorityDropdown({
                 : "gap-2 py-1 cursor-pointer",
             )}
           >
-            <PriorityIcon priority={value || priority} />
-            {!ShowOnlyPriorityIcon && (value || priority) && (
-              <span>{value || displayLabel}</span>
+            <PriorityIcon priority={priority} />
+            {!ShowOnlyPriorityIcon && currentlabel && (
+              <span>{currentlabel}</span>
             )}
           </div>
         </Menu.Target>

@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Menu, Button, Avatar, Divider } from "@mantine/core";
 import { UserCircleIcon, UserIcon } from "@heroicons/react/24/outline";
 import { useWorkspace } from "@/context/workspace-context";
@@ -25,6 +25,12 @@ export default function AssigneeDropdown({
     }
   };
 
+  useEffect(() => {
+    if (value) {
+      setAssignedTo(value);
+    }
+  }, [value]);
+
   const [assignedTo, setAssignedTo] = useState("Assignee");
 
   return (
@@ -46,7 +52,7 @@ export default function AssigneeDropdown({
             >
               {value ? value.charAt(0).toUpperCase() : "U"}
             </Avatar>
-            {!ShowOnlyUSerIcon && <span>{value}</span>}
+            {!ShowOnlyUSerIcon && <span>{assignedTo}</span>}
           </div>
         </Menu.Target>
 
