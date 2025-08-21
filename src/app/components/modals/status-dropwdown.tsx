@@ -11,11 +11,11 @@ import { cn } from "@/lib/cn";
 import { LifebuoyIcon } from "@heroicons/react/24/outline";
 
 interface statusDropdownType {
-  value?: string;
+  value?: string; // its basically to show in the detailed view -> that some value is already there
   onChange?: (val: string) => void;
   label?: string;
   classname?: string;
-  CurrentTaskListStatus?: string;
+  showOnlyIconsInList?: boolean;
 }
 
 export default function StatusDropdown({
@@ -23,10 +23,10 @@ export default function StatusDropdown({
   classname,
   value,
   onChange,
-  CurrentTaskListStatus,
+  showOnlyIconsInList,
 }: statusDropdownType) {
   const [currentStatus, setCurrentStatus] = useState("todo");
-  const [currentlabel, setCurrentlabel] = useState<String | undefined>("todo");
+  const [currentlabel, setCurrentlabel] = useState<string | undefined>("todo");
 
   const handleSelect = (status: string, label: string) => {
     setCurrentStatus(status);
@@ -36,6 +36,21 @@ export default function StatusDropdown({
     }
   };
 
+  function StatusIcon({ status }: { status: string }) {
+    switch (status) {
+      case "backlog":
+        return <StopCircleIcon className="w-4 h-4" />;
+      case "in-progress":
+        return <ClockIcon className="w-4 h-4 text-yellow-500" />;
+      case "review":
+        return <ClipboardDocumentListIcon className="w-4 h-4 text-green-600" />;
+      case "completed":
+        return <CheckCircleIcon className="w-4 h-4 text-blue-600" />;
+      default:
+        return <LifebuoyIcon className="w-4 h-4" />;
+    }
+  }
+
   const displayLabel = label === "status" ? currentlabel : label;
 
   return (
@@ -44,25 +59,17 @@ export default function StatusDropdown({
         <Menu.Target>
           <div
             className={cn(
-              "inline-flex items-center gap-2 px-2 py-1 text-sm border border-gray-200 hover:bg-gray-100 rounded-lg ",
-              !displayLabel && "px-1 border-none",
+              "inline-flex items-center text-sm border border-gray-200 hover:bg-gray-100 rounded-lg",
+              showOnlyIconsInList
+                ? "px-1 py-1 border-none cursor-default"
+                : "gap-2 px-2 py-1 cursor-pointer",
               classname,
             )}
           >
-            {
-              currentStatus === "backlog" ? (
-                <StopCircleIcon className="w-4 h-4" />
-              ) : currentStatus === "in-progress" ? (
-                <ClockIcon className="w-4 h-4 text-yellow-500" />
-              ) : currentStatus === "review" ? (
-                <ClipboardDocumentListIcon className="w-4 h-4 text-green-600" />
-              ) : currentStatus === "completed" ? (
-                <CheckCircleIcon className="w-4 h-4 text-blue-600" />
-              ) : (
-                <LifebuoyIcon className="w-4 h-4" />
-              ) // default
-            }
-            {displayLabel && <span>{displayLabel}</span>}
+            <StatusIcon status={value || currentStatus} />
+            {!showOnlyIconsInList && (value || displayLabel) && (
+              <span>{value || displayLabel}</span>
+            )}
           </div>
         </Menu.Target>
 

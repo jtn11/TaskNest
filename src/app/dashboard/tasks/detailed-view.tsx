@@ -77,9 +77,8 @@ export const DetailedView = ({
 
         <div className="flex gap-1 mb-2">
           <StatusDropdown
-            label={selectedListItem?.status}
-            value={status}
-            onChange={setStatus}
+            value={selectedListItem?.status}
+            // onChange={setStatus}
           />
           <PriorityDropdown
             value={selectedListItem?.priority}

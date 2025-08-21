@@ -49,7 +49,7 @@ export const TaskList = ({ status }: TaskListProps) => {
             <div className="flex items-center justify-between gap-4 px-4 cursor-pointer">
               {/* Left Section: Status + Title */}
               <div className="flex items-center gap-3">
-                <StatusDropdown CurrentTaskListStatus={status} />
+                <StatusDropdown value={task.status} showOnlyIconsInList />
 
                 <div
                   className="text-sm font-medium"

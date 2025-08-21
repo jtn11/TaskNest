@@ -41,24 +41,24 @@ export default function OverView() {
     return (
       <div>
         {overViewTasks.map((task) => (
-          <div
-            key={task.id}
-            className="w-full p-2 hover:bg-gray-100"
-            onClick={() => {
-              setOpenDetailedView(true);
-              setselectedListItem(task);
-            }}
-          >
+          <div key={task.id} className="w-full p-2 hover:bg-gray-100">
             <div className="flex items-center justify-between gap-4 px-4 cursor-pointer">
               {/* Left Section: Status + Title */}
               <div className="flex items-center gap-3">
-                <StatusDropdown />
+                <StatusDropdown value={task.status} showOnlyIconsInList />
 
                 <div
                   className="text-sm font-medium"
                   onClick={() => setExpandTask(false)}
                 >
-                  <span>{task.title}</span>
+                  <span
+                    onClick={() => {
+                      setOpenDetailedView(true);
+                      setselectedListItem(task);
+                    }}
+                  >
+                    {task.title}
+                  </span>
                 </div>
               </div>
 

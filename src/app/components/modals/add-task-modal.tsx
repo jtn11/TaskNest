@@ -94,8 +94,8 @@ export const TaskModal = ({ opened, onClose }: ModalProps) => {
           <div className="flex items-center gap-2">
             <StatusDropdown
               label="status"
-              value={status}
-              onChange={setStatus}
+              // value={status}
+              // onChange={setStatus}
             />
             <PriorityDropdown value={priority} onChange={setPriority} />
             <AssigneeDropdown value={assignedTo} onChange={setAssignedTo} />
