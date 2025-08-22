@@ -4,6 +4,13 @@ import { PaperClipIcon } from "@heroicons/react/24/outline";
 import StatusDropdown from "@/app/components/modals/status-dropwdown";
 import PriorityDropdown from "@/app/components/modals/priority-dropdown";
 import AssigneeDropdown from "@/app/components/modals/assignee-dropdown";
+import {
+  ArrowUpCircleIcon,
+  ArrowUpIcon,
+  CheckIcon,
+  XCircleIcon,
+} from "@heroicons/react/20/solid";
+import { cn } from "@/lib/cn";
 
 interface Task {
   id: string;
@@ -27,11 +34,24 @@ export const DetailedView = ({
 }: DetailedViewTypes) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [comment, setComment] = useState("");
 
   const [status, setStatus] = useState("todo");
   const [assignedTo, setAssignedTo] = useState("no-Assignee");
   const [priority, setPriority] = useState("medium");
+
+  const [comment, setComment] = useState("");
+  const [commentArr, setCommentArr] = useState<string[]>([]);
+
+  const handleComments = () => {
+    if (comment.trim() != "") {
+      setCommentArr((prev) => [...prev, comment]);
+      setComment("");
+    }
+  };
+  const handleDeleteComment = (index: number) => {
+    const FilteredArray = commentArr.filter((_, i) => i !== index);
+    setCommentArr(FilteredArray);
+  };
 
   const renderBody = () => {
     return (
@@ -93,6 +113,30 @@ export const DetailedView = ({
         <div className="pt-4 border-t border-gray-100 flex flex-col gap-2">
           <span className="text-sm font-medium text-blue-500">Comments</span>
 
+          {commentArr.length > 0 &&
+            commentArr.map((comment, index) => (
+              <div key={index}>
+                <Textarea
+                  radius="md"
+                  minRows={2}
+                  autosize
+                  value={comment}
+                  classNames={{
+                    input:
+                      "border border-gray-200 pr-10 placeholder-gray-400 text-gray-700",
+                  }}
+                  rightSection={
+                    <button
+                      onClick={() => handleDeleteComment(index)}
+                      disabled={!comment.trim()}
+                    >
+                      <XCircleIcon className="w-5 h-5 text-red-500" />
+                    </button>
+                  }
+                />
+              </div>
+            ))}
+
           <div>
             <Textarea
               radius="md"
@@ -105,6 +149,20 @@ export const DetailedView = ({
                 input:
                   "border border-gray-200 pr-10 placeholder-gray-400 text-gray-700 focus:border-blue-500",
               }}
+              rightSection={
+                <button
+                  onClick={handleComments}
+                  disabled={!comment.trim()}
+                  className={cn(
+                    "transition-opacity",
+                    comment.trim()
+                      ? "cursor-pointer opacity-100"
+                      : "cursor-not-allowed opacity-40",
+                  )}
+                >
+                  <ArrowUpCircleIcon className="w-6 h-6 text-blue-500" />
+                </button>
+              }
             />
           </div>
         </div>
