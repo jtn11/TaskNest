@@ -73,3 +73,32 @@ export const createTask = async (req: AuthRequest, res: Response) => {
     });
   }
 };
+
+// update Route
+
+export const updateTask = async (req: AuthRequest, res: Response) => {
+  const { workspaceId, taskId } = req.params;
+  const updates = req.body;
+  const userId = req.user?.uid;
+
+  try {
+    const workspaceRef = db.collection("workspace").doc(workspaceId);
+    const workspaceDoc = await workspaceRef.get();
+    if (!workspaceDoc.exists) {
+      return res.status(404).json({ error: "Workspace not found" });
+    }
+
+    const workspaceData = await workspaceDoc.data();
+    if (!workspaceData?.members?.includes(userId)) {
+      res.status(403).json({ error: "User Not Authorised" });
+    }
+
+    const taskRef = workspaceRef.collection("tasks").doc(taskId);
+    await taskRef.update(updates);
+
+    res.json({ success: true, message: "Task updated successfully" });
+  } catch (error) {
+    console.error("Error updating task:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};

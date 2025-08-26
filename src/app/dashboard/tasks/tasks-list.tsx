@@ -5,6 +5,7 @@ import { DetailedView } from "./detailed-view";
 import { useTasks } from "@/context/task-context";
 import PriorityDropdown from "@/app/components/modals/priority-dropdown";
 import AssigneeDropdown from "@/app/components/modals/assignee-dropdown";
+import { EmptyTaskList } from "./empty-task-list";
 
 interface TaskListProps {
   status: string;
@@ -27,6 +28,10 @@ export const TaskList = ({ status }: TaskListProps) => {
     undefined,
   );
   const { tasks } = useTasks();
+
+  if (tasks.length === 0) {
+    return <EmptyTaskList />;
+  }
 
   const filteredTask = tasks.filter((task) => task.status === status);
 

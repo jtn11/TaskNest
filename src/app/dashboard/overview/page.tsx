@@ -5,6 +5,7 @@ import { DetailedView } from "../tasks/detailed-view";
 import { useTasks } from "@/context/task-context";
 import PriorityDropdown from "@/app/components/modals/priority-dropdown";
 import AssigneeDropdown from "@/app/components/modals/assignee-dropdown";
+import { EmptyTaskList } from "../tasks/empty-task-list";
 
 interface Task {
   id: string;
@@ -25,6 +26,10 @@ export default function OverView() {
   );
 
   const { overViewTasks } = useTasks();
+
+  if (overViewTasks.length === 0) {
+    return <EmptyTaskList />;
+  }
 
   if (openDetailedView) {
     return (
