@@ -9,19 +9,25 @@ interface Task {
   createdAt: string;
 }
 
+type TaskUpdate = Partial<Task>;
+
 export const UpdateTask = async (
   taskId: string,
-  updates: Task,
+  workspaceId: string,
+  updates: TaskUpdate,
   userToken: string,
 ) => {
-  const res = await fetch(`/api/tasks/${taskId}`, {
-    method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${userToken}`, // from AuthContext
+  const res = await fetch(
+    `http://localhost:8000/api/workspace/${workspaceId}/tasks/${taskId}`,
+    {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userToken}`, // from AuthContext
+      },
+      body: JSON.stringify(updates),
     },
-    body: JSON.stringify(updates),
-  });
+  );
   if (!res.ok) throw new Error("Failed to update task");
   return res.json();
 };

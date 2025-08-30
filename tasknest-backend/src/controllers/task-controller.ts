@@ -77,7 +77,7 @@ export const createTask = async (req: AuthRequest, res: Response) => {
 // update Route
 
 export const updateTask = async (req: AuthRequest, res: Response) => {
-  const { workspaceId, taskId } = req.params;
+  const { id: workspaceId, taskId } = req.params;
   const updates = req.body;
   const userId = req.user?.uid;
 
@@ -90,10 +90,16 @@ export const updateTask = async (req: AuthRequest, res: Response) => {
 
     const workspaceData = await workspaceDoc.data();
     if (!workspaceData?.members?.includes(userId)) {
-      res.status(403).json({ error: "User Not Authorised" });
+      return res.status(403).json({ error: "User Not Authorised" });
     }
 
     const taskRef = workspaceRef.collection("tasks").doc(taskId);
+    const taskDoc = await taskRef.get();
+
+    if (!taskDoc.exists) {
+      return res.status(404).json({ error: "Task not found" });
+    }
+
     await taskRef.update(updates);
 
     res.json({ success: true, message: "Task updated successfully" });

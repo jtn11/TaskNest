@@ -4,13 +4,11 @@ import { PaperClipIcon } from "@heroicons/react/24/outline";
 import StatusDropdown from "@/app/components/modals/status-dropwdown";
 import PriorityDropdown from "@/app/components/modals/priority-dropdown";
 import AssigneeDropdown from "@/app/components/modals/assignee-dropdown";
-import {
-  ArrowUpCircleIcon,
-  ArrowUpIcon,
-  CheckIcon,
-  XCircleIcon,
-} from "@heroicons/react/20/solid";
+import { ArrowUpCircleIcon, XCircleIcon } from "@heroicons/react/20/solid";
 import { cn } from "@/lib/cn";
+import { useWorkspace } from "@/context/workspace-context";
+import { UpdateTask } from "./update-task";
+import { useAuth } from "@/context/auth-context";
 
 interface Task {
   id: string;
@@ -32,15 +30,16 @@ export const DetailedView = ({
   setOpenDetailedView,
   selectedListItem,
 }: DetailedViewTypes) => {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-
-  const [status, setStatus] = useState("todo");
-  const [assignedTo, setAssignedTo] = useState("no-Assignee");
-  const [priority, setPriority] = useState("medium");
-
+  const [title, setTitle] = useState(selectedListItem?.title);
+  const [description, setDescription] = useState(selectedListItem?.description);
+  const [status, setStatus] = useState(selectedListItem?.status);
+  const [assignedTo, setAssignedTo] = useState(selectedListItem?.assignedTo);
+  const [priority, setPriority] = useState(selectedListItem?.priority);
   const [comment, setComment] = useState("");
   const [commentArr, setCommentArr] = useState<string[]>([]);
+
+  const { activeWorkspace } = useWorkspace();
+  const { currentUser } = useAuth();
 
   const handleComments = () => {
     if (comment.trim() != "") {
@@ -53,6 +52,53 @@ export const DetailedView = ({
     setCommentArr(FilteredArray);
   };
 
+  const handleUpdate = async () => {
+    if (!selectedListItem) return;
+
+    const changes: Partial<Task> = {};
+
+    if (title !== selectedListItem.title) {
+      changes.title = title!;
+    }
+
+    if (description !== selectedListItem.description) {
+      changes.description = description!;
+    }
+
+    if (status !== selectedListItem.status) {
+      changes.status = status!;
+    }
+
+    if (priority !== selectedListItem.priority) {
+      changes.priority = priority!;
+    }
+
+    if (assignedTo !== selectedListItem.assignedTo) {
+      changes.assignedTo = assignedTo!;
+    }
+
+    if (Object.keys(changes).length === 0) {
+      console.log("No changes detected");
+      return;
+    }
+
+    const userToken = await currentUser?.getIdToken();
+    if (!activeWorkspace?.id || !userToken) return;
+
+    try {
+      await UpdateTask(
+        selectedListItem.id,
+        activeWorkspace?.id!,
+        changes,
+        userToken,
+      );
+      console.log(" Task updated successfully");
+      setOpenDetailedView(false);
+    } catch (err) {
+      console.error("Failed to update task:", err);
+    }
+  };
+
   const renderBody = () => {
     return (
       <div className="space-y-6">
@@ -61,7 +107,7 @@ export const DetailedView = ({
             variant="unstyled"
             size="lg"
             placeholder="Task title"
-            value={selectedListItem?.title}
+            value={title}
             onChange={(e) => setTitle(e.target.value)}
             classNames={{
               input:
@@ -77,7 +123,7 @@ export const DetailedView = ({
             minRows={3}
             maxRows={10}
             autosize
-            value={selectedListItem?.description}
+            value={description}
             onChange={(e) => setDescription(e.target.value)}
             classNames={{
               input:
@@ -96,18 +142,9 @@ export const DetailedView = ({
         </div>
 
         <div className="flex gap-1 mb-2">
-          <StatusDropdown
-            value={selectedListItem?.status}
-            // onChange={setStatus}
-          />
-          <PriorityDropdown
-            value={selectedListItem?.priority}
-            onChange={setPriority}
-          />
-          <AssigneeDropdown
-            value={selectedListItem?.assignedTo}
-            onChange={setAssignedTo}
-          />
+          <StatusDropdown value={status} onChange={setStatus} />
+          <PriorityDropdown value={priority} onChange={setPriority} />
+          <AssigneeDropdown value={assignedTo} onChange={setAssignedTo} />
         </div>
 
         <div className="pt-4 border-t border-gray-100 flex flex-col gap-2">
@@ -185,6 +222,7 @@ export const DetailedView = ({
             classNames={{
               root: "bg-blue-600 hover:bg-blue-700 text-white font-medium shadow-sm",
             }}
+            onClick={handleUpdate}
           >
             Update
           </Button>

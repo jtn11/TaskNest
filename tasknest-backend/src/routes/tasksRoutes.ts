@@ -10,6 +10,6 @@ const router = express.Router({ mergeParams: true });
 
 router.get("/", authenticate, getUsersTask);
 router.post("/", authenticate, createTask);
-router.patch("/", authenticate, updateTask);
+router.patch("/:taskId", authenticate, updateTask);
 
 export default router;
