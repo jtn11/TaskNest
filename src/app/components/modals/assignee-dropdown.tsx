@@ -4,25 +4,44 @@ import { Menu, Button, Avatar, Divider } from "@mantine/core";
 import { UserCircleIcon, UserIcon } from "@heroicons/react/24/outline";
 import { useWorkspace } from "@/context/workspace-context";
 import { cn } from "@/lib/cn";
+import { updateTasks } from "./update-dropdowns";
+import { useAuth } from "@/context/auth-context";
 
 interface AssigneeDropdownTypes {
   value?: string;
   onChange?: (val: string) => void;
   ShowOnlyUSerIcon?: boolean;
+  selectedListId?: string;
+  createMode?: boolean;
 }
 
 export default function AssigneeDropdown({
   value,
   onChange,
   ShowOnlyUSerIcon,
+  selectedListId,
+  createMode,
 }: AssigneeDropdownTypes) {
-  const { members } = useWorkspace();
-
-  const handleAssignee = (assignee: string) => {
+  const { members, activeWorkspace } = useWorkspace();
+  const { currentUser } = useAuth();
+  const handleAssignee = async (assignee: string) => {
     setAssignedTo(assignee);
     if (onChange) {
       onChange(assignee);
     }
+
+    if (createMode) {
+      return;
+    }
+
+    const userToken = await currentUser?.getIdToken();
+    const workspaceId = activeWorkspace?.id;
+    if (!userToken || !selectedListId || !workspaceId) {
+      return;
+    }
+    await updateTasks(userToken, selectedListId, workspaceId, {
+      assignedTo: assignee,
+    });
   };
 
   useEffect(() => {

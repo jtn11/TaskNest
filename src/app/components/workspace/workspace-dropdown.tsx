@@ -1,4 +1,3 @@
-"use client";
 import { useWorkspace } from "@/context/workspace-context";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import { HomeIcon } from "@heroicons/react/24/solid"; // Using 24 for consistency if available, otherwise 16

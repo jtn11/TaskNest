@@ -50,7 +50,11 @@ export const TaskList = ({ status }: TaskListProps) => {
             <div className="flex items-center justify-between gap-4 px-4 cursor-pointer">
               {/* Left Section: Status + Title */}
               <div className="flex items-center gap-3">
-                <StatusDropdown value={task.status} showOnlyIconsInList />
+                <StatusDropdown
+                  value={task.status}
+                  selectedListId={task.id}
+                  showOnlyIconsInList
+                />
 
                 <div
                   className="text-sm font-medium"
@@ -61,13 +65,21 @@ export const TaskList = ({ status }: TaskListProps) => {
                 >
                   <span>{task.title}</span>
                 </div>
-              </div>
 
-              {/* Right Section: Icons + Date */}
+                {/* Right Section: Icons + Date */}
 
-              <div className="flex items-center gap-2 text-sm">
-                <PriorityDropdown value={task.priority} ShowOnlyPriorityIcon />
-                <AssigneeDropdown value={task.assignedTo} ShowOnlyUSerIcon />
+                <div className="flex items-center gap-2 text-sm">
+                  <PriorityDropdown
+                    value={task.priority}
+                    selectedListId={task.id}
+                    ShowOnlyPriorityIcon
+                  />
+                  <AssigneeDropdown
+                    value={task.assignedTo}
+                    selectedListId={task.id}
+                    ShowOnlyUSerIcon
+                  />
+                </div>
                 <span>
                   {new Date(task.createdAt).toLocaleDateString("en-US", {
                     month: "short",

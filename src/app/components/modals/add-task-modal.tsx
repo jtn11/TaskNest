@@ -96,14 +96,20 @@ export const TaskModal = ({ opened, onClose }: ModalProps) => {
               label="status"
               value={status}
               onChange={setStatus}
+              createMode
             />
             <PriorityDropdown
               label="priority"
               value={priority}
               onChange={setPriority}
+              createMode
             />
 
-            <AssigneeDropdown value={assignedTo} onChange={setAssignedTo} />
+            <AssigneeDropdown
+              value={assignedTo}
+              onChange={setAssignedTo}
+              createMode
+            />
             <PaperClipIcon className="w-4 h-4" />
           </div>
 

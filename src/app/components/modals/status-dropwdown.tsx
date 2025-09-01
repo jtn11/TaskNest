@@ -9,31 +9,50 @@ import {
 } from "@heroicons/react/20/solid";
 import { cn } from "@/lib/cn";
 import { LifebuoyIcon } from "@heroicons/react/24/outline";
+import { useAuth } from "@/context/auth-context";
+import { useWorkspace } from "@/context/workspace-context";
+import { updateTasks } from "./update-dropdowns";
 
 interface statusDropdownType {
   value?: string; // its basically to show in the detailed view -> that some value is already there
   onChange?: (val: string) => void;
   label?: string; // from task modal
   classname?: string;
+  createMode?: boolean;
   showOnlyIconsInList?: boolean;
+  selectedListId?: string;
 }
 
 export default function StatusDropdown({
   label,
-  classname,
   value,
   onChange,
   showOnlyIconsInList,
+  selectedListId,
+  createMode,
 }: statusDropdownType) {
   const [currentStatus, setCurrentStatus] = useState("todo");
   const [currentlabel, setCurrentlabel] = useState<string | undefined>("todo");
+  const { currentUser } = useAuth();
+  const { activeWorkspace } = useWorkspace();
 
-  const handleSelect = (status: string, label: string) => {
+  const handleSelectAndUpdate = async (status: string, label: string) => {
     setCurrentStatus(status);
     setCurrentlabel(label);
     if (onChange) {
       onChange(status);
     }
+
+    if (createMode) {
+      return;
+    }
+    const userToken = await currentUser?.getIdToken();
+    const workspaceId = activeWorkspace?.id;
+    if (!userToken || !selectedListId || !workspaceId) {
+      return;
+    }
+
+    await updateTasks(userToken, selectedListId, workspaceId, { status });
   };
 
   function StatusIcon({ status }: { status: string }) {
@@ -96,7 +115,7 @@ export default function StatusDropdown({
             <Menu.Item
               component="div"
               className="hover:bg-transparent"
-              onClick={() => handleSelect("todo", "Todo")}
+              onClick={() => handleSelectAndUpdate("todo", "Todo")}
             >
               <div className="flex items-center space-x-2">
                 <LifebuoyIcon className="w-4 h-4 flex items-center justify-center text-xs font-medium" />
@@ -107,7 +126,7 @@ export default function StatusDropdown({
             <Menu.Item
               component="div"
               className="hover:bg-transparent"
-              onClick={() => handleSelect("backlog", "Backlog")}
+              onClick={() => handleSelectAndUpdate("backlog", "Backlog")}
             >
               <div className="flex items-center space-x-2">
                 <StopCircleIcon
@@ -121,7 +140,9 @@ export default function StatusDropdown({
             <Menu.Item
               component="div"
               className=" hover:bg-transparent"
-              onClick={() => handleSelect("in-progress", "In-Progress")}
+              onClick={() =>
+                handleSelectAndUpdate("in-progress", "In-Progress")
+              }
             >
               <div className="flex items-center space-x-2">
                 <ClockIcon
@@ -135,7 +156,7 @@ export default function StatusDropdown({
             <Menu.Item
               component="div"
               className="hover:bg-transparent"
-              onClick={() => handleSelect("review", "In-Review")}
+              onClick={() => handleSelectAndUpdate("review", "In-Review")}
             >
               <div className="flex items-center space-x-2">
                 <ClipboardDocumentListIcon
@@ -149,7 +170,7 @@ export default function StatusDropdown({
             <Menu.Item
               component="div"
               className="hover:bg-transparent"
-              onClick={() => handleSelect("completed", "Completed")}
+              onClick={() => handleSelectAndUpdate("completed", "Completed")}
             >
               <div className="flex items-center space-x-2">
                 <CheckCircleIcon className="w-4 h-4 flex items-center justify-center text-blue-600 text-xs font-medium"></CheckCircleIcon>

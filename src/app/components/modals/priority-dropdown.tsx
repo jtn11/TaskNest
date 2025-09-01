@@ -9,12 +9,17 @@ import {
   ArrowRightCircleIcon,
 } from "@heroicons/react/24/outline";
 import { cn } from "@/lib/cn";
+import { useAuth } from "@/context/auth-context";
+import { useWorkspace } from "@/context/workspace-context";
+import { updateTasks } from "./update-dropdowns";
 
 interface PriorityDropdownTypes {
   value?: string;
   onChange?: (val: string) => void;
   ShowOnlyPriorityIcon?: boolean;
   label?: string;
+  createMode?: boolean;
+  selectedListId?: string;
 }
 
 export default function PriorityDropdown({
@@ -22,26 +27,36 @@ export default function PriorityDropdown({
   value,
   label,
   ShowOnlyPriorityIcon,
+  selectedListId,
+  createMode,
 }: PriorityDropdownTypes) {
   const [priority, setPriority] = useState("Priority");
   const [currentlabel, setCurrentlabel] = useState<string | undefined>(
     "Priority",
   );
+  const { currentUser } = useAuth();
+  const { activeWorkspace } = useWorkspace();
 
-  const handlePriority = (Priority: string) => {
+  const handlePriority = async (Priority: string, label: string) => {
     setPriority(Priority);
-    setCurrentlabel(Priority);
+    setCurrentlabel(label);
     if (onChange) {
       onChange(Priority);
     }
-  };
 
-  useEffect(() => {
-    if (value) {
-      setPriority(value);
-      setCurrentlabel(value);
+    if (createMode) {
+      return;
     }
-  }, [value]);
+    const userToken = await currentUser?.getIdToken();
+    const workspaceId = activeWorkspace?.id;
+    if (!userToken || !selectedListId || !workspaceId) {
+      return;
+    }
+
+    await updateTasks(userToken, selectedListId, workspaceId, {
+      priority: Priority,
+    });
+  };
 
   function PriorityIcon({ priority }: { priority: string }) {
     switch (priority) {
@@ -55,6 +70,13 @@ export default function PriorityDropdown({
         return <EllipsisHorizontalCircleIcon className="w-5 h-5" />;
     }
   }
+
+  useEffect(() => {
+    if (value) {
+      setPriority(value);
+      setCurrentlabel(value);
+    }
+  }, [value]);
 
   const displayLabel = label === "priority" ? currentlabel : label;
 
@@ -84,7 +106,7 @@ export default function PriorityDropdown({
             <Menu.Item
               component="div"
               className="hover:bg-transparent"
-              onClick={() => handlePriority("low")}
+              onClick={() => handlePriority("low", "Low")}
             >
               <div className="flex items-center space-x-2">
                 <ArrowDownCircleIcon
@@ -98,7 +120,7 @@ export default function PriorityDropdown({
             <Menu.Item
               component="div"
               className=" hover:bg-transparent"
-              onClick={() => handlePriority("medium")}
+              onClick={() => handlePriority("medium", "Medium")}
             >
               <div className="flex items-center space-x-2">
                 <ArrowRightCircleIcon
@@ -112,7 +134,7 @@ export default function PriorityDropdown({
             <Menu.Item
               component="div"
               className="hover:bg-transparent"
-              onClick={() => handlePriority("high")}
+              onClick={() => handlePriority("high", "High")}
             >
               <div className="flex items-center space-x-2">
                 <ArrowUpCircleIcon

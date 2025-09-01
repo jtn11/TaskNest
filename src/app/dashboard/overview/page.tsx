@@ -46,7 +46,11 @@ export default function OverView() {
             <div className="flex items-center justify-between gap-4 px-4 cursor-pointer">
               {/* Left Section: Status + Title */}
               <div className="flex items-center gap-3">
-                <StatusDropdown value={task.status} showOnlyIconsInList />
+                <StatusDropdown
+                  value={task.status}
+                  selectedListId={task.id}
+                  showOnlyIconsInList
+                />
 
                 <div
                   className="text-sm font-medium"
@@ -65,8 +69,16 @@ export default function OverView() {
 
               {/* Right Section: Icons + Date */}
               <div className="flex items-center gap-2 text-sm">
-                <PriorityDropdown value={task.priority} ShowOnlyPriorityIcon />
-                <AssigneeDropdown value={task.assignedTo} ShowOnlyUSerIcon />
+                <PriorityDropdown
+                  value={task.priority}
+                  selectedListId={task.id}
+                  ShowOnlyPriorityIcon
+                />
+                <AssigneeDropdown
+                  value={task.assignedTo}
+                  selectedListId={task.id}
+                  ShowOnlyUSerIcon
+                />
                 <span>
                   {new Date(task.createdAt).toLocaleDateString("en-US", {
                     month: "short",
