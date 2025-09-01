@@ -65,21 +65,22 @@ export const TaskList = ({ status }: TaskListProps) => {
                 >
                   <span>{task.title}</span>
                 </div>
+              </div>
 
-                {/* Right Section: Icons + Date */}
+              {/* Right Section: Icons + Date */}
 
-                <div className="flex items-center gap-2 text-sm">
-                  <PriorityDropdown
-                    value={task.priority}
-                    selectedListId={task.id}
-                    ShowOnlyPriorityIcon
-                  />
-                  <AssigneeDropdown
-                    value={task.assignedTo}
-                    selectedListId={task.id}
-                    ShowOnlyUSerIcon
-                  />
-                </div>
+              <div className="flex items-center gap-2 text-sm">
+                <PriorityDropdown
+                  value={task.priority}
+                  selectedListId={task.id}
+                  ShowOnlyPriorityIcon
+                />
+                <AssigneeDropdown
+                  value={task.assignedTo}
+                  selectedListId={task.id}
+                  ShowOnlyUSerIcon
+                />
+
                 <span>
                   {new Date(task.createdAt).toLocaleDateString("en-US", {
                     month: "short",
