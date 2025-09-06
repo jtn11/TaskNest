@@ -1,5 +1,5 @@
 import { Button, Modal, Textarea, TextInput, ActionIcon } from "@mantine/core";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PaperClipIcon } from "@heroicons/react/24/outline";
 import StatusDropdown from "@/app/components/modals/status-dropwdown";
 import PriorityDropdown from "@/app/components/modals/priority-dropdown";
@@ -9,6 +9,7 @@ import { cn } from "@/lib/cn";
 import { useWorkspace } from "@/context/workspace-context";
 import { UpdateTask } from "./update-task";
 import { useAuth } from "@/context/auth-context";
+import { createComment, deleteComment, fetchComment } from "./task-comments";
 
 interface Task {
   id: string;
@@ -26,6 +27,14 @@ interface DetailedViewTypes {
   selectedListItem: Task | undefined;
 }
 
+interface Comment {
+  id: string;
+  text: string;
+  createdBy: string;
+  displayName: string;
+  createdAt: string;
+}
+
 export const DetailedView = ({
   setOpenDetailedView,
   selectedListItem,
@@ -36,20 +45,75 @@ export const DetailedView = ({
   const [assignedTo, setAssignedTo] = useState(selectedListItem?.assignedTo);
   const [priority, setPriority] = useState(selectedListItem?.priority);
   const [comment, setComment] = useState("");
-  const [commentArr, setCommentArr] = useState<string[]>([]);
+  const [commentArr, setCommentArr] = useState<Comment[]>([]);
 
   const { activeWorkspace } = useWorkspace();
   const { currentUser } = useAuth();
+  const { token } = useWorkspace();
 
-  const handleComments = () => {
-    if (comment.trim() != "") {
-      setCommentArr((prev) => [...prev, comment]);
+  //fetching comments
+
+  useEffect(() => {
+    const getComments = async () => {
+      if (!selectedListItem?.id || !activeWorkspace?.id) {
+        return;
+      }
+      const comments = await fetchComment(
+        activeWorkspace?.id,
+        selectedListItem.id,
+        token,
+      );
+      console.log(comments);
+      setCommentArr(comments.comments);
+    };
+    getComments();
+  }, [selectedListItem?.id, activeWorkspace?.id, token]);
+
+  const handleComments = async () => {
+    if (
+      !comment.trim() ||
+      !selectedListItem ||
+      !activeWorkspace?.id ||
+      !token
+    ) {
+      return;
+    }
+    const displayName =
+      currentUser?.email?.split("@")[0] ||
+      currentUser?.displayName ||
+      "Unknown";
+    console.log(displayName);
+    try {
+      const newComment = await createComment(
+        activeWorkspace.id,
+        selectedListItem.id,
+        token,
+        comment,
+        displayName,
+      );
+      setCommentArr((prev) => [...prev, newComment]);
       setComment("");
+    } catch (error) {
+      console.log("Error creating Comment", error);
     }
   };
-  const handleDeleteComment = (index: number) => {
-    const FilteredArray = commentArr.filter((_, i) => i !== index);
-    setCommentArr(FilteredArray);
+
+  const handleDeleteComment = async (commentId: string) => {
+    if (
+      !comment.trim() ||
+      !selectedListItem ||
+      !activeWorkspace?.id ||
+      !token
+    ) {
+      return;
+    }
+    await deleteComment(
+      activeWorkspace.id,
+      selectedListItem.id,
+      token,
+      commentId,
+    );
+    setCommentArr((prev) => prev.filter((c) => c.id !== commentId));
   };
 
   const handleUpdate = async () => {
@@ -150,23 +214,20 @@ export const DetailedView = ({
         <div className="pt-4 border-t border-gray-100 flex flex-col gap-2">
           <span className="text-sm font-medium text-blue-500">Comments</span>
 
-          {commentArr.length > 0 &&
-            commentArr.map((comment, index) => (
-              <div key={index}>
+          {commentArr &&
+            commentArr.map((comment) => (
+              <div key={comment.id}>
                 <Textarea
                   radius="md"
                   minRows={2}
                   autosize
-                  value={comment}
+                  value={comment.text}
                   classNames={{
                     input:
                       "border border-gray-200 pr-10 placeholder-gray-400 text-gray-700",
                   }}
                   rightSection={
-                    <button
-                      onClick={() => handleDeleteComment(index)}
-                      disabled={!comment.trim()}
-                    >
+                    <button onClick={() => handleDeleteComment(comment.id)}>
                       <XCircleIcon className="w-5 h-5 text-red-500" />
                     </button>
                   }
