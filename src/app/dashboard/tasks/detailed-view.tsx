@@ -99,12 +99,7 @@ export const DetailedView = ({
   };
 
   const handleDeleteComment = async (commentId: string) => {
-    if (
-      !comment.trim() ||
-      !selectedListItem ||
-      !activeWorkspace?.id ||
-      !token
-    ) {
+    if (!selectedListItem || !activeWorkspace?.id || !token) {
       return;
     }
     await deleteComment(
