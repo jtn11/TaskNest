@@ -8,6 +8,7 @@ import { GetOverViewTasks } from "@/app/dashboard/overview/overview";
 interface TaskContextType {
   tasks: Task[];
   overViewTasks: Task[];
+  triggerListRefresh: () => void;
 }
 
 interface Task {
@@ -29,6 +30,12 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [overViewTasks, setOverViewTasks] = useState<Task[]>([]);
 
+  const [refreshList, setRefrestList] = useState(false);
+
+  const triggerListRefresh = () => {
+    setRefrestList((prev) => !prev);
+  };
+
   //Overview Tasks of Workspace
 
   useEffect(() => {
@@ -36,10 +43,11 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
       const workspaceId = activeWorkspace?.id;
       if (!currentUser || !workspaceId) return;
       const taskByStatus = await GetOverViewTasks(workspaceId, token);
+      console.log("Added task ", taskByStatus);
       setOverViewTasks(taskByStatus || []);
     };
     handleTask();
-  }, [currentUser, activeWorkspace]);
+  }, [currentUser, activeWorkspace, refreshList]);
 
   // Tasks for LoggedIn User
   useEffect(() => {
@@ -51,10 +59,10 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
       setTasks(taskByStatus || []);
     };
     handleTask();
-  }, [currentUser, activeWorkspace, token]);
+  }, [currentUser, activeWorkspace, token, refreshList]);
 
   return (
-    <TaskContext.Provider value={{ tasks, overViewTasks }}>
+    <TaskContext.Provider value={{ tasks, overViewTasks, triggerListRefresh }}>
       {children}
     </TaskContext.Provider>
   );

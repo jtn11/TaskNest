@@ -7,6 +7,7 @@ import { PaperClipIcon } from "@heroicons/react/24/solid";
 import { getAuth } from "firebase/auth";
 import { CreateUsersTask } from "@/app/dashboard/tasks/create-tasks";
 import { useWorkspace } from "@/context/workspace-context";
+import { useTasks } from "@/context/task-context";
 
 interface ModalProps {
   opened: boolean;
@@ -22,6 +23,7 @@ export const TaskModal = ({ opened, onClose }: ModalProps) => {
 
   const { currentUser } = getAuth();
   const { activeWorkspace } = useWorkspace();
+  const { triggerListRefresh } = useTasks();
 
   const handleSubmit = async () => {
     if (title.trim() === "") {
@@ -48,6 +50,7 @@ export const TaskModal = ({ opened, onClose }: ModalProps) => {
       token,
     );
     if (task) {
+      triggerListRefresh();
       console.log("Created Task : ", task);
       onClose();
     } else {
