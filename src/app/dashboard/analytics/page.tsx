@@ -1,6 +1,7 @@
 "use client";
 import { useTasks } from "@/context/task-context";
-import React from "react";
+import { useWorkspace } from "@/context/workspace-context";
+import React, { useState } from "react";
 import {
   PieChart,
   Pie,
@@ -24,40 +25,47 @@ interface PersonalData {
   value: number;
 }
 
-interface AnalyticsDashboardProps {
-  // personalTasks: PersonalData[];
-  // teamTasks: MemberData[];
-  totalWorkspaceTasks: number;
-  completedWorkspaceTasks: number;
-}
-
-const personalTasks: PersonalData[] = [
-  { name: "Completed", value: 12 },
-  { name: "Pending", value: 8 },
-  { name: "Review ", value: 7 },
-];
-
-const teamTasks: MemberData[] = [
-  { name: "Alice", tasksCompleted: 10 },
-  { name: "Bob", tasksCompleted: 7 },
-  { name: "Charlie", tasksCompleted: 5 },
-];
-
 const COLORS = ["#2563EB", "#ffc658", "#82ca9d"];
 
-const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
-  // personalTasks,
-  // teamTasks,
-  totalWorkspaceTasks,
-  completedWorkspaceTasks,
-}) => {
+const AnalyticsDashboard = () => {
   const { tasks, overViewTasks } = useTasks();
+  const { members } = useWorkspace();
 
-  const OverAllTasks = overViewTasks.filter(
+  const personalStats = {
+    completed: 0,
+    pending: 0,
+    review: 0,
+  };
+
+  tasks.forEach((task) => {
+    if (task.status === "completed") personalStats.completed++;
+    else if (["todo", "backlog"].includes(task.status)) personalStats.pending++;
+    else if (task.status === "review") personalStats.review++;
+  });
+
+  const personalTasks: PersonalData[] = [
+    { name: "Completed", value: personalStats.completed },
+    { name: "Pending", value: personalStats.pending },
+    { name: "Review ", value: personalStats.review },
+  ];
+
+  const workspaceCompletedTaskCount = overViewTasks.filter(
     (task) => task.status === "completed",
-  );
+  ).length;
+
+  const teamTasks: MemberData[] = members.map((member) => {
+    const completedCount = overViewTasks.filter(
+      (task) => task.status === "completed" && task.assignedTo === member.email,
+    ).length;
+
+    return {
+      name: member.email ? member.email.split("@")[0] : "unknown user",
+      tasksCompleted: completedCount,
+    };
+  });
+
   const completionPercentage =
-    (completedWorkspaceTasks / totalWorkspaceTasks) * 100 || 0;
+    (workspaceCompletedTaskCount / overViewTasks.length) * 100 || 0;
 
   return (
     <div className="p-6 font-sans min-h-screen bg-gray-100 overflow-y-hidden">
@@ -65,20 +73,21 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
         Workspace Analytics
       </h1>
 
-      {/* Workspace-wide Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <div className="bg-white p-6 rounded-lg shadow-md flex flex-col items-center justify-center">
-          <h2 className="text-xl font-semibold text-gray-700">Total Tasks</h2>
+          <h2 className="text-xl font-semibold text-gray-700">
+            Total Workspace-Tasks
+          </h2>
           <p className="text-4xl font-bold text-indigo-600 mt-2">
-            {totalWorkspaceTasks}22
+            {overViewTasks.length}
           </p>
         </div>
         <div className="bg-white p-6 rounded-lg shadow-md flex flex-col items-center justify-center">
           <h2 className="text-xl font-semibold text-gray-700">
-            Tasks Completed
+            Your Completions
           </h2>
           <p className="text-4xl font-bold text-blue-600 mt-2">
-            {completedWorkspaceTasks}22
+            {personalStats.completed}
           </p>
         </div>
         <div className="bg-white p-6 rounded-lg shadow-md flex flex-col items-center justify-center">
@@ -92,7 +101,6 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Individual User's Task Completion */}
         <div className="bg-white p-6 rounded-lg shadow-md">
           <h2 className="text-2xl font-semibold text-gray-700 mb-4">
             Your Task Progress
@@ -122,7 +130,6 @@ const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({
           </ResponsiveContainer>
         </div>
 
-        {/* Team Task Completion */}
         <div className="bg-white p-6 rounded-lg shadow-md">
           <h2 className="text-2xl font-semibold text-gray-700 mb-4">
             Team Task Completion
