@@ -5,7 +5,8 @@ import { DetailedView } from "./detailed-view";
 import { useTasks } from "@/context/task-context";
 import PriorityDropdown from "@/app/components/modals/priority-dropdown";
 import AssigneeDropdown from "@/app/components/modals/assignee-dropdown";
-import { EmptyTaskList } from "./empty-task-list";
+import { Square3Stack3DIcon } from "@heroicons/react/24/outline";
+import { EmptyStatusView } from "./empty-status-view";
 
 interface TaskListProps {
   status: string;
@@ -29,11 +30,22 @@ export const TaskList = ({ status }: TaskListProps) => {
   );
   const { tasks } = useTasks();
 
-  if (tasks.length === 0) {
-    return <EmptyTaskList />;
-  }
-
   const filteredTask = tasks.filter((task) => task.status === status);
+
+  if (filteredTask.length === 0) {
+    // This shows a generic message if there are no tasks at all.
+    if (tasks.length === 0) {
+      return (
+        <div className="flex flex-col items-center justify-center h-full text-center text-gray-500 p-8 mt-20">
+          <Square3Stack3DIcon className="w-24 h-24 text-gray-300 mb-4" />
+          <h2 className="text-2xl font-semibold">No tasks yet</h2>
+          <p className="mt-2">Get started by creating a new task.</p>
+        </div>
+      );
+    }
+    // This shows a message specific to the status if no tasks are in that category.
+    return <EmptyStatusView status={status} />;
+  }
 
   if (openDetailedView) {
     return (
