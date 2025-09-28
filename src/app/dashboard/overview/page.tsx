@@ -79,12 +79,14 @@ export default function OverView() {
                   selectedListId={task.id}
                   ShowOnlyUSerIcon
                 />
-                <span>
-                  {new Date(task.createdAt).toLocaleDateString("en-US", {
-                    month: "short",
-                    day: "numeric",
-                  })}
-                </span>
+                <div className="w-12">
+                  <span>
+                    {new Date(task.createdAt).toLocaleDateString("en-US", {
+                      month: "short",
+                      day: "numeric",
+                    })}
+                  </span>
+                </div>
               </div>
             </div>
           </div>

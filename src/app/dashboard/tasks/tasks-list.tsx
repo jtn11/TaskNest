@@ -81,7 +81,7 @@ export const TaskList = ({ status }: TaskListProps) => {
 
               {/* Right Section: Icons + Date */}
 
-              <div className="flex items-center gap-2 text-sm">
+              <div className="flex items-center justify-evenly gap-2 text-sm">
                 <PriorityDropdown
                   value={task.priority}
                   selectedListId={task.id}
@@ -92,13 +92,16 @@ export const TaskList = ({ status }: TaskListProps) => {
                   selectedListId={task.id}
                   ShowOnlyUSerIcon
                 />
-
-                <span>
-                  {new Date(task.createdAt).toLocaleDateString("en-US", {
-                    month: "short",
-                    day: "numeric",
-                  })}
-                </span>
+                <div>
+                  <div className=" w-12 ">
+                    <span>
+                      {new Date(task.createdAt).toLocaleDateString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                      })}
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
