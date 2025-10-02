@@ -1,3 +1,5 @@
+import ChatInbox from "./chat-inbox";
+
 export default function Inbox() {
-  return <div>Inbox</div>;
+  return <ChatInbox />;
 }

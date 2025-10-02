@@ -20,7 +20,6 @@ export const initWebSocket = (server: any) => {
         if (parsed.type === "register") {
           const { token } = parsed;
 
-          //  Verify Firebase Auth Token
           const decoded = await auth().verifyIdToken(token);
           const userId = decoded.uid;
           currentUserId = userId;
