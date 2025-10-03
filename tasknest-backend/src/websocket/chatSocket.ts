@@ -43,6 +43,8 @@ export const initWebSocket = (server: any) => {
             return;
           }
 
+          const chatID = [senderId, receiverId].sort().join("_");
+
           const createdAt = new Date();
 
           const messagePayload = {
@@ -52,27 +54,16 @@ export const initWebSocket = (server: any) => {
             createdAt,
           };
 
-          // Store the message in both sender's and receiver's chat collections
-          const [senderDocRef, receiverDocRef] = await Promise.all([
-            db
-              .collection("users")
-              .doc(senderId)
-              .collection("chats")
-              .doc(receiverId)
-              .collection("messages")
-              .add(messagePayload),
+          // Store the message chat collections
 
-            db
-              .collection("users")
-              .doc(receiverId)
-              .collection("chats")
-              .doc(senderId)
-              .collection("messages")
-              .add(messagePayload),
-          ]);
+          const docRef = await db
+            .collection("chats")
+            .doc(chatID)
+            .collection("messages")
+            .add(messagePayload);
 
           const messageToSend = {
-            id: senderDocRef.id,
+            id: docRef.id,
             ...messagePayload,
           };
 

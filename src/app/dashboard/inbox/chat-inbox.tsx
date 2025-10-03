@@ -1,6 +1,6 @@
 "use client";
 import { PaperAirplaneIcon, UserCircleIcon } from "@heroicons/react/20/solid";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 interface Message {
   id: string;
@@ -17,58 +17,53 @@ interface Contact {
   unread?: number;
 }
 
-const ChatInbox: React.FC = () => {
-  const [contacts] = useState<Contact[]>([
-    {
-      id: "1",
-      name: "Alice Johnson",
-      lastMessage: "See you tomorrow!",
-      unread: 2,
-    },
-    { id: "2", name: "Bob Smith", lastMessage: "Thanks for the update" },
-    { id: "5", name: "Carol White", lastMessage: "Can we schedule a call?" },
-  ]);
+interface ChatInboxProps {
+  token: string;
+  currentUserId: string;
+  contacts: Contact[];
+}
 
-  const [selectedContact, setSelectedContact] = useState<Contact>(contacts[0]);
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: "1",
-      text: "Hey! How are you doing?",
-      sender: "Alice Johnson",
-      timestamp: new Date(Date.now() - 3600000),
-      isOwn: false,
-    },
-    {
-      id: "2",
-      text: "I'm great! Just finished the project.",
-      sender: "You",
-      timestamp: new Date(Date.now() - 3000000),
-      isOwn: true,
-    },
-    {
-      id: "3",
-      text: "That's awesome! Can you share the details?",
-      sender: "Alice Johnson",
-      timestamp: new Date(Date.now() - 2400000),
-      isOwn: false,
-    },
-    {
-      id: "4",
-      text: "Sure, I'll send them over in a few minutes.",
-      sender: "You",
-      timestamp: new Date(Date.now() - 1800000),
-      isOwn: true,
-    },
-    {
-      id: "5",
-      text: "See you tomorrow!",
-      sender: "Alice Johnson",
-      timestamp: new Date(Date.now() - 600000),
-      isOwn: false,
-    },
-  ]);
-
+const ChatInbox: React.FC = ({
+  token,
+  currentUserId,
+  contacts,
+}: ChatInboxProps) => {
+  const [selectedContact, setSelectedContact] = useState<Contact | null>(
+    contacts[0] || null,
+  );
+  const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState("");
+
+  useEffect(() => {
+    if (!selectedContact) return;
+    const fetchMessages = async () => {
+      try {
+        const res = await fetch(
+          `/api/messages/${currentUserId}/${selectedContact.id}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          },
+        );
+        const data = await res.json();
+
+        const formatted = data.map((msg: any) => ({
+          id: msg.id,
+          text: msg.content,
+          sender: msg.senderId === currentUserId ? "You" : selectedContact.name,
+          timestamp: msg.createdAt?.seconds
+            ? new Date(msg.createdAt.seconds * 1000)
+            : new Date(msg.createdAt),
+          isOwn: msg.senderId === currentUserId,
+        }));
+
+        setMessages(formatted);
+      } catch (error) {
+        console.error("Failed to fetch messages:", error);
+      }
+    };
+
+    fetchMessages();
+  }, [currentUserId, selectedContact, token]);
 
   const sendMessage = () => {
     if (inputValue.trim() === "") return;

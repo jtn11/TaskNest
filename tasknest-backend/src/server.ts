@@ -3,6 +3,9 @@ import dotenv from "dotenv";
 import cors from "cors";
 import taskRoutes from "./routes/tasksRoutes";
 import workspaceRoute from "./routes/workspaceRoute";
+import messageRoutes from "./routes/messageRoutes";
+import { initWebSocket } from "./websocket/chatSocket";
+import http from "http";
 
 dotenv.config();
 
@@ -13,12 +16,16 @@ const PORT = process.env.PORT;
 app.use(cors()); // allow frontend to req from backend
 app.use(express.json()); // parse json body
 
+const server = http.createServer(app);
+initWebSocket(server);
+
 app.get("/", (_req, res) => {
   res.send("backend is here");
 });
 
 app.use("/api/workspace/:id/tasks", taskRoutes);
 app.use("/api/workspace", workspaceRoute);
+app.use("/api/messages", messageRoutes);
 
 app.listen(PORT, () => {
   console.log("Server Running");
