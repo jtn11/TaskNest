@@ -7,6 +7,8 @@ const connectedUsers = new Map<string, Set<WebSocket>>();
 export const initWebSocket = (server: any) => {
   const wss = new WebSocketServer({ server });
 
+  console.log("WebSocket server started");
+
   wss.on("connection", (ws) => {
     console.log("Client connected");
 

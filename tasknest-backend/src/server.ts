@@ -27,6 +27,6 @@ app.use("/api/workspace/:id/tasks", taskRoutes);
 app.use("/api/workspace", workspaceRoute);
 app.use("/api/messages", messageRoutes);
 
-app.listen(PORT, () => {
-  console.log("Server Running");
+server.listen(PORT, () => {
+  console.log("Server Running on port", PORT);
 });

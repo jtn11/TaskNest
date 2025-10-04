@@ -1,15 +1,19 @@
-import { register } from "module";
 import { useEffect, useRef, useState } from "react";
 
 export function useChatSocket(token: string) {
   const ws = useRef<WebSocket | null>(null);
   const [messages, setmessages] = useState<any[]>([]);
+  const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
+    if (!token) return;
+
     ws.current = new WebSocket("ws://localhost:8000");
 
     ws.current.onopen = () => {
+      console.log("websocket connected ");
       ws.current?.send(JSON.stringify({ type: "register", token }));
+      setIsConnected(true);
     };
 
     // incoming messages
@@ -18,8 +22,13 @@ export function useChatSocket(token: string) {
       setmessages((prev) => [...prev, msg]);
     };
 
+    ws.current.onclose = () => {
+      setIsConnected(false);
+    };
+
     return () => {
       ws.current?.close();
+      setIsConnected(false);
     };
   }, [token]);
 
@@ -28,10 +37,12 @@ export function useChatSocket(token: string) {
     receiverId: string,
     content: string,
   ) => {
-    ws.current?.send(
-      JSON.stringify({ type: "message", senderId, receiverId, content }),
-    );
+    if (ws.current && ws.current.readyState === WebSocket.OPEN) {
+      ws.current.send(
+        JSON.stringify({ type: "message", senderId, receiverId, content }),
+      );
+    }
   };
 
-  return { messages, sendMessage };
+  return { messages, sendMessage, isConnected };
 }

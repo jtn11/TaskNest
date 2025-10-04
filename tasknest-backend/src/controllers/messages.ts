@@ -13,10 +13,16 @@ export const messages = async (req: AuthRequest, res: Response) => {
       .orderBy("createdAt", "asc")
       .get();
 
-    const messages = snapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
+    const messages = snapshot.docs.map((doc) => {
+      const data = doc.data();
+      return {
+        id: doc.id,
+        content: data.content,
+        senderId: data.senderId,
+        receiverId: data.receiverId,
+        createdAt: data.createdAt?.toDate?.() || new Date(),
+      };
+    });
 
     res.json(messages);
   } catch (error) {
