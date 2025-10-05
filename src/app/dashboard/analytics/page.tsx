@@ -1,7 +1,6 @@
 "use client";
 import { useTasks } from "@/context/task-context";
 import { useWorkspace } from "@/context/workspace-context";
-import React, { useState } from "react";
 import {
   PieChart,
   Pie,
@@ -68,8 +67,8 @@ const AnalyticsDashboard = () => {
     (workspaceCompletedTaskCount / overViewTasks.length) * 100 || 0;
 
   return (
-    <div className="p-6 font-sans min-h-screen bg-gray-100 overflow-y-hidden">
-      <h1 className="text-3xl font-bold text-gray-800 mb-6">
+    <div className="p-8 font-sans min-h-screen flex flex-col gap-6 bg-gray-100 overflow-y-hidden">
+      <h1 className="text-3xl mt-5 font-bold text-gray-800 mb-6">
         Workspace Analytics
       </h1>
 
