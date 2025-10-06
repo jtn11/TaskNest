@@ -61,7 +61,7 @@ export const TaskList = ({ status }: TaskListProps) => {
           <div key={task.id} className="w-full p-2 hover:bg-gray-100">
             <div className="flex items-center justify-between gap-4 px-4 cursor-pointer">
               {/* Left Section: Status + Title */}
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 cursor-pointer">
                 <StatusDropdown
                   value={task.status}
                   selectedListId={task.id}
@@ -81,7 +81,7 @@ export const TaskList = ({ status }: TaskListProps) => {
 
               {/* Right Section: Icons + Date */}
 
-              <div className="flex items-center justify-evenly gap-2 text-sm">
+              <div className="flex items-center justify-evenly gap-2 cursor-pointer text-sm">
                 <PriorityDropdown
                   value={task.priority}
                   selectedListId={task.id}

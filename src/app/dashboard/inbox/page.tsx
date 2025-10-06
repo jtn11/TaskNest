@@ -20,8 +20,6 @@ export default function Inbox() {
       contacts={members.map((m) => ({
         id: m.uid,
         name: m.username,
-        lastMessage: "",
-        unread: 0,
       }))}
     />
   );

@@ -14,8 +14,6 @@ interface Message {
 interface Contact {
   id: string;
   name: string;
-  lastMessage?: string;
-  unread?: number;
 }
 
 interface ChatInboxProps {
@@ -147,15 +145,7 @@ const ChatInbox: React.FC<ChatInboxProps> = ({
                       <h3 className="font-semibold text-gray-800 truncate">
                         {contact.name}
                       </h3>
-                      {contact.unread && (
-                        <span className="bg-blue-500 text-white text-xs rounded-full px-2 py-1 ml-2">
-                          {contact.unread}
-                        </span>
-                      )}
                     </div>
-                    <p className="text-sm text-gray-500 truncate">
-                      {contact.lastMessage}
-                    </p>
                   </div>
                 </div>
               </div>
