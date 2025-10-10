@@ -9,7 +9,6 @@ import {
 import { NavItem } from "./nav-items";
 import { usePathname } from "next/navigation";
 import { MemberWorkSpace } from "./workspace/member-workspace";
-import { use, useState } from "react";
 
 interface SideBarProps {
   setSidebarOpen: (open: boolean) => void;
@@ -17,7 +16,6 @@ interface SideBarProps {
 
 export const SideBar = ({ setSidebarOpen }: SideBarProps) => {
   const pathname = usePathname();
-  const [currentOpenPage, setCurrentOpenPage] = useState("Tasks");
 
   const isActive = (path: string) => {
     if (pathname === path) {
