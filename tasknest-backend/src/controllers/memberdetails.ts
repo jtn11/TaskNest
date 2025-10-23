@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { admin, db } from "../firebase/firebase";
 import { AuthRequest } from "../middleware/authmiddleware";
 import { Response } from "express";

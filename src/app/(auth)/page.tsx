@@ -8,18 +8,15 @@ import Link from "next/link";
 export default function Page() {
   return (
     <div className="min-h-screen bg-white">
-      {/* Navigation Bar */}
       <nav className="fixed top-0 left-0 right-0 bg-white backdrop-blur-md border-b border-gray-100 z-50">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            {/* Logo */}
             <div className="flex-shrink-0">
               <Link href="/" className="text-2xl font-bold text-blue-500">
                 TaskNest
               </Link>
             </div>
 
-            {/* Auth Buttons */}
             <div className="flex items-center gap-3">
               <Link href="/login">
                 <button className="px-4 py-2 text-gray-700 hover:text-blue-500 transition-colors">
@@ -36,11 +33,9 @@ export default function Page() {
         </div>
       </nav>
 
-      {/* Hero Section */}
       <main className="pt-16">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col lg:flex-row items-center justify-between min-h-screen py-20">
-            {/* Left Content */}
             <div className="lg:w-1/2 lg:pr-12 text-center lg:text-left">
               <div className="mb-8">
                 <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-gray-900 mb-6 leading-tight">
@@ -66,7 +61,6 @@ export default function Page() {
                 </Link>
               </div>
 
-              {/* Features List */}
               <div className="flex flex-wrap justify-center lg:justify-start gap-6 text-sm text-gray-600">
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
@@ -83,13 +77,10 @@ export default function Page() {
               </div>
             </div>
 
-            {/* Right Content - Visual Element */}
             <div className="lg:w-1/2 mt-16 lg:mt-0">
               <div className="relative">
-                {/* Main Card */}
                 <div className="bg-gradient-to-br from-blue-50 to-white p-8 rounded-3xl shadow-2xl border border-blue-100">
                   <div className="space-y-6">
-                    {/* Header */}
                     <div className="flex items-center justify-between">
                       <h3 className="text-lg font-semibold text-gray-900">
                         Today's Tasks
@@ -97,7 +88,6 @@ export default function Page() {
                       <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
                     </div>
 
-                    {/* Task Items */}
                     <div className="space-y-4">
                       <div className="flex items-center gap-3 p-3 bg-white rounded-xl shadow-sm">
                         <div className="w-4 h-4 border-2 border-blue-500 rounded-full"></div>
@@ -123,7 +113,6 @@ export default function Page() {
                   </div>
                 </div>
 
-                {/* Floating Elements */}
                 <div className="absolute -top-4 -right-4 w-16 h-16 bg-blue-500 rounded-2xl shadow-lg flex items-center justify-center transform rotate-12">
                   <div className="text-white text-2xl">✓</div>
                 </div>

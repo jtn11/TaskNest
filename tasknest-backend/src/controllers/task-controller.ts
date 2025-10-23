@@ -2,11 +2,8 @@ import { AuthRequest } from "../middleware/authmiddleware";
 import { db } from "../firebase/firebase";
 import { Response } from "express";
 
-// Get /api/tasks?workspanceId = id
 export const getUsersTask = async (req: AuthRequest, res: Response) => {
   const workspaceId = req.params.id;
-  // const status = req.query.status as string;
-  // const priority = req.query.priority as String ;
   const onlymine = req.query.onlymine === "true";
 
   if (!workspaceId) {

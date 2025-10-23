@@ -7,7 +7,6 @@ interface FormProps {
 }
 
 export const RegisterUser = ({ onSubmit }: FormProps) => {
-  const [name, setname] = useState("");
   const [email, setemail] = useState("");
   const [password, setPassword] = useState("");
 

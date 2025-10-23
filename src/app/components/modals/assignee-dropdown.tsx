@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Menu, Button, Avatar, Divider } from "@mantine/core";
-import { UserCircleIcon, UserIcon } from "@heroicons/react/24/outline";
+import { Menu, Avatar, Divider } from "@mantine/core";
+import { UserCircleIcon } from "@heroicons/react/24/outline";
 import { useWorkspace } from "@/context/workspace-context";
 import { cn } from "@/lib/cn";
 import { updateTasks } from "./update-dropdowns";

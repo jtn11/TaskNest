@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Menu, Button, Divider } from "@mantine/core";
+import { Menu, Divider } from "@mantine/core";
 import {
   ArrowDownCircleIcon,
   EllipsisHorizontalCircleIcon,
