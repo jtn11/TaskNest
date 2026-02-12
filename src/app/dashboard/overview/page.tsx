@@ -6,6 +6,8 @@ import { useTasks } from "@/context/task-context";
 import PriorityDropdown from "@/app/components/modals/priority-dropdown";
 import AssigneeDropdown from "@/app/components/modals/assignee-dropdown";
 import { EmptyTaskList } from "../tasks/empty-task-list";
+import { useAuth } from "@/context/auth-context";
+import { useWorkspace } from "@/context/workspace-context";
 
 interface Task {
   id: string;
@@ -25,7 +27,10 @@ export default function OverView() {
     undefined,
   );
 
-  const { overViewTasks } = useTasks();
+  const { overViewTasks, fetchTasks, hasMore, loading } = useTasks();
+  const { activeWorkspace, token } = useWorkspace();
+
+  if (!activeWorkspace?.id) return;
 
   if (overViewTasks.length === 0) {
     return <EmptyTaskList />;
@@ -91,6 +96,14 @@ export default function OverView() {
             </div>
           </div>
         ))}
+
+        <div>
+          {hasMore && (
+            <button onClick={() => fetchTasks(activeWorkspace?.id, token)}>
+              {loading ? "Loading..." : "Load More"}
+            </button>
+          )}
+        </div>
       </div>
     );
   }

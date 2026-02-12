@@ -21,7 +21,7 @@ export const authenticate = async (
   }
 
   const tokenId = authHeader.split(" ")[1];
-  try { 
+  try {
     // verify token using firebase admin sdk
     const decodedToken = await admin.auth().verifyIdToken(tokenId);
     req.user = decodedToken;

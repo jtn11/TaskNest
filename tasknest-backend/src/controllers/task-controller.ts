@@ -5,9 +5,8 @@ import { Response } from "express";
 export const getUsersTask = async (req: AuthRequest, res: Response) => {
   const workspaceId = req.params.id;
   const onlymine = req.query.onlymine === "true";
-  const cursor = req.query.cursor as string | undefined; 
-  const pageSize = Number(req.query.limit) || 5 ; 
-
+  const cursor = req.query.cursor as string | undefined;
+  const pageSize = Number(req.query.limit) || 5;
 
   if (!workspaceId) {
     return res.status(400).json({ message: "WorkspaceId is required" });
@@ -17,34 +16,36 @@ export const getUsersTask = async (req: AuthRequest, res: Response) => {
     let query: FirebaseFirestore.Query = db
       .collection("workspace")
       .doc(workspaceId)
-      .collection("tasks")
-      .orderBy("createdAt" , "desc")
-      .limit(5) // paginaton limit 
-    // if (status) query = query.where("status", "==", status);
+      .collection("tasks");
+
     if (onlymine) {
       if (!req.user?.uid) {
         return res.status(401).json({ message: "User not authenticated" });
       }
       query = query.where("assignedTo", "==", req.user?.email);
-      //member.email.split("@")[0]
     }
 
-    // apply cursor if present 
-    if(cursor){
-        const cursorDate = new Date(Number(cursor))
-        query = query.startAfter(cursorDate);
-    }
+    query = query.orderBy("createdAt", "desc").limit(pageSize);
 
+    if (cursor) {
+      const admin = require("firebase-admin");
+      const cursorTimestamp = admin.firestore.Timestamp.fromMillis(
+        Number(cursor),
+      );
+      query = query.startAfter(cursorTimestamp);
+    }
 
     const snapshot = await query.get();
     const tasks = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 
-    const lastDoc = snapshot.docs[snapshot.docs.length - 1]; 
-    const nextCursor = lastDoc ?lastDoc.data().createdAt.toDate().getTime() : null ; 
+    const lastDoc = snapshot.docs[snapshot.docs.length - 1];
+    const nextCursor = lastDoc
+      ? lastDoc.data().createdAt.toDate().getTime()
+      : null;
     res.json({
-       tasks,
-       nextCursor, 
-       hasMore: snapshot.docs.length === pageSize,
+      tasks,
+      nextCursor,
+      hasMore: snapshot.docs.length === pageSize,
     });
   } catch (error) {
     res.status(500).json({ message: "Failed to fetch tasks", error });

@@ -1,8 +1,6 @@
 "use client";
 
-import {
-  Square3Stack3DIcon,
-} from "@heroicons/react/24/solid";
+import { Square3Stack3DIcon } from "@heroicons/react/24/solid";
 
 export default function DashboardPage() {
   return (
