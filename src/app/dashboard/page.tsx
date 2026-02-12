@@ -1,8 +1,6 @@
 "use client";
 
 import {
-  AcademicCapIcon,
-  BuildingLibraryIcon,
   Square3Stack3DIcon,
 } from "@heroicons/react/24/solid";
 
