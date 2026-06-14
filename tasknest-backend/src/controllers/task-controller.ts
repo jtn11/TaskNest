@@ -28,27 +28,36 @@ export const getUsersTask = async (req: AuthRequest, res: Response) => {
     query = query.orderBy("createdAt", "desc").limit(pageSize);
 
     if (cursor) {
-      const admin = require("firebase-admin");
-      const cursorTimestamp = admin.firestore.Timestamp.fromMillis(
-        Number(cursor),
-      );
-      query = query.startAfter(cursorTimestamp);
+      query = query.startAfter(cursor); // 🔥 string
     }
 
     const snapshot = await query.get();
-    const tasks = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+
+    const tasks = snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
 
     const lastDoc = snapshot.docs[snapshot.docs.length - 1];
+
     const nextCursor = lastDoc
-      ? lastDoc.data().createdAt.toDate().getTime()
+      ? lastDoc.data().createdAt // 🔥 just string
       : null;
+
     res.json({
       tasks,
       nextCursor,
       hasMore: snapshot.docs.length === pageSize,
     });
-  } catch (error) {
-    res.status(500).json({ message: "Failed to fetch tasks", error });
+  } catch (error: any) {
+    console.error("🔥 FIRESTORE ERROR:", error);
+    console.error("🔥 ERROR MESSAGE:", error.message);
+    console.error("🔥 ERROR STACK:", error.stack);
+
+    res.status(500).json({
+      message: "Failed to fetch tasks",
+      error: error.message,
+    });
   }
 };
 

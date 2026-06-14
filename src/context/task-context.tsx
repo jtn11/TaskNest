@@ -53,7 +53,7 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
   ) => {
     const data = await GetOverViewTasks(workspaceId, token, cursor);
 
-    setTasks((prev) => [...prev, ...data.tasks]);
+    setTasks((prev) => [prev, ...data.tasks]);
     setCursor(data.nextCursor);
     setHasMore(data.hasMore);
 
