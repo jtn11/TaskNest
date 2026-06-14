@@ -18,12 +18,7 @@ export default function Page() {
   }, [isLoggedIn]);
 
   const loginUser = async (data: { email: string; password: string }) => {
-    try {
-      await login(data.email, data.password);
-      router.push("/dashboard");
-    } catch (error) {
-      console.log("Login Failed", error);
-    }
+    await login(data.email, data.password);
   };
 
   return <Login onSubmit={loginUser} />;

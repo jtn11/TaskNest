@@ -22,7 +22,7 @@ import {
 interface AuthContextType {
   // currentUser: any;
   login: (email: string, password: string) => Promise<void>;
-  signup: (email: string, password: string) => Promise<void>;
+  signup: (email: string, password: string, username: string) => Promise<void>;
   logout: () => void;
   isLoggedIn: boolean;
   username: string | null;
@@ -74,7 +74,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   // signUp User and added in users collection as a doc
 
-  const signup = async (email: string, password: string) => {
+  const signup = async (email: string, password: string, username: string) => {
     try {
       const SignedInUser = await createUserWithEmailAndPassword(
         auth,
@@ -82,9 +82,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         password,
       );
       const user = SignedInUser.user;
-
-      // to take username as the first intials before @in gmail
-      const username = user.email?.split("@")[0] || "anonymous";
 
       await setDoc(doc(firestoreDb, "users", user.uid), {
         username,
@@ -96,6 +93,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       router.push("/workspaces");
     } catch (error) {
       console.log("SignUp Error", error);
+      throw error;
     }
   };
 
