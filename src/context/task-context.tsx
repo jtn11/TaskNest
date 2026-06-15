@@ -51,13 +51,24 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
     token: string,
     cursor?: number,
   ) => {
-    const data = await GetOverViewTasks(workspaceId, token, cursor);
+    if (!token) return;
+    setLoading(true);
+    try {
+      const data = await GetOverViewTasks(workspaceId, token, cursor);
 
-    setTasks((prev) => [prev, ...data.tasks]);
-    setCursor(data.nextCursor);
-    setHasMore(data.hasMore);
-
-    setLoading(false);
+      setOverViewTasks((prev) => {
+        if (!cursor) {
+          return data.tasks || [];
+        }
+        return [...prev, ...(data.tasks || [])];
+      });
+      setCursor(data.nextCursor);
+      setHasMore(data.hasMore);
+    } catch (err) {
+      console.error("Error fetching overview tasks:", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   //Overview Tasks of Workspace
@@ -65,23 +76,20 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const handleTask = async () => {
       const workspaceId = activeWorkspace?.id;
-      if (!currentUser || !workspaceId) return;
-      // // const taskByStatus = await GetOverViewTasks(workspaceId, token);
-      // console.log("Added task ", taskByStatus);
-      // setOverViewTasks(taskByStatus || []);
+      if (!currentUser || !workspaceId || !token) return;
       fetchTasks(workspaceId, token);
     };
     handleTask();
-  }, [currentUser, activeWorkspace, refreshList]);
+  }, [currentUser, activeWorkspace, token, refreshList]);
 
   // Tasks for LoggedIn User
   useEffect(() => {
     const handleTask = async () => {
       const workspaceId = activeWorkspace?.id;
-      if (!currentUser || !workspaceId) return;
+      if (!currentUser || !workspaceId || !token) return;
       const taskByStatus = await GetCurrentUsersTask(workspaceId, token);
       console.log("Tasks of Current User", taskByStatus);
-      setTasks(taskByStatus || []);
+      setTasks(taskByStatus?.tasks || []);
     };
     handleTask();
   }, [currentUser, activeWorkspace, token, refreshList]);
