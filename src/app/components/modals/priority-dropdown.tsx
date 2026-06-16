@@ -12,12 +12,12 @@ import { cn } from "@/lib/cn";
 import { useAuth } from "@/context/auth-context";
 import { useWorkspace } from "@/context/workspace-context";
 import { updateTasks } from "./update-dropdowns";
+import { useTasks } from "@/context/task-context";
 
 interface PriorityDropdownTypes {
   value?: string;
   onChange?: (val: string) => void;
   ShowOnlyPriorityIcon?: boolean;
-  label?: string;
   createMode?: boolean;
   selectedListId?: string;
 }
@@ -25,7 +25,6 @@ interface PriorityDropdownTypes {
 export default function PriorityDropdown({
   onChange,
   value,
-  label,
   ShowOnlyPriorityIcon,
   selectedListId,
   createMode,
@@ -36,6 +35,7 @@ export default function PriorityDropdown({
   );
   const { currentUser } = useAuth();
   const { activeWorkspace } = useWorkspace();
+  const { triggerListRefresh } = useTasks();
 
   const handlePriority = async (Priority: string, label: string) => {
     setPriority(Priority);
@@ -56,6 +56,7 @@ export default function PriorityDropdown({
     await updateTasks(userToken, selectedListId, workspaceId, {
       priority: Priority,
     });
+    triggerListRefresh();
   };
 
   function PriorityIcon({ priority }: { priority: string }) {
@@ -77,8 +78,6 @@ export default function PriorityDropdown({
       setCurrentlabel(value);
     }
   }, [value]);
-
-  const displayLabel = label === "priority" ? currentlabel : label;
 
   return (
     <div className="flex items-center gap-3 rounded-sm cursor-pointer">

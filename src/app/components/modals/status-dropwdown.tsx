@@ -12,11 +12,11 @@ import { LifebuoyIcon } from "@heroicons/react/24/outline";
 import { useAuth } from "@/context/auth-context";
 import { useWorkspace } from "@/context/workspace-context";
 import { updateTasks } from "./update-dropdowns";
+import { useTasks } from "@/context/task-context";
 
 interface statusDropdownType {
   value?: string; // its basically to show in the detailed view -> that some value is already there
   onChange?: (val: string) => void;
-  label?: string; // from task modal
   classname?: string;
   createMode?: boolean;
   showOnlyIconsInList?: boolean;
@@ -24,7 +24,6 @@ interface statusDropdownType {
 }
 
 export default function StatusDropdown({
-  label,
   value,
   onChange,
   showOnlyIconsInList,
@@ -35,6 +34,7 @@ export default function StatusDropdown({
   const [currentlabel, setCurrentlabel] = useState<string | undefined>("todo");
   const { currentUser } = useAuth();
   const { activeWorkspace } = useWorkspace();
+  const { triggerListRefresh } = useTasks();
 
   const handleSelectAndUpdate = async (status: string, label: string) => {
     setCurrentStatus(status);
@@ -53,6 +53,7 @@ export default function StatusDropdown({
     }
 
     await updateTasks(userToken, selectedListId, workspaceId, { status });
+    triggerListRefresh();
   };
 
   function StatusIcon({ status }: { status: string }) {
@@ -76,8 +77,6 @@ export default function StatusDropdown({
       setCurrentlabel(value);
     }
   }, [value]);
-
-  const displayLabel = label === "status" ? currentlabel : label;
 
   return (
     <div className="flex items-center gap-3 borderq rounded-sm cursor-pointer">

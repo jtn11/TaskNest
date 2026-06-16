@@ -6,6 +6,7 @@ import { useWorkspace } from "@/context/workspace-context";
 import { cn } from "@/lib/cn";
 import { updateTasks } from "./update-dropdowns";
 import { useAuth } from "@/context/auth-context";
+import { useTasks } from "@/context/task-context";
 
 interface AssigneeDropdownTypes {
   value?: string;
@@ -24,6 +25,8 @@ export default function AssigneeDropdown({
 }: AssigneeDropdownTypes) {
   const { members, activeWorkspace } = useWorkspace();
   const { currentUser } = useAuth();
+  const { triggerListRefresh } = useTasks();
+
   const handleAssignee = async (assignee: string) => {
     setAssignedTo(assignee);
     if (onChange) {
@@ -42,6 +45,7 @@ export default function AssigneeDropdown({
     await updateTasks(userToken, selectedListId, workspaceId, {
       assignedTo: assignee,
     });
+    triggerListRefresh();
   };
 
   useEffect(() => {

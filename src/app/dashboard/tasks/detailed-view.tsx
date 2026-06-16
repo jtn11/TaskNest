@@ -1,4 +1,4 @@
-import { Button, Modal, Textarea, TextInput, ActionIcon } from "@mantine/core";
+import { Button, Modal, Textarea, TextInput } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { PaperClipIcon } from "@heroicons/react/24/outline";
 import StatusDropdown from "@/app/components/modals/status-dropwdown";
@@ -10,6 +10,7 @@ import { useWorkspace } from "@/context/workspace-context";
 import { UpdateTask } from "./update-task";
 import { useAuth } from "@/context/auth-context";
 import { createComment, deleteComment, fetchComment } from "./task-comments";
+import { useTasks } from "@/context/task-context";
 
 interface Task {
   id: string;
@@ -50,6 +51,7 @@ export const DetailedView = ({
   const { activeWorkspace } = useWorkspace();
   const { currentUser } = useAuth();
   const { token } = useWorkspace();
+  const { triggerListRefresh } = useTasks();
 
   //fetching comments
 
@@ -147,11 +149,12 @@ export const DetailedView = ({
     try {
       await UpdateTask(
         selectedListItem.id,
-        activeWorkspace?.id!,
+        activeWorkspace.id,
         changes,
         userToken,
       );
       console.log(" Task updated successfully");
+      triggerListRefresh();
       setOpenDetailedView(false);
     } catch (err) {
       console.error("Failed to update task:", err);
