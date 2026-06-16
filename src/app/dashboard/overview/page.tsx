@@ -13,7 +13,6 @@ import { DetailedView } from "../tasks/detailed-view";
 import { useTasks } from "@/context/task-context";
 import PriorityDropdown from "@/app/components/modals/priority-dropdown";
 import AssigneeDropdown from "@/app/components/modals/assignee-dropdown";
-import { useAuth } from "@/context/auth-context";
 import { useWorkspace } from "@/context/workspace-context";
 
 interface Task {
@@ -35,7 +34,6 @@ export default function OverView() {
 
   const { overViewTasks, tasks, fetchTasks, hasMore, loading } = useTasks();
   const { activeWorkspace, members, token } = useWorkspace();
-  const { username } = useAuth();
 
   if (!activeWorkspace?.id) {
     return (

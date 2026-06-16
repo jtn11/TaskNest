@@ -1,5 +1,5 @@
-import { Button, Modal, Switch, Textarea } from "@mantine/core";
-import { act, useEffect, useState } from "react";
+import { Button, Modal, Textarea } from "@mantine/core";
+import { useState } from "react";
 import PriorityDropdown from "./priority-dropdown";
 import StatusDropdown from "./status-dropwdown";
 import AssigneeDropdown from "./assignee-dropdown";
@@ -20,6 +20,7 @@ export const TaskModal = ({ opened, onClose }: ModalProps) => {
   const [status, setStatus] = useState("todo");
   const [assignedTo, setAssignedTo] = useState("no-Assignee");
   const [priority, setPriority] = useState("medium");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { currentUser } = getAuth();
   const { activeWorkspace } = useWorkspace();
@@ -30,101 +31,116 @@ export const TaskModal = ({ opened, onClose }: ModalProps) => {
       alert("Title cannot be empty");
       return;
     }
-    console.log("Title", title);
-    console.log("Description", description);
-    console.log("status", status);
-    console.log("assignedTo", assignedTo);
-    console.log("priority", priority);
-
     if (!activeWorkspace || !currentUser) return;
-    const token = await currentUser.getIdToken();
-    const workspaceId = activeWorkspace.id;
+    setIsSubmitting(true);
+    try {
+      const token = await currentUser.getIdToken();
+      const workspaceId = activeWorkspace.id;
 
-    const task = await CreateUsersTask(
-      title,
-      description,
-      assignedTo,
-      status,
-      priority,
-      workspaceId,
-      token,
-    );
-    if (task) {
-      triggerListRefresh();
-      console.log("Created Task : ", task);
-      onClose();
-    } else {
-      alert("Failed to create Task");
+      const task = await CreateUsersTask(
+        title,
+        description,
+        assignedTo,
+        status,
+        priority,
+        workspaceId,
+        token,
+      );
+      if (task) {
+        triggerListRefresh();
+        console.log("Created Task : ", task);
+        onClose();
+        setTitle("");
+        setDescription("");
+      } else {
+        alert("Failed to create Task");
+      }
+    } catch (err) {
+      console.error("Error creating task:", err);
+      alert("Failed to create task");
+    } finally {
+      setIsSubmitting(false);
     }
-
-    setTitle("");
-    setDescription("");
   };
 
   const renderBody = () => {
     return (
-      <div className="py-1 space-y-4">
+      <div className="space-y-4">
+        {/* Title Input */}
         <Textarea
-          size="md"
-          radius="md"
-          placeholder="Issue title..."
+          placeholder="Task title"
           minRows={1}
           maxRows={4}
           autosize
+          variant="unstyled"
           onChange={(e) => setTitle(e.target.value)}
           value={title}
+          autoFocus
           classNames={{
-            input:
-              "text-bold text-lg font-medium border-none focus:border-blue-500",
+            input: "text-lg font-bold text-slate-800 placeholder-slate-400 p-0 focus:outline-none focus:ring-0 leading-tight",
           }}
         />
 
+        {/* Description Input */}
         <Textarea
-          size="md"
-          radius="md"
           placeholder="Add description..."
-          minRows={2}
-          maxRows={12}
+          minRows={3}
+          maxRows={10}
           autosize
+          variant="unstyled"
           onChange={(e) => setDescription(e.target.value)}
           value={description}
           classNames={{
-            input: "border-gray-300 focus:border-blue-500",
+            input: "text-sm text-slate-600 placeholder-slate-400 p-0 focus:outline-none focus:ring-0 leading-relaxed",
           }}
         />
 
-        <div className="flex items-center justify-between pt-4 border-t border-gray-200">
-          <div className="flex items-center gap-2">
+        {/* Action Controls and Submit */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4 border-t border-slate-100">
+          {/* Dropdown Options */}
+          <div className="flex flex-wrap items-center gap-2">
             <StatusDropdown
-              label="status"
               value={status}
               onChange={setStatus}
               createMode
             />
             <PriorityDropdown
-              label="priority"
               value={priority}
               onChange={setPriority}
               createMode
             />
-
             <AssigneeDropdown
               value={assignedTo}
               onChange={setAssignedTo}
               createMode
             />
-            <PaperClipIcon className="w-4 h-4" />
+            <button className="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-50 border border-transparent hover:border-slate-200/50 rounded-lg transition-all cursor-pointer">
+              <PaperClipIcon className="w-4 h-4" />
+            </button>
           </div>
 
-          <Button
-            size="sm"
-            classNames={{
-              root: "bg-blue-600 hover:bg-blue-700 text-white",
-            }}
-            onClick={handleSubmit}
-          >
-            Create issue
-          </Button>
+          {/* Form Actions */}
+          <div className="flex items-center gap-2 self-end sm:self-auto">
+            <Button
+              size="sm"
+              variant="subtle"
+              color="gray"
+              onClick={onClose}
+              disabled={isSubmitting}
+              className="text-xs font-semibold text-slate-500 hover:bg-slate-100 cursor-pointer"
+            >
+              Cancel
+            </Button>
+            <Button
+              size="sm"
+              onClick={handleSubmit}
+              loading={isSubmitting}
+              disabled={title.trim() === ""}
+              className="text-xs font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-lg shadow-sm px-4 cursor-pointer disabled:opacity-50 transition-all duration-150 active:scale-95"
+            >
+              Create Task
+            </Button>
+          </div>
         </div>
       </div>
     );
@@ -133,25 +149,25 @@ export const TaskModal = ({ opened, onClose }: ModalProps) => {
   return (
     <Modal
       opened={opened}
-      centered={false}
+      centered
       onClose={onClose}
-      yOffset={140}
       title={
-        <span className="text-gray-900 ml-1 text-xl font-medium">Add Task</span>
+        <span className="text-slate-800 text-base font-bold tracking-tight">Create New Task</span>
       }
-      size="xl"
+      size={800}
       closeButtonProps={{
         size: "sm",
       }}
       overlayProps={{
         opacity: 0.3,
+        blur: 2,
       }}
       classNames={{
-        close: "text-gray-500 hover:text-gray-700",
-        body: "bg-white p-0",
+        close: "text-slate-400 hover:text-slate-600 transition-colors cursor-pointer",
+        body: "bg-white p-6",
         root: "z-[var(--z-modal)]",
-        content: "shadow-lg bg-white rounded-xl",
-        header: "mb-0  bg-white",
+        content: "shadow-2xl bg-white rounded-[24px] overflow-hidden border border-slate-100",
+        header: "mb-0 bg-white border-b border-slate-100 px-6 py-4",
       }}
     >
       {renderBody()}

@@ -293,28 +293,27 @@ export const DetailedView = ({
   return (
     <Modal
       opened
-      centered={false}
+      centered
       onClose={() => setOpenDetailedView(false)}
-      yOffset={140}
       title={
-        <span className="text-blue-500 ml-1 text-lg font-semibold">
+        <span className="text-slate-800 text-base font-bold tracking-tight">
           Task Details
         </span>
       }
-      size="auto"
+      size={800}
       closeButtonProps={{
         size: "sm",
       }}
       overlayProps={{
         opacity: 0.3,
+        blur: 2,
       }}
       classNames={{
-        close: "text-gray-400 hover:text-gray-600",
-        body: "bg-white p-8",
+        close: "text-slate-400 hover:text-slate-600 transition-colors cursor-pointer",
+        body: "bg-white p-6",
         root: "z-[var(--z-modal)]",
-        content:
-          "w-400 h-200 shadow-lg bg-white rounded-xl border border-gray-100",
-        header: "mb-0 bg-white border-b border-gray-100 pb-4",
+        content: "shadow-2xl bg-white rounded-[24px] overflow-hidden border border-slate-100",
+        header: "mb-0 bg-white border-b border-slate-100 px-6 py-4",
       }}
     >
       {renderBody()}
