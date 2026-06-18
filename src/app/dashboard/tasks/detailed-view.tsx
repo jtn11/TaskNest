@@ -163,127 +163,155 @@ export const DetailedView = ({
 
   const renderBody = () => {
     return (
-      <div className="space-y-6">
-        <div>
+      <div className="space-y-5 text-left bg-white">
+        {/* Title Input */}
+        <div className="flex flex-col border border-slate-200/80 focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500 rounded-xl p-3 bg-white shadow-sm transition-all">
+          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block select-none">Title</span>
           <TextInput
             variant="unstyled"
-            size="lg"
             placeholder="Task title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             classNames={{
               input:
-                "text-2xl font-semibold text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-0",
+                "text-sm font-bold text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-0 p-0 leading-tight w-full mt-1",
             }}
           />
         </div>
 
-        <div>
+        {/* Description Input */}
+        <div className="flex flex-col border border-slate-200/80 focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500 rounded-xl p-3 bg-white shadow-sm transition-all">
+          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block select-none">Description</span>
           <Textarea
             variant="unstyled"
             placeholder="Add a detailed description..."
             minRows={3}
-            maxRows={10}
+            maxRows={8}
             autosize
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             classNames={{
               input:
-                "text-gray-700 overflow-y-auto leading-relaxed placeholder-gray-400 focus:outline-none focus:ring-0 mb-2",
+                "text-sm text-slate-600 overflow-y-auto leading-relaxed placeholder-slate-400 focus:outline-none focus:ring-0 p-0 w-full mt-1 min-h-[80px]",
             }}
           />
           <Button
-            leftSection={<PaperClipIcon className="w-4 h-4 text-blue" />}
+            leftSection={<PaperClipIcon className="w-3.5 h-3.5 text-slate-500" />}
             variant="subtle"
+            color="gray"
             size="xs"
-            className="px-2 text-black text-xs rounded-sm font-medium
-             flex items-center gap-1"
+            className="px-2 text-slate-500 text-xs rounded-lg font-semibold flex items-center gap-1 hover:bg-slate-100 cursor-pointer mt-2 self-start"
           >
             Attach image
           </Button>
         </div>
 
-        <div className="flex gap-1 mb-2">
-          <StatusDropdown value={status} onChange={setStatus} />
-          <PriorityDropdown value={priority} onChange={setPriority} />
-          <AssigneeDropdown value={assignedTo} onChange={setAssignedTo} />
-        </div>
+        {/* Dropdowns Row */}
+        <div className="space-y-1.5 pt-2">
+          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Attributes</span>
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="flex items-center gap-1.5 bg-slate-50/50 border border-slate-200/60 rounded-xl px-2.5 py-1">
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider select-none">Status:</span>
+              <StatusDropdown value={status} onChange={setStatus} />
+            </div>
+            
+            <div className="flex items-center gap-1.5 bg-slate-50/50 border border-slate-200/60 rounded-xl px-2.5 py-1">
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider select-none">Priority:</span>
+              <PriorityDropdown value={priority} onChange={setPriority} />
+            </div>
 
-        <div className="pt-4 border-t border-gray-100 flex flex-col gap-2">
-          <span className="text-sm font-medium text-blue-500">Comments</span>
-
-          {commentArr &&
-            commentArr.map((comment) => (
-              <div key={comment.id}>
-                <Textarea
-                  radius="md"
-                  minRows={2}
-                  autosize
-                  value={comment.text}
-                  classNames={{
-                    input:
-                      "border border-gray-200 pr-10 placeholder-gray-400 text-gray-700",
-                  }}
-                  rightSection={
-                    <button onClick={() => handleDeleteComment(comment.id)}>
-                      <XCircleIcon className="w-5 h-5 text-red-500" />
-                    </button>
-                  }
-                />
-              </div>
-            ))}
-
-          <div>
-            <Textarea
-              radius="md"
-              placeholder="Write a comment..."
-              minRows={2}
-              autosize
-              value={comment}
-              onChange={(e) => setComment(e.target.value)}
-              classNames={{
-                input:
-                  "border border-gray-200 pr-10 placeholder-gray-400 text-gray-700 focus:border-blue-500",
-              }}
-              rightSection={
-                <button
-                  onClick={handleComments}
-                  disabled={!comment.trim()}
-                  className={cn(
-                    "transition-opacity",
-                    comment.trim()
-                      ? "cursor-pointer opacity-100"
-                      : "cursor-not-allowed opacity-40",
-                  )}
-                >
-                  <ArrowUpCircleIcon className="w-6 h-6 text-blue-500" />
-                </button>
-              }
-            />
+            <div className="flex items-center gap-1.5 bg-slate-50/50 border border-slate-200/60 rounded-xl px-2.5 py-1">
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider select-none">Assignee:</span>
+              <AssigneeDropdown value={assignedTo} onChange={setAssignedTo} />
+            </div>
           </div>
         </div>
 
-        <div className="flex justify-end gap-2">
+        {/* Comments Section */}
+        <div className="pt-4 border-t border-slate-100 space-y-4">
+          <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+            Comments ({commentArr ? commentArr.length : 0})
+          </h4>
+
+          {/* Comment list */}
+          <div className="space-y-3 max-h-[200px] overflow-y-auto pr-1">
+            {commentArr && commentArr.map((comment) => (
+              <div key={comment.id} className="flex gap-3 items-start relative group">
+                <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-blue-500 to-indigo-500 flex items-center justify-center text-white text-[10px] font-bold shrink-0 uppercase">
+                  {comment.displayName ? comment.displayName.charAt(0) : "U"}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-slate-700">
+                      {comment.displayName || "Unknown User"}
+                    </span>
+                    <button 
+                      onClick={() => handleDeleteComment(comment.id)}
+                      className="text-slate-400 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100 cursor-pointer"
+                    >
+                      <XCircleIcon className="w-4 h-4" />
+                    </button>
+                  </div>
+                  <p className="bg-slate-50 border border-slate-100/60 rounded-2xl px-4 py-2 text-xs text-slate-600 leading-relaxed mt-1 whitespace-pre-wrap">
+                    {comment.text}
+                  </p>
+                </div>
+              </div>
+            ))}
+            {(!commentArr || commentArr.length === 0) && (
+              <p className="text-xs text-slate-400 italic">No comments yet. Start the conversation!</p>
+            )}
+          </div>
+
+          {/* New Comment Input */}
+          <div className="flex gap-3 items-start pt-1">
+            <div className="flex-1 rounded-xl border border-slate-200 focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500 overflow-hidden shadow-sm bg-white p-2 flex items-center gap-2 transition-all">
+              <Textarea
+                variant="unstyled"
+                placeholder="Write a comment..."
+                minRows={1}
+                maxRows={4}
+                autosize
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                className="flex-1"
+                classNames={{
+                  input: "w-full text-xs text-slate-600 placeholder-slate-400 p-0 focus:outline-none border-none bg-transparent resize-none",
+                }}
+              />
+              <button
+                onClick={handleComments}
+                disabled={!comment.trim()}
+                className={cn(
+                  "p-1 rounded-lg transition-all cursor-pointer",
+                  comment.trim()
+                    ? "text-blue-500 hover:bg-blue-50"
+                    : "text-slate-300 cursor-not-allowed",
+                )}
+              >
+                <ArrowUpCircleIcon className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer Actions */}
+        <div className="pt-4 border-t border-slate-100 flex items-center justify-end gap-2">
           <Button
             size="sm"
             variant="subtle"
-            radius="md"
-            classNames={{
-              root: "bg-blue-600 hover:bg-blue-700 text-white font-medium shadow-sm",
-            }}
+            color="gray"
             onClick={() => setOpenDetailedView(false)}
+            className="text-xs font-semibold text-slate-500 hover:bg-slate-100 cursor-pointer"
           >
-            cancel
+            Cancel
           </Button>
           <Button
             size="sm"
-            radius="md"
-            classNames={{
-              root: "bg-blue-600 hover:bg-blue-700 text-white font-medium shadow-sm",
-            }}
             onClick={handleUpdate}
+            className="text-xs font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-lg shadow-sm px-4.5 py-2 cursor-pointer transition-all duration-150 active:scale-95"
           >
-            Update
+            Update Task
           </Button>
         </div>
       </div>
@@ -300,7 +328,7 @@ export const DetailedView = ({
           Task Details
         </span>
       }
-      size={800}
+      size={1000}
       closeButtonProps={{
         size: "sm",
       }}
