@@ -328,7 +328,7 @@ export const DetailedView = ({
           Task Details
         </span>
       }
-      size={1000}
+      size={1100}
       closeButtonProps={{
         size: "sm",
       }}
