@@ -8,15 +8,18 @@ interface EmptyStatusViewProps {
 
 export const EmptyStatusView: React.FC<EmptyStatusViewProps> = ({ status }) => {
   return (
-    <div className="flex flex-col items-center justify-center text-center text-gray-500 p-8 mt-20">
-      <ClipboardDocumentIcon className="w-24 h-24 text-gray-300 mb-4" />
-      <h2 className="text-2xl font-semibold text-gray-700">
-        No tasks in '{status}'
+    <div className="flex flex-col items-center justify-center text-center text-slate-500 p-8 mt-20 max-w-md mx-auto">
+      <div className="w-16 h-16 rounded-full bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 mb-4 shadow-sm">
+        <ClipboardDocumentIcon className="w-8 h-8" />
+      </div>
+      <h2 className="text-lg font-bold text-slate-800">
+        No tasks in &apos;{status}&apos;
       </h2>
-      <p className="mt-2">
-        There are no tasks with the status "{status}" assigned to you.
+      <p className="text-sm text-slate-500 mt-1 leading-relaxed">
+        There are no tasks with the status &quot;{status}&quot; assigned to you.
       </p>
-      <p className="mt-1">Create a new task or check other categories.</p>
+      <p className="text-xs text-slate-400 mt-2">Create a new task or check other categories.</p>
     </div>
   );
 };
+
