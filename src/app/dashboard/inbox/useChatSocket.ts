@@ -1,8 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 
+export interface SocketMessage {
+  id: string;
+  content: string;
+  senderId: string;
+  receiverId: string;
+  createdAt?: string | Date;
+}
+
 export function useChatSocket(token: string) {
   const ws = useRef<WebSocket | null>(null);
-  const [messages, setmessages] = useState<any[]>([]);
+  const [messages, setmessages] = useState<SocketMessage[]>([]);
   const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
@@ -11,15 +19,19 @@ export function useChatSocket(token: string) {
     ws.current = new WebSocket("ws://localhost:8000");
 
     ws.current.onopen = () => {
-      console.log("websocket connected ");
+      console.log("websocket connected");
       ws.current?.send(JSON.stringify({ type: "register", token }));
       setIsConnected(true);
     };
 
     // incoming messages
     ws.current.onmessage = (event) => {
-      const msg = JSON.parse(event.data);
-      setmessages((prev) => [...prev, msg]);
+      try {
+        const msg = JSON.parse(event.data);
+        setmessages((prev) => [...prev, msg]);
+      } catch (err) {
+        console.error("Error parsing message: ", err);
+      }
     };
 
     ws.current.onclose = () => {
@@ -46,3 +58,4 @@ export function useChatSocket(token: string) {
 
   return { messages, sendMessage, isConnected };
 }
+
