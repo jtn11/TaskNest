@@ -1,36 +1,98 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# TaskNest
 
-## Getting Started
+TaskNest is a modern, real-time task management and team collaboration platform built for high-performance product teams. It features a clean, responsive, and minimalist user interface inspired by premium SaaS tools.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 🚀 Key Features
+
+### 📋 Task Management
+- **Dashboard Overview**: Productivity trackers, task status breakdown rings, and workspace activity statistics.
+- **My Tasks View**: Dynamic horizontal tab strip sorting tasks by status (`Todo`, `Backlog`, `In Progress`, `In Review`, `Completed`) with live, automatic count badges.
+- **Interactive Rows**: Custom table cards featuring hover highlights and inline quick-actions (Status, Priority, Assignee changes) without leaving the list view.
+- **Task Details Modal**: Expansive detail views featuring card-based text containers, commenting streams, user initial avatars, and attribute badges.
+- **Task Creation**: Clean, borderless input fields with embedded image attachment controls.
+
+### 💬 Real-Time Messaging
+- **Chat Inbox**: Sidebar loaded with workspace contacts, individual avatar cards, and active user indicators.
+- **WebSocket Synchronization**: Live message delivery backed by a WebSocket server.
+- **Connection Badge**: Live indicator dot showing your connection status (`Live` pulsing green or `Offline` red badge).
+- **Auto-Scrolling Chat Frame**: Snaps the chat window frame to the bottom automatically when sending, receiving, or switching chat threads.
+
+### 🏢 Workspace Onboarding
+- **Dedicated Setup Landing Page**: Standalone onboarding flow at `/workspaces` for creating a workspace, subdomain sluggifying, and managing team workspace redirects.
+
+---
+
+## 🛠️ Tech Stack
+
+### Frontend (`/`)
+- **Framework**: Next.js 15 (App Router, Turbopack)
+- **UI & Components**: React 19, Mantine Core (v8), Heroicons
+- **Styling**: TailwindCSS 4, Vanilla CSS
+- **Authentication**: Firebase Auth
+
+### Backend (`/tasknest-backend`)
+- **Server**: Node.js, Express, TypeScript, `ts-node-dev`
+- **Real-Time Protocol**: WebSockets (WS)
+
+---
+
+## 📂 Project Structure
+
+```
+task-manager/
+├── src/                          # Next.js App Source
+│   ├── app/                      # Routes and Pages
+│   │   ├── dashboard/            # Core Dashboard (Overview, Tasks, Inbox)
+│   │   ├── workspaces/           # Workspace Setup Landing Page
+│   │   └── (auth)/               # User Login & Registration Pages
+│   ├── components/               # Shareable UI Modals and Dropdowns
+│   ├── context/                  # Workspace, Auth, and Task React Contexts
+│   └── lib/                      # Styling Utilities
+├── public/                       # Static Assets
+└── tasknest-backend/             # Express & WebSocket Node.js Server
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## ⚙️ Getting Started
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+To run the application locally, you will need to start both the backend server and the frontend client.
 
-## Learn More
+### 1. Run the Backend Server
 
-To learn more about Next.js, take a look at the following resources:
+Navigate to the backend directory, install the dependencies, and start the development server:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+cd tasknest-backend
+npm install
+npm run dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The WebSocket server starts on `ws://localhost:8000` and the REST API server runs on `http://localhost:8000`.
 
-## Deploy on Vercel
+### 2. Run the Frontend Client
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+In the root directory, install the node modules and launch the Next.js dev server:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm install
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) in your browser to view the application.
+
+---
+
+## 🔨 Build & Linting
+
+### Compile Frontend Production Bundle
+```bash
+npm run build
+```
+
+### Run Formatting
+```bash
+npm run format
+```
