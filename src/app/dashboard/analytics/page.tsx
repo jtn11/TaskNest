@@ -40,11 +40,17 @@ interface CustomTooltipProps {
   label?: string;
 }
 
-const CustomTooltip: React.FC<CustomTooltipProps> = ({ active, payload, label }) => {
+const CustomTooltip: React.FC<CustomTooltipProps> = ({
+  active,
+  payload,
+  label,
+}) => {
   if (active && payload && payload.length) {
     return (
       <div className="bg-white/95 backdrop-blur-sm border border-slate-200/80 p-3 rounded-xl shadow-lg select-none">
-        {label && <p className="text-xs font-bold text-slate-800 mb-1.5">{label}</p>}
+        {label && (
+          <p className="text-xs font-bold text-slate-800 mb-1.5">{label}</p>
+        )}
         <div className="space-y-1">
           {payload.map((item, idx) => (
             <div key={idx} className="flex items-center gap-2">
@@ -52,8 +58,12 @@ const CustomTooltip: React.FC<CustomTooltipProps> = ({ active, payload, label })
                 className="w-2.5 h-2.5 rounded-full border border-white/20"
                 style={{ backgroundColor: item.color || item.fill }}
               />
-              <span className="text-xs text-slate-500 font-medium">{item.name}:</span>
-              <span className="text-xs font-extrabold text-slate-800">{item.value}</span>
+              <span className="text-xs text-slate-500 font-medium">
+                {item.name}:
+              </span>
+              <span className="text-xs font-extrabold text-slate-800">
+                {item.value}
+              </span>
             </div>
           ))}
         </div>
@@ -94,13 +104,22 @@ const AnalyticsDashboard = () => {
   });
 
   const totalUserTasks = tasks.length;
-  const userCompletionRate = totalUserTasks > 0 ? (personalStats.completed / totalUserTasks) * 100 : 0;
+  const userCompletionRate =
+    totalUserTasks > 0 ? (personalStats.completed / totalUserTasks) * 100 : 0;
 
   const personalChartData = [
-    { name: "Completed", value: personalStats.completed, fill: "url(#pieCompleted)" },
-    { name: "In Progress", value: personalStats.inProgress, fill: "url(#pieInProgress)" },
+    {
+      name: "Completed",
+      value: personalStats.completed,
+      fill: "url(#pieCompleted)",
+    },
+    {
+      name: "In Progress",
+      value: personalStats.inProgress,
+      fill: "url(#pieInProgress)",
+    },
     { name: "Pending", value: personalStats.pending, fill: "url(#piePending)" },
-  ].filter(item => item.value > 0);
+  ].filter((item) => item.value > 0);
 
   // Workspace statistics calculations
   const workspaceCompletedTaskCount = overViewTasks.filter(
@@ -108,17 +127,25 @@ const AnalyticsDashboard = () => {
   ).length;
 
   const completionPercentage =
-    overViewTasks.length > 0 ? (workspaceCompletedTaskCount / overViewTasks.length) * 100 : 0;
+    overViewTasks.length > 0
+      ? (workspaceCompletedTaskCount / overViewTasks.length) * 100
+      : 0;
 
   const teamTasks: MemberData[] = members.map((member) => {
     const memberTasks = overViewTasks.filter(
       (task) => task.assignedTo === member.email,
     );
-    const completed = memberTasks.filter((task) => task.status?.toLowerCase() === "completed").length;
-    const pending = memberTasks.filter((task) => task.status?.toLowerCase() !== "completed").length;
+    const completed = memberTasks.filter(
+      (task) => task.status?.toLowerCase() === "completed",
+    ).length;
+    const pending = memberTasks.filter(
+      (task) => task.status?.toLowerCase() !== "completed",
+    ).length;
 
     return {
-      name: member.username || (member.email ? member.email.split("@")[0] : "unknown"),
+      name:
+        member.username ||
+        (member.email ? member.email.split("@")[0] : "unknown"),
       completed,
       pending,
       total: memberTasks.length,
@@ -127,24 +154,31 @@ const AnalyticsDashboard = () => {
 
   // Priority Stats
   const priorityStats = {
-    high: overViewTasks.filter(t => t.priority?.toLowerCase() === "high").length,
-    medium: overViewTasks.filter(t => t.priority?.toLowerCase() === "medium").length,
-    low: overViewTasks.filter(t => t.priority?.toLowerCase() === "low").length,
+    high: overViewTasks.filter((t) => t.priority?.toLowerCase() === "high")
+      .length,
+    medium: overViewTasks.filter((t) => t.priority?.toLowerCase() === "medium")
+      .length,
+    low: overViewTasks.filter((t) => t.priority?.toLowerCase() === "low")
+      .length,
   };
   const totalWorkspaceTasks = overViewTasks.length;
 
   // Status Stats
   const statusStats = {
-    backlog: overViewTasks.filter(t => t.status?.toLowerCase() === "backlog").length,
-    todo: overViewTasks.filter(t => t.status?.toLowerCase() === "todo").length,
-    inProgress: overViewTasks.filter(t => t.status?.toLowerCase() === "in-progress").length,
-    review: overViewTasks.filter(t => t.status?.toLowerCase() === "review").length,
+    backlog: overViewTasks.filter((t) => t.status?.toLowerCase() === "backlog")
+      .length,
+    todo: overViewTasks.filter((t) => t.status?.toLowerCase() === "todo")
+      .length,
+    inProgress: overViewTasks.filter(
+      (t) => t.status?.toLowerCase() === "in-progress",
+    ).length,
+    review: overViewTasks.filter((t) => t.status?.toLowerCase() === "review")
+      .length,
     completed: workspaceCompletedTaskCount,
   };
 
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6 bg-slate-50/20 min-h-screen">
-      
       {/* SVG Gradient definitions for Recharts */}
       <svg width={0} height={0} className="absolute">
         <defs>
@@ -178,7 +212,8 @@ const AnalyticsDashboard = () => {
             Workspace Analytics
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 mt-1 font-medium">
-            Real-time workload metrics, completion progress, and team performance overview.
+            Real-time workload metrics, completion progress, and team
+            performance overview.
           </p>
         </div>
         <div className="flex items-center gap-2 bg-white border border-slate-200/80 rounded-xl px-4 py-2 shadow-sm select-none shrink-0 self-start sm:self-auto hover:border-slate-300 transition-colors">
@@ -201,7 +236,8 @@ const AnalyticsDashboard = () => {
               {overViewTasks.length}
             </span>
             <span className="text-[11px] font-semibold text-slate-500 block">
-              {workspaceCompletedTaskCount} completed • {overViewTasks.length - workspaceCompletedTaskCount} active
+              {workspaceCompletedTaskCount} completed •{" "}
+              {overViewTasks.length - workspaceCompletedTaskCount} active
             </span>
           </div>
           <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-100/80 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
@@ -255,7 +291,7 @@ const AnalyticsDashboard = () => {
               {members.length}
             </span>
             <span className="text-[11px] font-semibold text-slate-500 block">
-              {teamTasks.filter(t => t.total > 0).length} active contributors
+              {teamTasks.filter((t) => t.total > 0).length} active contributors
             </span>
           </div>
           <div className="w-10 h-10 rounded-xl bg-amber-50 border border-amber-100/80 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
@@ -266,7 +302,6 @@ const AnalyticsDashboard = () => {
 
       {/* Main Visualizations Section */}
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
-        
         {/* Your Task Progress - Donut Chart (2 columns span) */}
         <div className="lg:col-span-2 bg-white border border-slate-200/80 rounded-2xl shadow-sm p-6 flex flex-col justify-between">
           <div className="space-y-1">
@@ -277,16 +312,19 @@ const AnalyticsDashboard = () => {
               Your Task Progress
             </h2>
           </div>
-          
+
           <div className="my-6 relative flex items-center justify-center">
             {totalUserTasks === 0 ? (
               <div className="h-[250px] flex flex-col items-center justify-center text-center px-4">
                 <div className="w-12 h-12 rounded-full bg-slate-50 border border-slate-100 flex items-center justify-center mb-3">
                   <DocumentCheckIcon className="w-6 h-6 text-slate-400" />
                 </div>
-                <span className="text-sm font-semibold text-slate-600">No tasks assigned</span>
+                <span className="text-sm font-semibold text-slate-600">
+                  No tasks assigned
+                </span>
                 <p className="text-xs text-slate-400 mt-1 max-w-[200px]">
-                  Add tasks in this workspace and assign them to yourself to see progress.
+                  Add tasks in this workspace and assign them to yourself to see
+                  progress.
                 </p>
               </div>
             ) : (
@@ -304,7 +342,11 @@ const AnalyticsDashboard = () => {
                       labelLine={false}
                     >
                       {personalChartData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.fill} className="outline-none" />
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={entry.fill}
+                          className="outline-none"
+                        />
                       ))}
                     </Pie>
                     <Tooltip content={<CustomTooltip />} />
@@ -328,15 +370,21 @@ const AnalyticsDashboard = () => {
             <div className="flex items-center justify-center gap-6 border-t border-slate-100 pt-4 text-xs font-semibold">
               <div className="flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
-                <span className="text-slate-600">Completed ({personalStats.completed})</span>
+                <span className="text-slate-600">
+                  Completed ({personalStats.completed})
+                </span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-blue-500" />
-                <span className="text-slate-600">In Progress ({personalStats.inProgress})</span>
+                <span className="text-slate-600">
+                  In Progress ({personalStats.inProgress})
+                </span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-amber-500" />
-                <span className="text-slate-600">Pending ({personalStats.pending})</span>
+                <span className="text-slate-600">
+                  Pending ({personalStats.pending})
+                </span>
               </div>
             </div>
           )}
@@ -359,15 +407,25 @@ const AnalyticsDashboard = () => {
                 <div className="w-12 h-12 rounded-full bg-slate-50 border border-slate-100 flex items-center justify-center mb-3">
                   <UserGroupIcon className="w-6 h-6 text-slate-400" />
                 </div>
-                <span className="text-sm font-semibold text-slate-600">No workspace data</span>
+                <span className="text-sm font-semibold text-slate-600">
+                  No workspace data
+                </span>
                 <p className="text-xs text-slate-400 mt-1 max-w-[200px]">
-                  Tasks added to the workspace will populate team workload graphs.
+                  Tasks added to the workspace will populate team workload
+                  graphs.
                 </p>
               </div>
             ) : (
               <ResponsiveContainer width="100%" height={250}>
-                <BarChart data={teamTasks} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
+                <BarChart
+                  data={teamTasks}
+                  margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
+                >
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="#f1f5f9"
+                    vertical={false}
+                  />
                   <XAxis
                     dataKey="name"
                     tick={{ fill: "#94a3b8", fontSize: 11, fontWeight: 600 }}
@@ -418,7 +476,6 @@ const AnalyticsDashboard = () => {
 
       {/* Bottom Grid: Priority Breakdown + Status Distribution */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        
         {/* Priority Breakdown */}
         <div className="bg-white border border-slate-200/80 rounded-2xl shadow-sm p-6 space-y-4">
           <div className="space-y-1">
@@ -429,7 +486,7 @@ const AnalyticsDashboard = () => {
               Priority Breakdown
             </h2>
           </div>
-          
+
           <div className="space-y-4 pt-2">
             {/* High Priority Bar */}
             <div className="space-y-1.5">
@@ -508,7 +565,6 @@ const AnalyticsDashboard = () => {
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 pt-2">
-            
             {/* Backlog Pill */}
             <div className="bg-slate-50 border border-slate-100 p-3 rounded-xl flex flex-col items-center justify-center text-center shadow-sm">
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
@@ -558,12 +614,9 @@ const AnalyticsDashboard = () => {
                 {statusStats.completed}
               </span>
             </div>
-
           </div>
         </div>
-
       </div>
-
     </div>
   );
 };

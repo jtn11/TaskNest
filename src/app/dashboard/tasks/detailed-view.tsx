@@ -166,7 +166,9 @@ export const DetailedView = ({
       <div className="space-y-5 text-left bg-white">
         {/* Title Input */}
         <div className="flex flex-col border border-slate-200/80 focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500 rounded-xl p-3 bg-white shadow-sm transition-all">
-          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block select-none">Title</span>
+          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block select-none">
+            Title
+          </span>
           <TextInput
             variant="unstyled"
             placeholder="Task title"
@@ -181,7 +183,9 @@ export const DetailedView = ({
 
         {/* Description Input */}
         <div className="flex flex-col border border-slate-200/80 focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500 rounded-xl p-3 bg-white shadow-sm transition-all">
-          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block select-none">Description</span>
+          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block select-none">
+            Description
+          </span>
           <Textarea
             variant="unstyled"
             placeholder="Add a detailed description..."
@@ -196,7 +200,9 @@ export const DetailedView = ({
             }}
           />
           <Button
-            leftSection={<PaperClipIcon className="w-3.5 h-3.5 text-slate-500" />}
+            leftSection={
+              <PaperClipIcon className="w-3.5 h-3.5 text-slate-500" />
+            }
             variant="subtle"
             color="gray"
             size="xs"
@@ -208,20 +214,28 @@ export const DetailedView = ({
 
         {/* Dropdowns Row */}
         <div className="space-y-1.5 pt-2">
-          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Attributes</span>
+          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+            Attributes
+          </span>
           <div className="flex flex-wrap items-center gap-3">
             <div className="flex items-center gap-1.5 bg-slate-50/50 border border-slate-200/60 rounded-xl px-2.5 py-1">
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider select-none">Status:</span>
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider select-none">
+                Status:
+              </span>
               <StatusDropdown value={status} onChange={setStatus} />
             </div>
-            
+
             <div className="flex items-center gap-1.5 bg-slate-50/50 border border-slate-200/60 rounded-xl px-2.5 py-1">
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider select-none">Priority:</span>
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider select-none">
+                Priority:
+              </span>
               <PriorityDropdown value={priority} onChange={setPriority} />
             </div>
 
             <div className="flex items-center gap-1.5 bg-slate-50/50 border border-slate-200/60 rounded-xl px-2.5 py-1">
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider select-none">Assignee:</span>
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider select-none">
+                Assignee:
+              </span>
               <AssigneeDropdown value={assignedTo} onChange={setAssignedTo} />
             </div>
           </div>
@@ -235,31 +249,37 @@ export const DetailedView = ({
 
           {/* Comment list */}
           <div className="space-y-3 max-h-[200px] overflow-y-auto pr-1">
-            {commentArr && commentArr.map((comment) => (
-              <div key={comment.id} className="flex gap-3 items-start relative group">
-                <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-blue-500 to-indigo-500 flex items-center justify-center text-white text-[10px] font-bold shrink-0 uppercase">
-                  {comment.displayName ? comment.displayName.charAt(0) : "U"}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-slate-700">
-                      {comment.displayName || "Unknown User"}
-                    </span>
-                    <button 
-                      onClick={() => handleDeleteComment(comment.id)}
-                      className="text-slate-400 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100 cursor-pointer"
-                    >
-                      <XCircleIcon className="w-4 h-4" />
-                    </button>
+            {commentArr &&
+              commentArr.map((comment) => (
+                <div
+                  key={comment.id}
+                  className="flex gap-3 items-start relative group"
+                >
+                  <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-blue-500 to-indigo-500 flex items-center justify-center text-white text-[10px] font-bold shrink-0 uppercase">
+                    {comment.displayName ? comment.displayName.charAt(0) : "U"}
                   </div>
-                  <p className="bg-slate-50 border border-slate-100/60 rounded-2xl px-4 py-2 text-xs text-slate-600 leading-relaxed mt-1 whitespace-pre-wrap">
-                    {comment.text}
-                  </p>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold text-slate-700">
+                        {comment.displayName || "Unknown User"}
+                      </span>
+                      <button
+                        onClick={() => handleDeleteComment(comment.id)}
+                        className="text-slate-400 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100 cursor-pointer"
+                      >
+                        <XCircleIcon className="w-4 h-4" />
+                      </button>
+                    </div>
+                    <p className="bg-slate-50 border border-slate-100/60 rounded-2xl px-4 py-2 text-xs text-slate-600 leading-relaxed mt-1 whitespace-pre-wrap">
+                      {comment.text}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
             {(!commentArr || commentArr.length === 0) && (
-              <p className="text-xs text-slate-400 italic">No comments yet. Start the conversation!</p>
+              <p className="text-xs text-slate-400 italic">
+                No comments yet. Start the conversation!
+              </p>
             )}
           </div>
 
@@ -276,7 +296,8 @@ export const DetailedView = ({
                 onChange={(e) => setComment(e.target.value)}
                 className="flex-1"
                 classNames={{
-                  input: "w-full text-xs text-slate-600 placeholder-slate-400 p-0 focus:outline-none border-none bg-transparent resize-none",
+                  input:
+                    "w-full text-xs text-slate-600 placeholder-slate-400 p-0 focus:outline-none border-none bg-transparent resize-none",
                 }}
               />
               <button
@@ -337,10 +358,12 @@ export const DetailedView = ({
         blur: 2,
       }}
       classNames={{
-        close: "text-slate-400 hover:text-slate-600 transition-colors cursor-pointer",
+        close:
+          "text-slate-400 hover:text-slate-600 transition-colors cursor-pointer",
         body: "bg-white p-6",
         root: "z-[var(--z-modal)]",
-        content: "shadow-2xl bg-white rounded-[24px] overflow-hidden border border-slate-100",
+        content:
+          "shadow-2xl bg-white rounded-[24px] overflow-hidden border border-slate-100",
         header: "mb-0 bg-white border-b border-slate-100 px-6 py-4",
       }}
     >

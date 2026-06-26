@@ -18,8 +18,9 @@ export const EmptyStatusView: React.FC<EmptyStatusViewProps> = ({ status }) => {
       <p className="text-sm text-slate-500 mt-1 leading-relaxed">
         There are no tasks with the status &quot;{status}&quot; assigned to you.
       </p>
-      <p className="text-xs text-slate-400 mt-2">Create a new task or check other categories.</p>
+      <p className="text-xs text-slate-400 mt-2">
+        Create a new task or check other categories.
+      </p>
     </div>
   );
 };
-

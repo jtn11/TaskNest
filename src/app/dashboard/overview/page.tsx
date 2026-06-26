@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { 
-  ClockIcon, 
-  CheckCircleIcon, 
-  ClipboardDocumentListIcon, 
+import {
+  ClockIcon,
+  CheckCircleIcon,
+  ClipboardDocumentListIcon,
   StopCircleIcon,
-  UserGroupIcon
+  UserGroupIcon,
 } from "@heroicons/react/24/outline";
 import StatusDropdown from "@/app/components/modals/status-dropwdown";
 import { DetailedView } from "../tasks/detailed-view";
@@ -43,14 +43,14 @@ export default function OverView() {
     );
   }
 
-
   // Calculate metrics based on the full list of user's tasks
   const completedTasks = tasks.filter((t) => t.status === "completed").length;
-  
+
   const stats = [
     {
       label: "To Do / Backlog",
-      count: tasks.filter((t) => t.status === "todo" || t.status === "backlog").length,
+      count: tasks.filter((t) => t.status === "todo" || t.status === "backlog")
+        .length,
       icon: <StopCircleIcon className="w-5 h-5 text-slate-500" />,
       bgColor: "bg-slate-50/50 border-slate-200/80 hover:border-slate-300",
       iconBg: "bg-slate-100 text-slate-600",
@@ -66,7 +66,8 @@ export default function OverView() {
       label: "In Review",
       count: tasks.filter((t) => t.status === "review").length,
       icon: <ClipboardDocumentListIcon className="w-5 h-5 text-emerald-500" />,
-      bgColor: "bg-emerald-50/20 border-emerald-100/80 hover:border-emerald-200",
+      bgColor:
+        "bg-emerald-50/20 border-emerald-100/80 hover:border-emerald-200",
       iconBg: "bg-emerald-100/50 text-emerald-700",
     },
     {
@@ -83,8 +84,8 @@ export default function OverView() {
       {/* Stats Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {stats.map((stat, i) => (
-          <div 
-            key={i} 
+          <div
+            key={i}
             className={`flex items-center justify-between p-4 rounded-xl border ${stat.bgColor} shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md cursor-default`}
           >
             <div>
@@ -95,7 +96,9 @@ export default function OverView() {
                 {stat.count}
               </span>
             </div>
-            <div className={`p-2.5 rounded-lg ${stat.iconBg} flex items-center justify-center shrink-0`}>
+            <div
+              className={`p-2.5 rounded-lg ${stat.iconBg} flex items-center justify-center shrink-0`}
+            >
               {stat.icon}
             </div>
           </div>
@@ -118,12 +121,26 @@ export default function OverView() {
 
             {overViewTasks.length === 0 ? (
               <div className="p-10 flex flex-col items-center justify-center text-center">
-                <svg className="w-12 h-12 text-slate-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                <svg
+                  className="w-12 h-12 text-slate-300 mb-3"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="1.8"
+                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+                  />
                 </svg>
-                <span className="text-sm font-semibold text-slate-700">No tasks assigned to you</span>
+                <span className="text-sm font-semibold text-slate-700">
+                  No tasks assigned to you
+                </span>
                 <p className="text-xs text-slate-400 mt-1 max-w-[280px]">
-                  {"Tasks assigned to you in this workspace will show up here. Use the '+' button to add tasks."}
+                  {
+                    "Tasks assigned to you in this workspace will show up here. Use the '+' button to add tasks."
+                  }
                 </p>
               </div>
             ) : (
@@ -135,15 +152,18 @@ export default function OverView() {
                   >
                     {/* Task Title + Status */}
                     <div className="flex items-start gap-3 flex-1 min-w-0">
-                      <div className="mt-0.5 shrink-0" onClick={(e) => e.stopPropagation()}>
+                      <div
+                        className="mt-0.5 shrink-0"
+                        onClick={(e) => e.stopPropagation()}
+                      >
                         <StatusDropdown
                           value={task.status}
                           selectedListId={task.id}
                           showOnlyIconsInList
                         />
                       </div>
-                      <div 
-                        className="flex-1 min-w-0" 
+                      <div
+                        className="flex-1 min-w-0"
                         onClick={() => {
                           setselectedListItem(task);
                           setOpenDetailedView(true);
@@ -162,7 +182,10 @@ export default function OverView() {
 
                     {/* Metadata Dropdowns + Date */}
                     <div className="flex items-center justify-between sm:justify-end gap-3 self-stretch sm:self-auto pl-7 sm:pl-0">
-                      <div className="flex items-center gap-1.5" onClick={(e) => e.stopPropagation()}>
+                      <div
+                        className="flex items-center gap-1.5"
+                        onClick={(e) => e.stopPropagation()}
+                      >
                         <PriorityDropdown
                           value={task.priority}
                           selectedListId={task.id}
@@ -209,52 +232,72 @@ export default function OverView() {
             </h3>
             <div className="space-y-3">
               {(() => {
-                const highCount = tasks.filter((t) => t.priority === "high").length;
-                const mediumCount = tasks.filter((t) => t.priority === "medium").length;
-                const lowCount = tasks.filter((t) => t.priority === "low").length;
+                const highCount = tasks.filter(
+                  (t) => t.priority === "high",
+                ).length;
+                const mediumCount = tasks.filter(
+                  (t) => t.priority === "medium",
+                ).length;
+                const lowCount = tasks.filter(
+                  (t) => t.priority === "low",
+                ).length;
                 const totalPriority = highCount + mediumCount + lowCount || 1;
 
-                const highPercent = Math.round((highCount / totalPriority) * 100);
-                const mediumPercent = Math.round((mediumCount / totalPriority) * 100);
+                const highPercent = Math.round(
+                  (highCount / totalPriority) * 100,
+                );
+                const mediumPercent = Math.round(
+                  (mediumCount / totalPriority) * 100,
+                );
                 const lowPercent = Math.round((lowCount / totalPriority) * 100);
 
                 return (
                   <>
                     <div className="space-y-1">
                       <div className="flex justify-between text-xs font-semibold">
-                        <span className="text-red-600 flex items-center gap-1">🔴 High</span>
-                        <span className="text-slate-500">{highCount} tasks</span>
+                        <span className="text-red-600 flex items-center gap-1">
+                          🔴 High
+                        </span>
+                        <span className="text-slate-500">
+                          {highCount} tasks
+                        </span>
                       </div>
                       <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
-                        <div 
-                          className="h-full bg-red-500 rounded-full transition-all duration-500" 
-                          style={{ width: `${highPercent}%` }} 
+                        <div
+                          className="h-full bg-red-500 rounded-full transition-all duration-500"
+                          style={{ width: `${highPercent}%` }}
                         />
                       </div>
                     </div>
 
                     <div className="space-y-1">
                       <div className="flex justify-between text-xs font-semibold">
-                        <span className="text-amber-600 flex items-center gap-1">🟡 Moderate</span>
-                        <span className="text-slate-500">{mediumCount} tasks</span>
+                        <span className="text-amber-600 flex items-center gap-1">
+                          🟡 Moderate
+                        </span>
+                        <span className="text-slate-500">
+                          {mediumCount} tasks
+                        </span>
                       </div>
                       <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
-                        <div 
-                          className="h-full bg-amber-500 rounded-full transition-all duration-500" 
-                          style={{ width: `${mediumPercent}%` }} 
+                        <div
+                          className="h-full bg-amber-500 rounded-full transition-all duration-500"
+                          style={{ width: `${mediumPercent}%` }}
                         />
                       </div>
                     </div>
 
                     <div className="space-y-1">
                       <div className="flex justify-between text-xs font-semibold">
-                        <span className="text-slate-500 flex items-center gap-1">🔵 Low</span>
+                        <span className="text-slate-500 flex items-center gap-1">
+                          🔵 Low
+                        </span>
                         <span className="text-slate-500">{lowCount} tasks</span>
                       </div>
                       <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
-                        <div 
-                          className="h-full bg-slate-400 rounded-full transition-all duration-500" 
-                          style={{ width: `${lowPercent}%` }} 
+                        <div
+                          className="h-full bg-slate-400 rounded-full transition-all duration-500"
+                          style={{ width: `${lowPercent}%` }}
                         />
                       </div>
                     </div>
@@ -274,11 +317,15 @@ export default function OverView() {
               {members.map((member) => (
                 <div key={member.uid} className="flex items-center gap-2.5">
                   <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-blue-500 to-indigo-500 flex items-center justify-center text-white text-[10px] font-bold shrink-0 uppercase">
-                    {member.username ? member.username.charAt(0) : member.email?.charAt(0) || "U"}
+                    {member.username
+                      ? member.username.charAt(0)
+                      : member.email?.charAt(0) || "U"}
                   </div>
                   <div className="flex flex-col min-w-0">
                     <span className="text-xs font-bold text-slate-700 truncate">
-                      {member.username || member.email?.split("@")[0] || "Team Member"}
+                      {member.username ||
+                        member.email?.split("@")[0] ||
+                        "Team Member"}
                     </span>
                     <span className="text-[10px] text-slate-400 truncate">
                       {member.email}
@@ -306,4 +353,3 @@ export default function OverView() {
     </div>
   );
 }
-

@@ -60,19 +60,23 @@ export const TaskNavBar = ({ activeState, setActiveState }: NavBarProps) => {
       <div className="px-6 pt-4 pb-2">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h1 className="text-xl font-bold text-slate-800 tracking-tight">My Tasks</h1>
-            <p className="text-xs text-slate-400 mt-0.5">Manage and track the tasks assigned to you</p>
+            <h1 className="text-xl font-bold text-slate-800 tracking-tight">
+              My Tasks
+            </h1>
+            <p className="text-xs text-slate-400 mt-0.5">
+              Manage and track the tasks assigned to you
+            </p>
           </div>
         </div>
       </div>
-      
+
       <div className="px-6 flex overflow-x-auto scrollbar-none border-t border-slate-50 mt-2">
         <div className="flex space-x-6 min-w-max">
           {navItems.map((item) => {
             const Icon = item.icon;
             const count = getCount(item.id);
             const isActive = activeState === item.id;
-            
+
             return (
               <button
                 key={item.id}
@@ -81,17 +85,22 @@ export const TaskNavBar = ({ activeState, setActiveState }: NavBarProps) => {
                   "flex items-center gap-2 py-3 border-b-2 font-medium text-xs tracking-wide transition-all cursor-pointer outline-none select-none",
                   isActive
                     ? "border-blue-600 text-blue-600"
-                    : "border-transparent text-slate-400 hover:text-slate-600"
+                    : "border-transparent text-slate-400 hover:text-slate-600",
                 )}
               >
-                <Icon className={cn("w-4 h-4 shrink-0", isActive ? "text-blue-600" : item.color)} />
+                <Icon
+                  className={cn(
+                    "w-4 h-4 shrink-0",
+                    isActive ? "text-blue-600" : item.color,
+                  )}
+                />
                 <span>{item.label}</span>
                 <span
                   className={cn(
                     "text-[10px] font-bold px-1.5 py-0.5 rounded-full transition-colors",
                     isActive
                       ? "bg-blue-50 text-blue-600"
-                      : "bg-slate-100 text-slate-500"
+                      : "bg-slate-100 text-slate-500",
                   )}
                 >
                   {count}
@@ -104,4 +113,3 @@ export const TaskNavBar = ({ activeState, setActiveState }: NavBarProps) => {
     </div>
   );
 };
-

@@ -8,9 +8,9 @@ export const EmptyTaskList = () => {
       </div>
       <h2 className="text-lg font-bold text-slate-800">No tasks yet</h2>
       <p className="text-sm text-slate-500 mt-1 leading-relaxed">
-        There are no tasks in this workspace. Get started by creating your first task.
+        There are no tasks in this workspace. Get started by creating your first
+        task.
       </p>
     </div>
   );
 };
-

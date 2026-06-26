@@ -116,4 +116,3 @@ export const TaskList = ({ status }: TaskListProps) => {
     </div>
   );
 };
-

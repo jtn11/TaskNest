@@ -143,7 +143,9 @@ const ChatInbox: React.FC<ChatInboxProps> = ({
       {/* Sidebar */}
       <div className="w-80 bg-white border-r border-slate-100 flex flex-col shrink-0">
         <div className="p-4 border-b border-slate-100 flex items-center justify-between">
-          <h1 className="text-lg font-bold text-slate-800 tracking-tight">Messages</h1>
+          <h1 className="text-lg font-bold text-slate-800 tracking-tight">
+            Messages
+          </h1>
           <div className="flex items-center gap-1.5 bg-slate-50 border border-slate-100 rounded-full px-2.5 py-0.5 select-none">
             <span
               className={cn(
@@ -218,7 +220,12 @@ const ChatInbox: React.FC<ChatInboxProps> = ({
                     msg.isOwn ? "justify-end" : "justify-start",
                   )}
                 >
-                  <div className={cn("max-w-md", msg.isOwn ? "order-2" : "order-1")}>
+                  <div
+                    className={cn(
+                      "max-w-md",
+                      msg.isOwn ? "order-2" : "order-1",
+                    )}
+                  >
                     <div
                       className={cn(
                         "rounded-[20px] px-4 py-2.5 text-sm leading-relaxed",

@@ -58,4 +58,3 @@ export function useChatSocket(token: string) {
 
   return { messages, sendMessage, isConnected };
 }
-
