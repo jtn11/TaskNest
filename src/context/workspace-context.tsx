@@ -86,9 +86,9 @@ export const WorkspaceProvider = ({
         const data = await GetWorkspace(token);
         if (data) {
           setWorkspaces(data);
-        }
-        if (data.length > 0 && !activeWorkspace) {
-          setActiveWorkspace(data[data.length - 1]);
+          if (data.length > 0 && !activeWorkspace) {
+            setActiveWorkspace(data[data.length - 1]);
+          }
         }
         console.log("WholeData", data);
       }

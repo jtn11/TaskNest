@@ -46,7 +46,7 @@ export const GetWorkspace = async (req: AuthRequest, res: Response) => {
     const snapshot = workspaceRef.get();
 
     if ((await snapshot).empty) {
-      return res.status(404).json({ message: "No workspace found" });
+      return res.status(200).json([]);
     }
 
     const workspaces = (await snapshot).docs.map((doc) => ({

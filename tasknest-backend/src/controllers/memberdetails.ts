@@ -11,7 +11,7 @@ export const fetchMembersDetails = async (req: AuthRequest, res: Response) => {
       .get();
 
     if (!workspaceDoc.exists) {
-      res.status(404).json({ message: "workspace not found" });
+      return res.status(404).json({ message: "workspace not found" });
     }
     const workspacedata = workspaceDoc.data();
     const membersId = workspacedata?.members || [];
