@@ -84,7 +84,7 @@ export const WorkspaceProvider = ({
           return console.log("token not available");
         }
         const data = await GetWorkspace(token);
-        if (data) {
+        if (data) { 
           setWorkspaces(data);
           if (data.length > 0 && !activeWorkspace) {
             setActiveWorkspace(data[data.length - 1]);
