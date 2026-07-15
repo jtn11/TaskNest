@@ -3,7 +3,7 @@ export const GetCurrentUsersTask = async (
   token: string,
 ) => {
   const res = await fetch(
-    `http://localhost:8000/api/workspace/${workspaceId}/tasks?onlymine=true`,
+    `http://localhost:8000/api/workspace/${workspaceId}/tasks?limit=100`,
     {
       method: "GET",
       headers: { Authorization: `Bearer ${token}` },

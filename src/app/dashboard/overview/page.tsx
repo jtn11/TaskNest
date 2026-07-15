@@ -14,6 +14,7 @@ import { useTasks } from "@/context/task-context";
 import PriorityDropdown from "@/app/components/modals/priority-dropdown";
 import AssigneeDropdown from "@/app/components/modals/assignee-dropdown";
 import { useWorkspace } from "@/context/workspace-context";
+import { useAuth } from "@/context/auth-context";
 
 interface Task {
   id: string;
@@ -34,6 +35,7 @@ export default function OverView() {
 
   const { overViewTasks, tasks, fetchTasks, hasMore, loading } = useTasks();
   const { activeWorkspace, members, token } = useWorkspace();
+  const { currentUser } = useAuth();
 
   if (!activeWorkspace?.id) {
     return (
@@ -44,12 +46,15 @@ export default function OverView() {
   }
 
   // Calculate metrics based on the full list of user's tasks
-  const completedTasks = tasks.filter((t) => t.status === "completed").length;
+  const myTasks = tasks.filter(
+    (t) => t.assignedTo?.toLowerCase() === currentUser?.email?.toLowerCase()
+  );
+  const completedTasks = myTasks.filter((t) => t.status === "completed").length;
 
   const stats = [
     {
       label: "To Do / Backlog",
-      count: tasks.filter((t) => t.status === "todo" || t.status === "backlog")
+      count: myTasks.filter((t) => t.status === "todo" || t.status === "backlog")
         .length,
       icon: <StopCircleIcon className="w-5 h-5 text-slate-500" />,
       bgColor: "bg-slate-50/50 border-slate-200/80 hover:border-slate-300",
@@ -57,14 +62,14 @@ export default function OverView() {
     },
     {
       label: "In Progress",
-      count: tasks.filter((t) => t.status === "in-progress").length,
+      count: myTasks.filter((t) => t.status === "in-progress").length,
       icon: <ClockIcon className="w-5 h-5 text-amber-500" />,
       bgColor: "bg-amber-50/20 border-amber-100/80 hover:border-amber-200",
       iconBg: "bg-amber-100/50 text-amber-700",
     },
     {
       label: "In Review",
-      count: tasks.filter((t) => t.status === "review").length,
+      count: myTasks.filter((t) => t.status === "review").length,
       icon: <ClipboardDocumentListIcon className="w-5 h-5 text-emerald-500" />,
       bgColor:
         "bg-emerald-50/20 border-emerald-100/80 hover:border-emerald-200",

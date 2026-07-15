@@ -8,9 +8,11 @@ import AssigneeDropdown from "@/app/components/modals/assignee-dropdown";
 import { CalendarIcon } from "@heroicons/react/24/outline";
 import { EmptyStatusView } from "./empty-status-view";
 import { EmptyTaskList } from "./empty-task-list";
+import { useAuth } from "@/context/auth-context";
 
 interface TaskListProps {
   status: string;
+  filterMode: "all" | "mine";
 }
 
 interface Task {
@@ -24,14 +26,22 @@ interface Task {
   createdAt: string;
 }
 
-export const TaskList = ({ status }: TaskListProps) => {
+export const TaskList = ({ status, filterMode }: TaskListProps) => {
   const [openDetailedView, setOpenDetailedView] = useState(false);
   const [selectedListItem, setselectedListItem] = useState<Task | undefined>(
     undefined,
   );
   const { tasks } = useTasks();
+  const { currentUser } = useAuth();
 
-  const filteredTask = tasks.filter((task) => task.status === status);
+  const filteredTask = tasks.filter((task) => {
+    const matchStatus = task.status === status;
+    if (!matchStatus) return false;
+    if (filterMode === "mine") {
+      return task.assignedTo?.toLowerCase() === currentUser?.email?.toLowerCase();
+    }
+    return true;
+  });
 
   if (filteredTask.length === 0) {
     if (tasks.length === 0) {

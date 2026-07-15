@@ -2,6 +2,7 @@
 import React from "react";
 import { useTasks } from "@/context/task-context";
 import { useWorkspace } from "@/context/workspace-context";
+import { useAuth } from "@/context/auth-context";
 import {
   PieChart,
   Pie,
@@ -74,8 +75,9 @@ const CustomTooltip: React.FC<CustomTooltipProps> = ({
 };
 
 const AnalyticsDashboard = () => {
-  const { tasks, overViewTasks } = useTasks();
+  const { tasks } = useTasks();
   const { activeWorkspace, members } = useWorkspace();
+  const { currentUser } = useAuth();
 
   if (!activeWorkspace?.id) {
     return (
@@ -93,6 +95,9 @@ const AnalyticsDashboard = () => {
   };
 
   tasks.forEach((task) => {
+    if (task.assignedTo?.toLowerCase() !== currentUser?.email?.toLowerCase()) {
+      return;
+    }
     const status = task.status ? task.status.toLowerCase() : "";
     if (status === "completed") {
       personalStats.completed++;
@@ -103,7 +108,9 @@ const AnalyticsDashboard = () => {
     }
   });
 
-  const totalUserTasks = tasks.length;
+  const totalUserTasks = tasks.filter(
+    (task) => task.assignedTo?.toLowerCase() === currentUser?.email?.toLowerCase()
+  ).length;
   const userCompletionRate =
     totalUserTasks > 0 ? (personalStats.completed / totalUserTasks) * 100 : 0;
 
@@ -122,17 +129,17 @@ const AnalyticsDashboard = () => {
   ].filter((item) => item.value > 0);
 
   // Workspace statistics calculations
-  const workspaceCompletedTaskCount = overViewTasks.filter(
+  const workspaceCompletedTaskCount = tasks.filter(
     (task) => task.status?.toLowerCase() === "completed",
   ).length;
 
   const completionPercentage =
-    overViewTasks.length > 0
-      ? (workspaceCompletedTaskCount / overViewTasks.length) * 100
+    tasks.length > 0
+      ? (workspaceCompletedTaskCount / tasks.length) * 100
       : 0;
 
   const teamTasks: MemberData[] = members.map((member) => {
-    const memberTasks = overViewTasks.filter(
+    const memberTasks = tasks.filter(
       (task) => task.assignedTo === member.email,
     );
     const completed = memberTasks.filter(
@@ -154,25 +161,25 @@ const AnalyticsDashboard = () => {
 
   // Priority Stats
   const priorityStats = {
-    high: overViewTasks.filter((t) => t.priority?.toLowerCase() === "high")
+    high: tasks.filter((t) => t.priority?.toLowerCase() === "high")
       .length,
-    medium: overViewTasks.filter((t) => t.priority?.toLowerCase() === "medium")
+    medium: tasks.filter((t) => t.priority?.toLowerCase() === "medium")
       .length,
-    low: overViewTasks.filter((t) => t.priority?.toLowerCase() === "low")
+    low: tasks.filter((t) => t.priority?.toLowerCase() === "low")
       .length,
   };
-  const totalWorkspaceTasks = overViewTasks.length;
+  const totalWorkspaceTasks = tasks.length;
 
   // Status Stats
   const statusStats = {
-    backlog: overViewTasks.filter((t) => t.status?.toLowerCase() === "backlog")
+    backlog: tasks.filter((t) => t.status?.toLowerCase() === "backlog")
       .length,
-    todo: overViewTasks.filter((t) => t.status?.toLowerCase() === "todo")
+    todo: tasks.filter((t) => t.status?.toLowerCase() === "todo")
       .length,
-    inProgress: overViewTasks.filter(
+    inProgress: tasks.filter(
       (t) => t.status?.toLowerCase() === "in-progress",
     ).length,
-    review: overViewTasks.filter((t) => t.status?.toLowerCase() === "review")
+    review: tasks.filter((t) => t.status?.toLowerCase() === "review")
       .length,
     completed: workspaceCompletedTaskCount,
   };
@@ -233,11 +240,11 @@ const AnalyticsDashboard = () => {
               Total Workspace Tasks
             </span>
             <span className="text-2xl font-extrabold text-slate-800 block">
-              {overViewTasks.length}
+              {tasks.length}
             </span>
             <span className="text-[11px] font-semibold text-slate-500 block">
               {workspaceCompletedTaskCount} completed •{" "}
-              {overViewTasks.length - workspaceCompletedTaskCount} active
+              {tasks.length - workspaceCompletedTaskCount} active
             </span>
           </div>
           <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-100/80 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
@@ -402,7 +409,7 @@ const AnalyticsDashboard = () => {
           </div>
 
           <div className="my-6">
-            {overViewTasks.length === 0 ? (
+            {tasks.length === 0 ? (
               <div className="h-[250px] flex flex-col items-center justify-center text-center px-4">
                 <div className="w-12 h-12 rounded-full bg-slate-50 border border-slate-100 flex items-center justify-center mb-3">
                   <UserGroupIcon className="w-6 h-6 text-slate-400" />
@@ -459,7 +466,7 @@ const AnalyticsDashboard = () => {
           </div>
 
           {/* Bar Chart Legend Footer */}
-          {overViewTasks.length > 0 && (
+          {tasks.length > 0 && (
             <div className="flex items-center justify-center gap-6 border-t border-slate-100 pt-4 text-xs font-semibold select-none">
               <div className="flex items-center gap-2">
                 <span className="w-3 h-3 rounded-md bg-gradient-to-r from-blue-500 to-blue-600" />
