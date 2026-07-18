@@ -5,7 +5,7 @@ export const GetOverViewTasks = async (
 ) => {
   // /api/workspace/:id/tasks
 
-  let url = `http://localhost:8000/api/workspace/${workspaceId}/tasks?limit=5&onlymine=true`;
+  let url = `http://localhost:8000/api/workspace/${workspaceId}/tasks?limit=5`;
 
   if (cursor) {
     url += `&cursor=${cursor}`;

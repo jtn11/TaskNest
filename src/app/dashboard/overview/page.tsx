@@ -14,7 +14,6 @@ import { useTasks } from "@/context/task-context";
 import PriorityDropdown from "@/app/components/modals/priority-dropdown";
 import AssigneeDropdown from "@/app/components/modals/assignee-dropdown";
 import { useWorkspace } from "@/context/workspace-context";
-import { useAuth } from "@/context/auth-context";
 
 interface Task {
   id: string;
@@ -35,7 +34,6 @@ export default function OverView() {
 
   const { overViewTasks, tasks, fetchTasks, hasMore, loading } = useTasks();
   const { activeWorkspace, members, token } = useWorkspace();
-  const { currentUser } = useAuth();
 
   if (!activeWorkspace?.id) {
     return (
@@ -45,16 +43,13 @@ export default function OverView() {
     );
   }
 
-  // Calculate metrics based on the full list of user's tasks
-  const myTasks = tasks.filter(
-    (t) => t.assignedTo?.toLowerCase() === currentUser?.email?.toLowerCase()
-  );
-  const completedTasks = myTasks.filter((t) => t.status === "completed").length;
+  // Calculate metrics based on the full list of workspace tasks
+  const completedTasks = tasks.filter((t) => t.status === "completed").length;
 
   const stats = [
     {
       label: "To Do / Backlog",
-      count: myTasks.filter((t) => t.status === "todo" || t.status === "backlog")
+      count: tasks.filter((t) => t.status === "todo" || t.status === "backlog")
         .length,
       icon: <StopCircleIcon className="w-5 h-5 text-slate-500" />,
       bgColor: "bg-slate-50/50 border-slate-200/80 hover:border-slate-300",
@@ -62,14 +57,14 @@ export default function OverView() {
     },
     {
       label: "In Progress",
-      count: myTasks.filter((t) => t.status === "in-progress").length,
+      count: tasks.filter((t) => t.status === "in-progress").length,
       icon: <ClockIcon className="w-5 h-5 text-amber-500" />,
       bgColor: "bg-amber-50/20 border-amber-100/80 hover:border-amber-200",
       iconBg: "bg-amber-100/50 text-amber-700",
     },
     {
       label: "In Review",
-      count: myTasks.filter((t) => t.status === "review").length,
+      count: tasks.filter((t) => t.status === "review").length,
       icon: <ClipboardDocumentListIcon className="w-5 h-5 text-emerald-500" />,
       bgColor:
         "bg-emerald-50/20 border-emerald-100/80 hover:border-emerald-200",
@@ -117,7 +112,7 @@ export default function OverView() {
           <div className="bg-white border border-slate-200/80 rounded-xl shadow-sm overflow-hidden">
             <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
               <h2 className="text-sm font-bold text-slate-800 tracking-tight flex items-center gap-2">
-                <span>📋</span> My Tasks
+                <span>📋</span> Workspace Tasks
               </h2>
               <span className="text-[10px] font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full uppercase tracking-wider">
                 {overViewTasks.length} shown
@@ -140,11 +135,11 @@ export default function OverView() {
                   />
                 </svg>
                 <span className="text-sm font-semibold text-slate-700">
-                  No tasks assigned to you
+                  No tasks in this workspace
                 </span>
                 <p className="text-xs text-slate-400 mt-1 max-w-[280px]">
                   {
-                    "Tasks assigned to you in this workspace will show up here. Use the '+' button to add tasks."
+                    "Tasks created in this workspace will show up here. Use the '+' button to add tasks."
                   }
                 </p>
               </div>
