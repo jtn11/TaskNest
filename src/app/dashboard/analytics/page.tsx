@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { useTasks } from "@/context/task-context";
 import { useWorkspace } from "@/context/workspace-context";
 import { useAuth } from "@/context/auth-context";
@@ -75,9 +75,13 @@ const CustomTooltip: React.FC<CustomTooltipProps> = ({
 };
 
 const AnalyticsDashboard = () => {
-  const { tasks } = useTasks();
+  const { tasks, triggerListRefresh } = useTasks();
   const { activeWorkspace, members } = useWorkspace();
   const { currentUser } = useAuth();
+
+  useEffect(() => {
+    triggerListRefresh();
+  }, []);
 
   if (!activeWorkspace?.id) {
     return (
@@ -140,7 +144,7 @@ const AnalyticsDashboard = () => {
 
   const teamTasks: MemberData[] = members.map((member) => {
     const memberTasks = tasks.filter(
-      (task) => task.assignedTo === member.email,
+      (task) => task.assignedTo?.toLowerCase() === member.email?.toLowerCase(),
     );
     const completed = memberTasks.filter(
       (task) => task.status?.toLowerCase() === "completed",

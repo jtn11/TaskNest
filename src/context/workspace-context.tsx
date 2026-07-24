@@ -109,7 +109,7 @@ export const WorkspaceProvider = ({
 
   useEffect(() => {
     if (activeWorkspace) fetchmembers(activeWorkspace.id);
-  }, [activeWorkspace]);
+  }, [activeWorkspace, token]);
 
   useEffect(() => {
     console.log("Updated Workspaces:", workspaces);
